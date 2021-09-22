@@ -1,7 +1,7 @@
 .PHONY: all test clean
 
 version := $(shell swipl -q -s pack -g 'version(V),writeln(V)' -t halt)
-packfile = date_time-$(version).tgz
+packfile = abbreviated_dates-$(version).tgz
 
 SWIPL := swipl
 
