@@ -21,8 +21,11 @@ install-dev:
 test:
 	@$(SWIPL) -q -g 'main,halt(0)' -t 'halt(1)' -s test/test.pl
 
-package: test
+bump: test
+	@bumpversion patch
+
+package: bump
 	@tar cvzf $(packfile) prolog test pack.pl README.md LICENSE
 
-release: test
-	@hub release create -m v$(version) v$(version)
+release: package
+	@hub release create -a $(packfile) -m v$(version) v$(version)
