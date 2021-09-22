@@ -32,5 +32,5 @@ package: test
 release: test
 	@hub release create -a $(packfile) -m v$(version) v$(version)
 
-submit: test
+submit: clean bump package release
 	@$(SWIPL) -q -g "pack_remove(abbreviated_dates), pack_install('$(remote)'),halt(0)" -t 'halt(1)'
