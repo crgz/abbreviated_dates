@@ -1,0 +1,6 @@
+.*
+!.gitignore
+
+# generated files
+doc/
+abbreviated_dates-*.tgz
