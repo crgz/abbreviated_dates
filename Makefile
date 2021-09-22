@@ -2,6 +2,7 @@
 
 version := $(shell swipl -q -s pack -g 'version(V),writeln(V)' -t halt)
 packfile = abbreviated_dates-$(version).tgz
+remote = https://github.com/crgz/abbreviated_dates/releases/download/v$(version)/$(packfile)
 
 SWIPL := swipl
 
@@ -10,7 +11,8 @@ all: test
 version:
 	@echo $(version)
 
-check: test
+clean:
+	rm abbreviated_dates-*.tgz
 
 install:
 	@echo "(none)"
@@ -24,8 +26,11 @@ test:
 bump: test
 	@bumpversion patch
 
-package: bump
+package: test
 	@tar cvzf $(packfile) prolog test pack.pl README.md LICENSE
 
-release: package
+release: test
 	@hub release create -a $(packfile) -m v$(version) v$(version)
+
+submit: test
+	@$(SWIPL) -q -g "pack_remove(abbreviated_dates), pack_install('$(remote)'),halt(0)" -t 'halt(1)'
