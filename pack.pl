@@ -1,6 +1,6 @@
 name(abbreviated_dates).
 
-version('0.0.1').
+version('0.0.2').
 download('https://github.com/crgz/abbreviated_dates/releases/*.zip').
 
 title('Logical arithmetic on dates and times').
