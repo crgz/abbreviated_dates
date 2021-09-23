@@ -13,7 +13,10 @@ version:
 	@echo $(version)
 
 clean:
-	rm $(name)-*.tgz
+ifneq (,$(wildcard $(pack_name)))
+    rm $(name)-*.tgz
+endif
+	@$(SWIPL) -q -g "pack_remove(abbreviated_dates),halt(0)" -t 'halt(1)'
 
 install:
 	@echo "(none)"
@@ -33,5 +36,5 @@ package: test
 release: test
 	@hub release create -a $(pack_name) -m v$(version) v$(version)
 
-submit: bump push package release   
-	@$(SWIPL) -q -g "pack_remove(abbreviated_dates), pack_install('$(remote)'),halt(0)" -t 'halt(1)'
+submit: bump push package release
+	@$(SWIPL) -q -g "pack_remove(abbreviated_dates),pack_install('$(remote)',[interactive(false)]),halt(0)" -t 'halt(1)'
