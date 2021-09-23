@@ -14,7 +14,7 @@ version:
 
 clean:
 ifneq (,$(wildcard $(pack_name)))
-    rm $(name)-*.tgz
+	rm $(pack_name)
 endif
 	@$(SWIPL) -q -g "pack_remove(abbreviated_dates),halt(0)" -t 'halt(1)'
 
