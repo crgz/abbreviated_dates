@@ -16,10 +16,12 @@ clean:
 ifneq (,$(wildcard $(pack_name)))
 	rm $(pack_name)
 endif
-	@$(SWIPL) -q -g "pack_remove(abbreviated_dates),halt(0)" -t 'halt(1)'
 
 install:
-	@echo "(none)"
+	@$(SWIPL) -q -g "pack_install(abbreviated_dates),halt(0)" -t 'halt(1)'
+
+uninstall:
+	@$(SWIPL) -q -g "pack_remove(abbreviated_dates),halt(0)" -t 'halt(1)'
 
 test:
 	@$(SWIPL) -q -g 'main,halt(0)' -t 'halt(1)' -s test/test.pl
