@@ -1,3 +1,5 @@
+<img src=".github/images/streaming-icon.jpg?raw=true" width="20%" align="right" style="border:20px solid white">
+
 # Abbreviated Date Parser Library
 
 The Abbreviated Date Parser Library contains a predicate that parses abbreviated incomplete dates in multiple languages.
