@@ -24,7 +24,7 @@ install:
 test:
 	@$(SWIPL) -q -g 'main,halt(0)' -t 'halt(1)' -s test/test.pl
 
-bump: test
+bump:
 	@bumpversion patch
 
 push:
@@ -33,7 +33,7 @@ push:
 package: test
 	@tar cvzf $(pack_name) prolog test pack.pl README.md LICENSE
 
-release: test
+release:
 	@hub release create -m v$(version) v$(version)
 
 submit: bump push release
