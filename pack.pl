@@ -1,6 +1,6 @@
 name(abbreviated_dates).
 
-version('0.0.12').
+version('0.0.13').
 download('https://github.com/crgz/abbreviated_dates/releases/*.zip').
 
 title('Parses abbreviated & incomplete dates in multiple languages').
