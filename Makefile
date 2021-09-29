@@ -18,6 +18,7 @@ ifneq (,$(wildcard $(pack_name)))
 endif
 
 dependencies:
+	@$(SWIPL) -q -g "pack_install(tap,[interactive(false)]),halt(0)" -t 'halt(1)'
 	@$(SWIPL) -q -g "pack_install(date_time,[interactive(false)]),halt(0)" -t 'halt(1)'
 
 install:
