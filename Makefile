@@ -7,7 +7,7 @@ remote = https://github.com/crgz/$(name).git
 
 SWIPL := swipl
 
-all: test
+all: dependencies
 
 version:
 	@echo $(version)
