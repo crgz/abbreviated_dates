@@ -1,3 +1,5 @@
+<img src=".github/World-Flag-Buttons-Globe.svg?raw=true" width="40%" align="right" style="border:20px solid white">
+
 # Abbreviated Date Parser Library
 
 The Abbreviated Date Parser Library contains a predicate that parses abbreviated incomplete dates in multiple languages.
