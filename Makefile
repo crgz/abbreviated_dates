@@ -1,4 +1,4 @@
-.PHONY: all clean dependencies test install uninstall bump push package
+.PHONY: all test clean
 
 name = $(shell swipl -q -s pack -g 'name(N),writeln(N)' -t halt)
 version = $(shell swipl -q -s pack -g 'version(V),writeln(V)' -t halt)
@@ -7,25 +7,19 @@ remote = https://github.com/crgz/$(name).git
 
 SWIPL := swipl
 
-all: dependencies test
+all: test
 
 version:
 	@echo $(version)
 
-clean:
-ifneq (,$(wildcard $(pack_name)))
-	rm $(pack_name)
-endif
+check: test
 
 dependencies:
 	@$(SWIPL) -q -g "pack_install(tap,[interactive(false)]),halt(0)" -t 'halt(1)'
 	@$(SWIPL) -q -g "pack_install(date_time,[interactive(false)]),halt(0)" -t 'halt(1)'
 
 install:
-	@$(SWIPL) -q -g "pack_install(abbreviated_dates,[interactive(false)]),halt(0)" -t 'halt(1)'
-
-uninstall:
-	@$(SWIPL) -q -g "pack_remove(abbreviated_dates),halt(0)" -t 'halt(1)'
+	@echo "(none)"
 
 test:
 	@$(SWIPL) -q -g 'main,halt(0)' -t 'halt(1)' -s test/test.pl
