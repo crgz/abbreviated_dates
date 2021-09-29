@@ -73,10 +73,10 @@ language('Japanese',
 	['月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日', '日曜日'],
 	'Oggi', 'Domani'
 ).
-language('Korean',
-	['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
-	['월요일', '화요일', '수요일', '목요일', '금요일', '토요일', '일요일'],
-	'Oggi', 'Domani'
+language('Lithuanian',
+	['Sausis', 'Vasaris', 'Kovas', 'Balandis', 'Gegužė', 'Birželis', 'Liepa', 'Rugpjūtis', 'Rugsėjis', 'Spalis', 'Lapkritis', 'Gruodis'],
+	['Pirmadienis', 'Antradienis', 'Trečiadienis', 'Ketvirtadienis', 'Penktadienis', 'Šeštadienis', 'Sekmadienis'],
+	'Rytoj', 'Šiandien'
 ).
 language('Norwegian',
 	['Januar', 'Februar', 'Mars', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Desember'],

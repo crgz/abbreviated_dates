@@ -1,4 +1,4 @@
-.PHONY: all test clean
+.PHONY: all clean test install uninstall bump push package
 
 name = $(shell swipl -q -s pack -g 'name(N),writeln(N)' -t halt)
 version = $(shell swipl -q -s pack -g 'version(V),writeln(V)' -t halt)
@@ -18,7 +18,7 @@ ifneq (,$(wildcard $(pack_name)))
 endif
 
 install:
-	@$(SWIPL) -q -g "pack_install(abbreviated_dates),halt(0)" -t 'halt(1)'
+	@$(SWIPL) -q -g "pack_install(abbreviated_dates,[interactive(false)]),halt(0)" -t 'halt(1)'
 
 uninstall:
 	@$(SWIPL) -q -g "pack_remove(abbreviated_dates),halt(0)" -t 'halt(1)'
@@ -36,7 +36,7 @@ package: test
 	@tar cvzf $(pack_name) prolog test pack.pl README.md LICENSE
 
 release: test
-	@hub release create -a $(pack_name) -m v$(version) v$(version)
+	@hub release create -m v$(version) v$(version)
 
 submit: bump push package release
 	@$(SWIPL) -q -g "pack_remove(abbreviated_dates),pack_install('$(remote)',[interactive(false)]),halt(0)" -t 'halt(1)'
