@@ -3,7 +3,7 @@
 name = $(shell swipl -q -s pack -g 'name(N),writeln(N)' -t halt)
 version = $(shell swipl -q -s pack -g 'version(V),writeln(V)' -t halt)
 pack_name = $(shell swipl -q -s pack -g 'name(N),version(V),format("~a-~a.tgz", [N,V])' -t halt)
-remote = https://github.com/crgz/$(name)/archive/v$(version).zip
+remote = https://github.com/crgz/$(name).git
 
 SWIPL := swipl
 
