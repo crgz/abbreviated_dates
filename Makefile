@@ -37,4 +37,4 @@ release:
 	@hub release create -m v$(version) v$(version)
 
 submit: bump push release
-	@$(SWIPL) -q -g "pack_remove(abbreviated_dates),pack_install('$(remote)',[interactive(false)]),halt(0)" -t 'halt(1)'
+	@$(SWIPL) -q -g "pack_install('https://github.com/crgz/abbreviated_dates.git',[interactive(false)]),halt(0)" -t 'halt(1)'
