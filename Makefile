@@ -6,11 +6,13 @@ remote = https://github.com/crgz/$(name)/archive/v$(version).zip
 
 SWIPL := swipl
 
-
 version:
 	@echo $(version)
 
-all check install: test
+all install:
+	@echo "(none)"
+
+check: test
 
 test:
 	@$(SWIPL) -q -g 'main,halt(0)' -t 'halt(1)' -s test/test.pl
