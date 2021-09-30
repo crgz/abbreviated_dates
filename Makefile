@@ -7,16 +7,12 @@ remote = https://github.com/crgz/$(name).git
 
 SWIPL := swipl
 
-all: dependencies
+all: test
 
 version:
 	@echo $(version)
 
 check: test
-
-dependencies:
-	@$(SWIPL) -q -g "pack_install(tap,[interactive(false)]),halt(0)" -t 'halt(1)'
-	@$(SWIPL) -q -g "pack_install(date_time,[interactive(false)]),halt(0)" -t 'halt(1)'
 
 install:
 	@echo "(none)"
