@@ -1,6 +1,4 @@
-.*
-!.gitignore
-
 # generated files
+.idea
 doc/
 abbreviated_dates-*.tgz
