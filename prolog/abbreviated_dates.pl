@@ -56,13 +56,25 @@ month(MonthNumber, explicit(Language)) -->
   { atom_codes(MonthName, Codes), month(Language, MonthNumber , MonthName) }.
 
 month(MonthNumber, abbreviated(Language)) -->
-  string(Abbreviation), ".",
+  string(Abbreviation), end_of_abbreviation,
   { month(Language, MonthNumber, MonthName),
-    atom_codes(MonthName, Codes),
-    append(Abbreviation, Tail, Codes),
-    length(Tail,L),
-    L > 0
+    maybe_uppercase(MonthName, MaybeUppercase),
+    abbreviation(MaybeUppercase, Abbreviation)
   }.
+
+end_of_abbreviation --> ".".
+end_of_abbreviation --> [].
+
+maybe_uppercase(Atom, Atom).
+maybe_uppercase(Atom, MaybeUppercase):- upcase_atom(Atom, MaybeUppercase).
+
+abbreviation(Text, Abbreviation):-
+  atom_codes(Text, Codes),
+  append(Abbreviation, _, Codes),
+  length(Abbreviation,AbbreviationLength),
+  length(Codes,TextLength),
+  AbbreviationLength > 0,
+  AbbreviationLength < TextLength.
 
 bestDate(date(Year, 12, D), Day, date(BestYear, BestMonth, Day)):-
   ( Day >= D -> BestYear = Year, BestMonth = 12; BestYear is Year + 1, BestMonth = 1).
@@ -91,4 +103,3 @@ adverb(Language, Today, Date, Date):-
 
 adverb(Language, Tomorrow, Date, Next):-
 	language(Language, _, _, _, Tomorrow), date_add(Date, days(1), Next).
-
