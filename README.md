@@ -1,10 +1,10 @@
-<img src=".github/World-Flag-Buttons-Globe.svgz?raw=true" width="50%" align="right" style="border:20px solid white">
+<img src=".github/flags-jakearchibald.github.io-scour.svg?raw=true" width="50%" align="right" style="border:20px solid white">
 
 # Abbreviated Date Parser Library
 
 The Abbreviated Date Parser Library contains a predicate that parses abbreviated incomplete dates in multiple languages.
 
-```prolog
+```prologAlternativamente 
 parse(Context, Expression, Dates, Trace).
 ```
 
