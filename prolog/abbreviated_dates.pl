@@ -1,24 +1,27 @@
-%-----------------------------------------------------------
-% Module definition
-%
-
-:- module(abbreviated_dates, [parse/3, parse/4, parse/5]).   % get a date
-
-%-----------------------------------------------------------
-% Native dependency requirements
-%
+/*
+Author: Conrado M. Rodriguez <Conrado.Rgz@gmail.com> https://github.com/crgz
+*/
+:- module(abbreviated_dates,
+[
+  parse/3,   % +Context, +Expression, ?Dates
+  parse/4,   % +Context, +Expression, ?Dates, ?Syntax
+  parse/5    % +Context, +Expression, ?Dates, ?Syntax, ?Language
+]).
 
 :- [library(dcg/basics)].
 :- use_module(library(date_time)).
 :- use_module(library(dcg/basics), [whites//0, nonblanks//1, digits//1]).
 
-
 :- [facts/languages]. % Facts about languages
 
-% 
-% date_time:date_get(today, Today), parse(Today, 'Freitag, 7. Mai', Dates, Syntax).
-% 
-% 
+%!  parse(+Context, +Expression, ?Dates)
+%
+%   True if Dates can be parsed from Expression and Dates is greater than the Reference date.
+%
+%   ==
+%   parse(date(29,02,2020), 'saturday, 23 april', Dates, Syntax, Language).
+%   ==
+
 parse(Context, Expression, Dates) :-
   parse(Context, Expression, Dates, _, _).
 
