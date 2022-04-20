@@ -2,7 +2,7 @@
 % Module definition
 %
 
-:- module(abbreviated_dates, [parse/4]).   % get a date
+:- module(abbreviated_dates, [parse/3, parse/4, parse/5]).   % get a date
 
 %-----------------------------------------------------------
 % Native dependency requirements
@@ -19,7 +19,13 @@
 % date_time:date_get(today, Today), parse(Today, 'Freitag, 7. Mai', Dates, Syntax).
 % 
 % 
-parse(Context, Expression, Dates, [Language, Syntax]) :-
+parse(Context, Expression, Dates) :-
+  parse(Context, Expression, Dates, _, _).
+
+parse(Context, Expression, Dates, Syntax) :-
+  parse(Context, Expression, Dates, Syntax, _).
+
+parse(Context, Expression, Dates, Syntax, Language) :-
   atom_codes(Expression, Codes), phrase(multiple_days([Context], Dates, Language, Syntax), Codes).
 
 %-----------------------------------------------------------
@@ -32,9 +38,14 @@ multiple_days([LastKnownDate|Other], [SingleDay|MultipleDays], Language, [S1|S2]
   multiple_days([SingleDay, LastKnownDate|Other], MultipleDays, Language, S2).
 
 % phrase(abbreviated_dates:single_day([date(2020, 2, 28)], Date, Language, Syntax), `1 July`).
-single_day([Context|_], date(Y, M, D), Language, ['%d', Syntax]) -->
-  day_number(D), b, month(M, Language, Syntax), 
-  {maybe_future_year(Context, M, D, Y)}.
+single_day([Context|_], date(Y, M, D), Language, Syntax) -->
+  day_number(D), b, month(M, Language, MonthFormat), 
+  {maybe_future_year(Context, M, D, Y), atom_concat('%d ', MonthFormat, Syntax)}.
+
+% phrase(abbreviated_dates:single_day([date(2020, 2, 28)], Date, Language, Syntax), `Jan. 1`).
+single_day([Context|_], date(Y, M, D), Language, Syntax) -->
+  month(M, Language, MonthFormat), b, day_number(D), 
+  {maybe_future_year(Context, M, D, Y), atom_concat(MonthFormat,' %d', Syntax)}.
 
 % phrase(abbreviated_dates:single_day([date(2020, 2, 28)], Date, Language, Syntax), `31`).
 single_day([Context|_], Date, Language, '%d') --> 
@@ -42,32 +53,27 @@ single_day([Context|_], Date, Language, '%d') -->
   {future_date(Context, D, Date), language(Language)}.
 
 % phrase(abbreviated_dates:single_day([date(2020, 2, 29)], Date, Language, Syntax), `Tomorrow`).
-single_day([Context|_], Date, Language, adverb) -->
+single_day([Context|_], Date, Language, Syntax) -->
   nonblanks(Codes),
-  {atom_codes(Adverb, Codes), adverb(Language, Adverb, Context, Date)}.
+  {atom_codes(Adverb, Codes), adverb(Language, Adverb, Context, Date, Syntax)}.
 
 % phrase(abbreviated_dates:single_day([date(2020, 2, 28)], Date, Language, Syntax), `Saturday, 1 July`).
-single_day(Context, Date, Language, ['%A',Syntax]) -->
-  string(Codes), ",", b, single_day(Context, Date, Language, Syntax),
-  {atom_codes(WeekDay, Codes), dayName(Language, _, WeekDay)}.
-
-% phrase(abbreviated_dates:single_day([date(2020, 2, 28)], Date, Language, Syntax), `Jan. 1`).
-single_day([Context|_], date(Y, M, D), Language, [MonthFormat, '%d']) -->
-  month(M, Language, MonthFormat), b, day_number(D), 
-  {maybe_future_year(Context, M, D, Y)}.
+single_day(Context, Date, Language, Syntax) -->
+  string(Codes), ",", b, single_day(Context, Date, Language, DaySyntax),
+  {atom_codes(WeekDay, Codes), week_day(Language, _, WeekDay), atom_concat('%A, ', DaySyntax, Syntax)}.
 
 day_number(D) --> integer(D).
 day_number(D) --> integer(D), ".".
 
 month(MonthNumber, Language, '%B') --> % explicit month
   nonblanks(Codes),
-  { atom_codes(MonthName, Codes), monthName(Language, MonthNumber , MonthName) }.
+  { atom_codes(MonthName, Codes), month_name(Language, MonthNumber , MonthName) }.
 
 month(MonthNumber, Language, '%b') --> % abbreviated month
   string(Abbreviation), ".",
   { 
     atom_codes(Prefix, Abbreviation),
-    monthName(Language, MonthNumber, MonthName),
+    month_name(Language, MonthNumber, MonthName),
     sub_atom(MonthName, 0, _, _, Prefix)
   }.
 
@@ -125,16 +131,16 @@ date_leap_year(Y) :-
 %
 language(Language):- language(Language, _, _, _, _).
 
-monthName(Language, MonthNumber, MonthName):-
+month_name(Language, MonthNumber, MonthName):-
 	language(Language, Months, _, _, _),
 	nth1(MonthNumber, Months, MonthName).
   
-dayName(Language, WeekNumber, WeekName):-
+week_day(Language, WeekNumber, WeekName):-
 	language(Language, _, Weeks, _, _),
 	nth1(WeekNumber, Weeks, WeekName).
 
-adverb(Language, Today, Date, Date):-
+adverb(Language, Today, Date, Date, today):-
 	language(Language, _, _, Today, _).
 
-adverb(Language, Tomorrow, Date, Next):-
+adverb(Language, Tomorrow, Date, Next, tomorrow):-
 	language(Language, _, _, _, Tomorrow), date_add(Date, days(1), Next).
