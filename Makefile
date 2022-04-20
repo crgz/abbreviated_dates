@@ -4,7 +4,7 @@ name = $(shell swipl -q -s pack -g 'name(N),writeln(N)' -t halt)
 version = $(shell swipl -q -s pack -g 'version(V),writeln(V)' -t halt)
 remote = https://github.com/crgz/$(name)/archive/v$(version).zip
 
-all: test bump push release upload
+all: test bump push release
 
 test:
 	@swipl -q -g 'main,halt(0)' -t 'halt(1)' -s test/test.pl
