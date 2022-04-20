@@ -43,6 +43,11 @@ parse(date(2021, 9, 21), 'Friday, 7. May', Dates, Syntax, Language) ->
    Syntax = ['%A, %d %B'],
    Language = 'English'.
 
+parse(date(2021, 9, 21), 'saturday, 23 april', Dates, Syntax, Language) ->
+   Dates = [date(2022, 4, 23)],
+   Syntax = ['%A, %d %B'],
+   Language = 'English'.
+
 parse(date(2020, 2, 28), '23 Sep. - 27 Sep.', Dates, Syntax, Language) ->
    Dates = [date(2020, 9, 23), date(2020, 9, 27)],
    Syntax = ['%d %b', '%d %b'],

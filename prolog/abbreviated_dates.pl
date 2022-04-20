@@ -60,14 +60,21 @@ single_day([Context|_], Date, Language, Syntax) -->
 % phrase(abbreviated_dates:single_day([date(2020, 2, 28)], Date, Language, Syntax), `Saturday, 1 July`).
 single_day(Context, Date, Language, Syntax) -->
   string(Codes), ",", b, single_day(Context, Date, Language, DaySyntax),
-  {atom_codes(WeekDay, Codes), week_day(Language, _, WeekDay), atom_concat('%A, ', DaySyntax, Syntax)}.
+  {
+    atom_codes(InputWeekDay, Codes), downcase_atom(InputWeekDay, LowerCaseWeekDay),
+    week_day(Language, _, KnownWeekDay), downcase_atom(KnownWeekDay, LowerCaseWeekDay),
+    atom_concat('%A, ', DaySyntax, Syntax)
+  }.
 
 day_number(D) --> integer(D).
 day_number(D) --> integer(D), ".".
 
 month(MonthNumber, Language, '%B') --> % explicit month
   nonblanks(Codes),
-  { atom_codes(MonthName, Codes), month_name(Language, MonthNumber , MonthName) }.
+  {
+    atom_codes(InputMonthName, Codes), downcase_atom(InputMonthName, LowerCaseMonthName),
+    month_name(Language, MonthNumber , KnownMonthName), downcase_atom(KnownMonthName, LowerCaseMonthName)
+  }.
 
 month(MonthNumber, Language, '%b') --> % abbreviated month
   string(Abbreviation), ".",
