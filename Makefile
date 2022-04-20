@@ -11,11 +11,11 @@ upload: release
 release: bump
 	@hub release create -m v$(version) v$(version)
 
-bump: push
-	@bumpversion patch
-
-push: test
+push: bump
 	@git push
+
+bump: test
+	@bumpversion patch
 
 test:
 	@$(SWIPL) -q -g 'main,halt(0)' -t 'halt(1)' -s test/test.pl
