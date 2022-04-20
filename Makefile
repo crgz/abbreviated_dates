@@ -8,7 +8,7 @@ SWIPL := swipl
 upload: release
 	@$(SWIPL) -q -g "pack_remove(abbreviated_dates),pack_install('$(remote)',[interactive(false)]),halt(0)" -t 'halt(1)'
 
-release: bump
+release: push
 	@hub release create -m v$(version) v$(version)
 
 push: bump
