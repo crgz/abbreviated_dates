@@ -6,6 +6,8 @@ remote = https://github.com/crgz/$(name)/archive/v$(version).zip
 
 SWIPL := swipl
 
+all: test push bump push release upload
+
 upload: 
 	@$(SWIPL) -q -g "pack_remove(abbreviated_dates),pack_install('$(remote)',[interactive(false)]),halt(0)" -t 'halt(1)'
 
