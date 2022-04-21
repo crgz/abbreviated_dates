@@ -4,7 +4,7 @@
 
 The Abbreviated Date Parser Library contains a predicate that parses abbreviated incomplete dates in multiple languages.
 
-```prologAlternativamente 
+```prolog 
 parse(Context, Expression, Dates, Trace).
 ```
 
