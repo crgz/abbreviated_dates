@@ -1,8 +1,6 @@
 .*          export-ignore
 test        export-ignore
-LICENSE     export-ignore
 Makefile    export-ignore
-README.md   export-ignore
 
 ###############################
 # Git Line Endings            #
