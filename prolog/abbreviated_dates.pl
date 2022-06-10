@@ -50,6 +50,16 @@ single_day([Context|_], date(Y, M, D), Language, Syntax) -->
   month(M, Language, MonthFormat), b, day_number(D), 
   {maybe_future_year(Context, M, D, Y), atom_concat(MonthFormat,' %d', Syntax)}.
 
+% phrase(abbreviated_dates:single_day([date(2022, 2, 28)], Date, Language, Syntax), `ma 13/6`).
+single_day([Context|_], date(Y, M, D), Language, Syntax) -->
+  week_day(_, Language, WeekDayFormat), b, day_number(D), "/", integer(M),
+  {maybe_future_year(Context, M, D, Y), atom_concat(WeekDayFormat, ' %d/%m', Syntax)}.
+
+% phrase(abbreviated_dates:single_day([date(2022, 2, 28)], Date, Language, Syntax), `Petak 24.06.`).
+single_day([Context|_], date(Y, M, D), Language, Syntax) -->
+  week_day(_, Language, WeekDayFormat), b, day_number(D), ".", integer(M), ".",
+  {maybe_future_year(Context, M, D, Y), atom_concat(WeekDayFormat, ' %d.%m.', Syntax)}.
+
 % phrase(abbreviated_dates:single_day([date(2020, 2, 28)], Date, Language, Syntax), `31`).
 single_day([Context|_], Date, Language, '%d') --> 
   day_number(D), 
@@ -65,7 +75,7 @@ single_day(Context, Date, Language, Syntax) -->
   string(Codes), ",", b, single_day(Context, Date, Language, DaySyntax),
   {
     atom_codes(InputWeekDay, Codes), downcase_atom(InputWeekDay, LowerCaseWeekDay),
-    week_day(Language, _, KnownWeekDay), downcase_atom(KnownWeekDay, LowerCaseWeekDay),
+    week_day_name(Language, _, KnownWeekDay), downcase_atom(KnownWeekDay, LowerCaseWeekDay),
     atom_concat('%A, ', DaySyntax, Syntax)
   }.
 
@@ -85,6 +95,22 @@ month(MonthNumber, Language, '%b') --> % abbreviated month
     atom_codes(Prefix, Abbreviation),
     month_name(Language, MonthNumber, MonthName),
     sub_atom(MonthName, 0, _, _, Prefix)
+  }.
+
+week_day(WeekDayNumber, Language, '%A') --> % explicit week day
+  nonblanks(Codes),
+  {
+    atom_codes(InputWeekDayName, Codes), downcase_atom(InputWeekDayName, LowerCaseWeekDayName),
+    week_day_name(Language, WeekDayNumber , KnownWeekDayName), downcase_atom(KnownWeekDayName, LowerCaseWeekDayName)
+  }.
+
+week_day(WeekDayNumber, Language, '%a') --> % abbreviated week day
+  string(Abbreviation),
+  {
+    atom_codes(Prefix, Abbreviation),
+    week_day_name(Language, WeekDayNumber, WeekDayName),
+    downcase_atom(WeekDayName, LowerCaseWeekDayName),
+    sub_atom(LowerCaseWeekDayName, 0, _, _, Prefix)
   }.
 
 dash --> " - ".
@@ -145,9 +171,9 @@ month_name(Language, MonthNumber, MonthName):-
 	language(Language, Months, _, _, _),
 	nth1(MonthNumber, Months, MonthName).
   
-week_day(Language, WeekNumber, WeekName):-
+week_day_name(Language, WeekDayNumber, WeekDayName):-
 	language(Language, _, Weeks, _, _),
-	nth1(WeekNumber, Weeks, WeekName).
+	nth1(WeekDayNumber, Weeks, WeekDayName).
 
 adverb(Language, Today, Date, Date, today):-
 	language(Language, _, _, Today, _).
