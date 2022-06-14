@@ -55,6 +55,11 @@ single_day([Context|_], date(Y, M, D), Language, Syntax) -->
   week_day(_, Language, WeekDayFormat), optional_comma, b, day_number(D), day_month_separator, month_number(M),
   {maybe_future_year(Context, M, D, Y), atom_concat(WeekDayFormat, ' %d %m', Syntax)}.
 
+% phrase(abbreviated_dates:single_day([date(2022, 2, 28)], Date, Language, Syntax), `Pirm. 06-20`).
+single_day([Context|_], date(Y, M, D), Language, Syntax) -->
+  week_day(_, Language, WeekDayFormat), optional_comma, b, month_number(M), month_day_separator, day_number(D),
+  {maybe_future_year(Context, M, D, Y), atom_concat(WeekDayFormat, ' %m %d', Syntax)}.
+
 % phrase(abbreviated_dates:single_day([date(2020, 2, 28)], Date, Language, Syntax), `31`).
 single_day([Context|_], Date, Language, '%d') --> 
   day_number(D), 
@@ -78,7 +83,8 @@ day_number(D) --> integer(D).
 day_number(D) --> integer(D), ".".
 month_number(M) --> integer(M).
 month_number(M) --> integer(M), ".".
-day_month_separator --> "."; "/"; "-".
+day_month_separator --> "."; "/".
+month_day_separator --> "-".
 
 month(MonthNumber, Language, '%B') --> % explicit month
   nonblanks(Codes),

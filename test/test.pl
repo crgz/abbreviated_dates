@@ -48,6 +48,11 @@ parse(date(2022, 2, 28), 'Petak 24.06.', Dates, Syntax, Language) ->
    Syntax = ['%A %d %m'],
    Language = 'Croatian'.
 
+parse(date(2022, 2, 28), 'Pirm. 06-20', Dates, Syntax, Language) ->
+   Dates = [date(2022, 6, 20)],
+   Syntax = ['%A %m %d'],
+   Language = 'Lithuanian'.
+
 parse(date(2021, 9, 21), 'Friday, 7. May', Dates, Syntax, Language) ->
    Dates = [date(2022, 5, 7)],
    Syntax = ['%A, %d %B'],
