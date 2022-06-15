@@ -35,6 +35,11 @@ language('English',
 	['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
 	'Today', 'Tomorrow'
 ).
+language('Estonian',
+	['Jaanuar', 'Veebruar', 'Märts', 'Aprill', 'Mai', 'Juuni', 'Juuli', 'August', 'September', 'Oktoober', 'November', 'Detsember'],
+	['Esmaspäev', 'Teisipäev', 'Kolmapäev', 'Neljapäev', 'Reede', 'Laupäev', 'Pühapäev'],
+	'Täna', 'Homme'
+).
 language('Finnish',
 	['Tammikuu', 'Helmikuu', 'Maaliskuu', 'Huhtikuu', 'Saattaa', 'Kesäkuu', 'Heinäkuu', 'Elokuu', 'Syyskuu', 'Lokakuu', 'Marraskuu', 'Joulukuu'],
 	['Maanantai', 'Tiistai', 'Keskiviikko', 'Torstai', 'Perjantai', 'Lauantai', 'Sunnuntai'],
@@ -58,7 +63,7 @@ language('Greek',
 language('Hebrew',
 	['ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני', 'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'],
 	['יום שני', 'יום שלישי', 'יום רביעי', 'יום חמישי', 'יום שישי', 'יום שבת', 'יום ראשון'],
-	'Σήμερα', 'Αύριο'
+	'היום', 'מָחָר'
 ).
 language('Hungarian',
 	['Január', 'Február', 'Március', 'Április', 'Május', 'Június', 'Július', 'Augusztus', 'Szeptember', 'Október', 'November', 'December'],
@@ -73,7 +78,12 @@ language('Italian',
 language('Japanese',
 	['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
 	['月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日', '日曜日'],
-	'Oggi', 'Domani'
+	'今日', '明日'
+).
+language('Latvian',
+	['Janvāris', 'Februāris', 'Marts', 'Aprīlis', 'Maijs', 'Jūnijs', 'Jūlijs', 'Augusts', 'Septembris', 'Oktobris', 'Novembris', 'Decembris'],
+	['Pirmdiena', 'Otrdiena', 'Trešdiena', 'Ceturtdiena', 'Piektdiena', 'Sestdiena', 'Svētdiena'],
+	'Šodien', 'Rīt'
 ).
 language('Lithuanian',
 	['Sausis', 'Vasaris', 'Kovas', 'Balandis', 'Gegužė', 'Birželis', 'Liepa', 'Rugpjūtis', 'Rugsėjis', 'Spalis', 'Lapkritis', 'Gruodis'],
