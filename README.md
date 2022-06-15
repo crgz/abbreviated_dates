@@ -27,6 +27,7 @@ Only for development purposes the [`tap` pack](http://www.swi-prolog.org/pack/li
 ```prolog
 ?- pack_install(tap).
 ```
+For maintenance tasks [bumpversion](https://github.com/peritus/bumpversion) and [hub](https://github.com/github/hub) might be required.
 
 ## Provided Predicates
 
