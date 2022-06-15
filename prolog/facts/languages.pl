@@ -63,7 +63,7 @@ language('Greek',
 language('Hebrew',
 	['ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני', 'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'],
 	['יום שני', 'יום שלישי', 'יום רביעי', 'יום חמישי', 'יום שישי', 'יום שבת', 'יום ראשון'],
-	'Σήμερα', 'Αύριο'
+	'היום', 'מָחָר'
 ).
 language('Hungarian',
 	['Január', 'Február', 'Március', 'Április', 'Május', 'Június', 'Július', 'Augusztus', 'Szeptember', 'Október', 'November', 'December'],
