@@ -1,3 +1,4 @@
+:- module(languages, [language/5]).
 :- encoding(utf8).
 
 language('Bulgarian',

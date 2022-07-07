@@ -12,7 +12,9 @@ Author: Conrado M. Rodriguez <Conrado.Rgz@gmail.com> https://github.com/crgz
 :- use_module(library(date_time)).
 :- use_module(library(dcg/basics), [whites//0, nonblanks//1, digits//1]).
 
-:- [facts/languages]. % Facts about languages
+:- use_module(facts/languages).  % Facts about languages
+:- use_module(facts/country_language).
+:- use_module(facts/country_date_endianness).
 
 %!  parse(+Context, +Expression, ?Dates)
 %
@@ -57,8 +59,13 @@ single_day([Context|_], date(Y, M, D), Language, Syntax) -->
 
 % phrase(abbreviated_dates:single_day([date(2022, 2, 28)], Date, Language, Syntax), `Pirm. 06-20`).
 single_day([Context|_], date(Y, M, D), Language, Syntax) -->
-  week_day(_, Language, WeekDayFormat), optional_comma, b, month_number(M), month_day_separator, day_number(D),
-  {maybe_future_year(Context, M, D, Y), atom_concat(WeekDayFormat, ' %m %d', Syntax)}.
+  week_day(_, Language, WeekDayFormat), optional_comma, b,
+  integer(First), optional_comma, month_day_separator, integer(Second), optional_comma,
+  {
+    guess_day_month(Language, Y, First, Second, D, M),
+    maybe_future_year(Context, M, D, Y), 
+    atom_concat(WeekDayFormat, ' %m %d', Syntax)
+  }.
 
 % phrase(abbreviated_dates:single_day([date(2020, 2, 28)], Date, Language, Syntax), `31`).
 single_day([Context|_], Date, Language, '%d') --> 
@@ -78,6 +85,18 @@ single_day(Context, Date, Language, Syntax) -->
     week_day_name(Language, _, KnownWeekDay), downcase_atom(KnownWeekDay, LowerCaseWeekDay),
     atom_concat('%A, ', DaySyntax, Syntax)
   }.
+
+guess_day_month(Language, Year, First, Second, Day, Month):-
+  top_country_language(Country, Language),
+  top_endianness(Country, Endianness),
+  day_month_order(Endianness, First, Second, Day, Month),
+  valid_date(Day, Month, Year).
+
+day_month_order(little, Day,   Month, Day, Month). % day is first number in little endian dates
+day_month_order(middle, Month, Day,   Day, Month). % day is second number in little middle dates
+day_month_order(big,    Month, Day,   Day, Month). % day is second number in big middle dates
+
+valid_date(Day, Month, Year):- Month =< 12, date_month_days(Month,Year,MD), Day =< MD.
 
 day_number(D) --> integer(D).
 day_number(D) --> integer(D), ".".
@@ -109,7 +128,7 @@ week_day(WeekDayNumber, Language, '%A') --> % explicit week day
   }.
 
 week_day(WeekDayNumber, Language, '%a') --> % abbreviated week day
-  string(Abbreviation), optional_period,
+  string_without(". ", Abbreviation), optional_period,
   {
     atom_codes(Prefix, Abbreviation),
     week_day_name(Language, WeekDayNumber, WeekDayName),
