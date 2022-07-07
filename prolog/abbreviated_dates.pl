@@ -12,7 +12,9 @@ Author: Conrado M. Rodriguez <Conrado.Rgz@gmail.com> https://github.com/crgz
 :- use_module(library(date_time)).
 :- use_module(library(dcg/basics), [whites//0, nonblanks//1, digits//1]).
 
-:- [facts/languages]. % Facts about languages
+:- use_module(facts/languages).  % Facts about languages
+:- use_module(facts/country_language).
+:- use_module(facts/country_date_endianness).
 
 %!  parse(+Context, +Expression, ?Dates)
 %
