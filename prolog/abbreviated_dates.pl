@@ -111,7 +111,7 @@ week_day(WeekDayNumber, Language, '%A') --> % explicit week day
   }.
 
 week_day(WeekDayNumber, Language, '%a') --> % abbreviated week day
-  string(Abbreviation), optional_period,
+  string_without(". ", Abbreviation), optional_period,
   {
     atom_codes(Prefix, Abbreviation),
     week_day_name(Language, WeekDayNumber, WeekDayName),
