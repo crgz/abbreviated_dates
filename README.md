@@ -48,7 +48,7 @@ The new tests can be run using the following command:
 
 ```shell
 swipl -t "load_test_files([]), run_tests." prolog/abbreviated_dates.pl
-```shell
+```
 
 The tap tests can be run using the following command:
 
