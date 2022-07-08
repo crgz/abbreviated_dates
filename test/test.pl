@@ -58,11 +58,13 @@ parse(date(2021, 9, 21), 'saturday, 23 april', Dates, Syntax, Language) ->
    Syntax = ['%A, %d %B'],
    Language = 'English'.
 
+% Please consider removal of test case since it is indirectly covered by test: '23 Sep.'
 parse(date(2020, 2, 28), '23 Sep. - 27 Sep.', Dates, Syntax, Language) ->
    Dates = [date(2020, 9, 23), date(2020, 9, 27)],
    Syntax = ['%d %b', '%d %b'],
    Language = 'English'.
 
+% Please consider removal of test case since it is indirectly covered by test: 'ma 13/6'
 parse(date(2022, 2, 28), 'ma 13/6 - wo 15/6', Dates, Syntax, Language) ->
    Dates = [date(2022, 6, 13), date(2022, 6, 15)],
    Syntax = ['%a %d %m', '%a %d %m'],
