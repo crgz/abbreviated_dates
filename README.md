@@ -44,16 +44,10 @@ We are migrating the test suit from tap to PL-Unit aiming to implement test cove
 
 ### Run Tests
 
-The new tests can be run using the following command:
+The old tap & new tests can be run using the following command:
 
 ```shell
-swipl -t "load_test_files([]), run_tests." prolog/abbreviated_dates.pl
-```
-
-The tap tests can be run using the following command:
-
-```shell
-swipl -q -g main -t halt -s test/test.pl
+make test
 ```
 
 ### Define new Tests
