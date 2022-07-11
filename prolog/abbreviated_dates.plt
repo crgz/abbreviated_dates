@@ -8,7 +8,7 @@
 test('Pirm. 20-06', all(Languages == ['Latvian','Lithuanian'])) :- % Explanation:
   assertion(top_endianness('Latvia', little)), % Latvia little date endianness and first number month day
   assertion(top_country_language('Latvia', 'Lithuanian')),  % Lithuanian speaking population in Latvia
-  phrase(abbreviated_dates:single_day([date(2022, 2, 28)], date(2022, 6, 20), Languages, '%a %m %d'), `Pirm. 20-06`).
+  phrase(abbreviated_dates:single_day([date(2022, 2, 28)], date(2022, 6, 20), Languages, '%a %d %m'), `Pirm. 20-06`).
 
 test('Pirm. 06-20', all(Languages == ['Lithuanian'])) :-
   assertion(top_endianness('Lithuania', big)),

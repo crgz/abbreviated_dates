@@ -44,32 +44,37 @@ multiple_days([LastKnownDate|Other], [SingleDay|MultipleDays], Language, [S1|S2]
 
 % phrase(abbreviated_dates:single_day([date(2020, 2, 28)], Date, Language, Syntax), `1 July`).
 single_day([Context|_], date(Y, M, D), Language, Syntax) -->
-  day_number(D), b, month(M, Language, MonthFormat), 
+  date_number(D), b, month(M, Language, MonthFormat), 
   {maybe_future_year(Context, M, D, Y), atom_concat('%d ', MonthFormat, Syntax)}.
 
 % phrase(abbreviated_dates:single_day([date(2020, 2, 28)], Date, Language, Syntax), `Jan. 1`).
 single_day([Context|_], date(Y, M, D), Language, Syntax) -->
-  month(M, Language, MonthFormat), b, day_number(D), 
+  month(M, Language, MonthFormat), b, date_number(D), 
   {maybe_future_year(Context, M, D, Y), atom_concat(MonthFormat,' %d', Syntax)}.
-
-% phrase(abbreviated_dates:single_day([date(2022, 2, 28)], Date, Language, Syntax), `ma 13/6`).
-single_day([Context|_], date(Y, M, D), Language, Syntax) -->
-  week_day(_, Language, WeekDayFormat), optional_comma, b, day_number(D), day_month_separator, month_number(M),
-  {maybe_future_year(Context, M, D, Y), atom_concat(WeekDayFormat, ' %d %m', Syntax)}.
 
 % phrase(abbreviated_dates:single_day([date(2022, 2, 28)], Date, Language, Syntax), `Pirm. 06-20`).
 single_day([Context|_], date(Y, M, D), Language, Syntax) -->
-  week_day(_, Language, WeekDayFormat), optional_comma, b,
-  integer(First), optional_comma, month_day_separator, integer(Second), optional_comma,
+  week_day(_, Language, WeekDaySyntax), optional_comma, b,
+  date_number(First), separator, date_number(Second),
   {
-    guess_day_month(Language, Y, First, Second, D, M),
+    guess_day_month(Language, DayMonthSyntax, Y, First, Second, D, M),
     maybe_future_year(Context, M, D, Y), 
-    atom_concat(WeekDayFormat, ' %m %d', Syntax)
+    atom_concat(WeekDaySyntax, " ", PaddedWeekDaySyntax), atom_concat(PaddedWeekDaySyntax, DayMonthSyntax, Syntax)
+  }.
+
+% phrase(abbreviated_dates:single_day([date(2022, 2, 28)], Date, Language, Syntax), `06-20, Pirm.`).
+single_day([Context|_], date(Y, M, D), Language, Syntax) -->
+  date_number(First), separator, date_number(Second),
+  optional_comma, b, week_day(_, Language, WeekDaySyntax),
+  {
+    guess_day_month(Language, DayMonthSyntax, Y, First, Second, D, M),
+    maybe_future_year(Context, M, D, Y), 
+    atom_concat(DayMonthSyntax, " ", PaddedDayMonthSyntax), atom_concat(PaddedDayMonthSyntax, WeekDaySyntax, Syntax)
   }.
 
 % phrase(abbreviated_dates:single_day([date(2020, 2, 28)], Date, Language, Syntax), `31`).
 single_day([Context|_], Date, Language, '%d') --> 
-  day_number(D), 
+  date_number(D), 
   {future_date(Context, D, Date), language(Language)}.
 
 % phrase(abbreviated_dates:single_day([date(2020, 2, 29)], Date, Language, Syntax), `Tomorrow`).
@@ -86,24 +91,25 @@ single_day(Context, Date, Language, Syntax) -->
     atom_concat('%A, ', DaySyntax, Syntax)
   }.
 
-guess_day_month(Language, Year, First, Second, Day, Month):-
+guess_day_month(Language, Syntax, Year, First, Second, Day, Month):-
   top_country_language(Country, Language),
   top_endianness(Country, Endianness),
   day_month_order(Endianness, First, Second, Day, Month),
+  day_month_syntax(Syntax, First, Second, Day, Month),
   valid_date(Day, Month, Year).
 
 day_month_order(little, Day,   Month, Day, Month). % day is first number in little endian dates
 day_month_order(middle, Month, Day,   Day, Month). % day is second number in little middle dates
 day_month_order(big,    Month, Day,   Day, Month). % day is second number in big middle dates
 
+day_month_syntax('%d %m', Day, Month, Day, Month).
+day_month_syntax('%m %d', Month, Day, Day, Month).
+
 valid_date(Day, Month, Year):- Month =< 12, date_month_days(Month,Year,MD), Day =< MD.
 
-day_number(D) --> integer(D).
-day_number(D) --> integer(D), ".".
-month_number(M) --> integer(M).
-month_number(M) --> integer(M), ".".
-day_month_separator --> "."; "/".
-month_day_separator --> "-".
+date_number(N) --> integer(N).
+date_number(N) --> integer(N), ".".
+separator --> "/"; "-"; "."; " ".
 
 month(MonthNumber, Language, '%B') --> % explicit month
   nonblanks(Codes),
