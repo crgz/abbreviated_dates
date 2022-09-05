@@ -1,4 +1,5 @@
 # generated files
 .idea
+.history
 doc/
 abbreviated_dates-*.tgz
