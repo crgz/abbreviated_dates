@@ -54,22 +54,18 @@ single_day([Context|_], date(Y, M, D), Language, Syntax) -->
 
 % phrase(abbreviated_dates:single_day([date(2022, 2, 28)], Date, Language, Syntax), `Pirm. 06-20`).
 single_day([Context|_], date(Y, M, D), Language, Syntax) -->
-  week_day(_, Language, WeekDaySyntax), optional_comma, b,
-  date_number(First), separator, date_number(Second),
+  week_day(WeekDayNumber, Language, WeekDaySyntax), optional_comma, b, date_number(First), separator, date_number(Second),
   {
-    guess_day_month(Language, DayMonthSyntax, Y, First, Second, D, M),
-    maybe_future_year(Context, M, D, Y), 
-    atom_concat(WeekDaySyntax, " ", PaddedWeekDaySyntax), atom_concat(PaddedWeekDaySyntax, DayMonthSyntax, Syntax)
+    best_date(Context, First, Second, WeekDayNumber, Language, Y, D, M, DayMonthSyntax),
+    atomic_list_concat([WeekDaySyntax, DayMonthSyntax], ' ', Syntax)
   }.
 
 % phrase(abbreviated_dates:single_day([date(2022, 2, 28)], Date, Language, Syntax), `06-20, Pirm.`).
 single_day([Context|_], date(Y, M, D), Language, Syntax) -->
-  date_number(First), separator, date_number(Second),
-  optional_comma, b, week_day(_, Language, WeekDaySyntax),
+  date_number(First), separator, date_number(Second), optional_comma, b, week_day(WeekDayNumber, Language, WeekDaySyntax),
   {
-    guess_day_month(Language, DayMonthSyntax, Y, First, Second, D, M),
-    maybe_future_year(Context, M, D, Y), 
-    atom_concat(DayMonthSyntax, " ", PaddedDayMonthSyntax), atom_concat(PaddedDayMonthSyntax, WeekDaySyntax, Syntax)
+    best_date(Context, First, Second, WeekDayNumber, Language, Y, D, M, DayMonthSyntax),
+    atomic_list_concat([DayMonthSyntax, WeekDaySyntax], ' ', Syntax)
   }.
 
 % phrase(abbreviated_dates:single_day([date(2020, 2, 28)], Date, Language, Syntax), `31`).
@@ -91,12 +87,18 @@ single_day(Context, Date, Language, Syntax) -->
     atom_concat('%A, ', DaySyntax, Syntax)
   }.
 
-guess_day_month(Language, Syntax, Year, First, Second, Day, Month):-
+best_date(Context, First, Second, WeekDayNumber, Language, Year, Day, Month, Syntax):-
+  possible_year(Context, Year),
   top_country_language(Country, Language),
   top_endianness(Country, Endianness),
   day_month_order(Endianness, First, Second, Day, Month),
-  day_month_syntax(Syntax, First, Second, Day, Month),
-  valid_date(Day, Month, Year).
+  week_dayn(date(Year,Month,Day), WeekDayNumber),
+  day_month_syntax(Syntax, First, Second, Day, Month).
+
+possible_year(Context, Year):-
+  date_extract(Context, years(Y)),
+  Max is Y + 10,
+  between(Y, Max, Year).
 
 day_month_order(little, Day,   Month, Day, Month). % day is first number in little endian dates
 day_month_order(middle, Month, Day,   Day, Month). % day is second number in little middle dates
@@ -104,8 +106,6 @@ day_month_order(big,    Month, Day,   Day, Month). % day is second number in big
 
 day_month_syntax('%d %m', Day, Month, Day, Month).
 day_month_syntax('%m %d', Month, Day, Day, Month).
-
-valid_date(Day, Month, Year):- Month =< 12, date_month_days(Month,Year,MD), Day =< MD.
 
 date_number(N) --> integer(N).
 date_number(N) --> integer(N), ".".
