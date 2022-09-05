@@ -126,28 +126,16 @@ month(MonthNumber, Language, '%b') --> % abbreviated month
     sub_atom(MonthName, 0, _, _, Prefix)
   }.
 
-week_day(WeekDayNumber, Language, '%A') --> % explicit week day
-  nonblanks(Codes),
+week_day(WeekDayNumber, Language, Format) --> % abbreviated week day
+  string_without(". ", InputCodes), optional_period,
   {
-    atom_codes(InputWeekDayName, Codes), downcase_atom(InputWeekDayName, LowerCaseWeekDayName),
-    week_day_name(Language, WeekDayNumber , KnownWeekDayName), downcase_atom(KnownWeekDayName, LowerCaseWeekDayName)
-  }.
-
-week_day(WeekDayNumber, Language, '%a') --> % abbreviated week day
-  string_without(". ", Abbreviation), optional_period,
-  {
-    atom_codes(Prefix, Abbreviation),
-    week_day_name(Language, WeekDayNumber, WeekDayName),
-    sub_atom(WeekDayName, 0, _, _, Prefix)
-  }.
-
-week_day(WeekDayNumber, Language, '%a') --> % abbreviated lower case week day
-  string(Abbreviation), optional_period,
-  {
-    atom_codes(Prefix, Abbreviation),
+    atom_codes(InputAtom, InputCodes),
+    downcase_atom(InputAtom, LowerCaseInputAtom),
     week_day_name(Language, WeekDayNumber, WeekDayName),
     downcase_atom(WeekDayName, LowerCaseWeekDayName),
-    sub_atom(LowerCaseWeekDayName, 0, _, _, Prefix)
+
+    optional_abbreviation(LowerCaseWeekDayName, LowerCaseInputAtom, Abbreviated),
+    select_abbreviation_format(Abbreviated, Format)
   }.
 
 dash --> " - ".
@@ -158,6 +146,16 @@ optional_comma --> ","; "".
 %-----------------------------------------------------------
 % Internal predicates
 %
+
+% Find optional abbreviations ordering by length
+optional_abbreviation(Atom, Abbreviation, Abbreviated):-
+  order_by([desc(L)], (sub_atom(Atom, 0, _, After, Abbreviation), atom_length(Abbreviation,L))),
+  L > 0,
+  (After = 0 -> Abbreviated = false; Abbreviated = true).
+
+select_abbreviation_format(true, '%a').
+select_abbreviation_format(false, '%A').
+
 future_date(date(Y, M, D), Day, date(YY,MM,DD)):-
   date_month_days(M,Y,MD),
   D =< Day, Day =< MD, % Day in current month

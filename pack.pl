@@ -9,5 +9,4 @@ packager('Conrado M. Rodriguez','conrado.rgz@gmail.com').
 download('https://github.com/crgz/abbreviated_dates/releases/*.zip').
 
 home('https://github.com/crgz/abbreviated_dates').
-requires(tap).
 requires(date_time).
