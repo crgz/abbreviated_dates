@@ -19,9 +19,6 @@ test: test-tap
 test-visual-friendly: test-tap
 	@script -qc "swipl -t 'load_test_files([]), run_tests.' prolog/$(name).pl" /dev/null | tail -n +8
 
-test-tap:
-	@swipl -q -g 'main,halt(0)' -t 'halt(1)' -s test/test.pl
-
 bump:
 	@bumpversion patch
 
