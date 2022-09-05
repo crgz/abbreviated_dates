@@ -13,10 +13,10 @@ remote = https://github.com/crgz/$(name)/archive/v$(version).zip
 
 all: test bump push release
 
-test: test-tap
+test:
 	@swipl -t 'load_test_files([]), run_tests.' prolog/$(name).pl 2>&1 /dev/null | tail -n +8
 
-test-visual-friendly: test-tap
+test-visual-friendly:
 	@script -qc "swipl -t 'load_test_files([]), run_tests.' prolog/$(name).pl" /dev/null | tail -n +8
 
 bump:
