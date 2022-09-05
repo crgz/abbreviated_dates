@@ -210,7 +210,7 @@ month_name(Language, MonthNumber, MonthName):-
   
 week_day_name(Language, WeekDayNumber, WeekDayName):-
 	language(Language, _, Weeks, _, _),
-	nth1(WeekDayNumber, Weeks, WeekDayName).
+	nth0(WeekDayNumber, Weeks, WeekDayName).
 
 adverb(Language, Today, Date, Date, today):-
 	language(Language, _, _, Today, _).
