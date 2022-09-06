@@ -10,15 +10,14 @@ SHELL = /bin/bash
 name = $(shell swipl -q -s pack -g 'name(N),writeln(N)' -t halt)
 title = $(shell swipl -q -s pack -g 'title(V),writeln(V)' -t halt)
 version = $(shell swipl -q -s pack -g 'version(V),writeln(V)' -t halt)
-local_version = v$(version)
 remote_version = $(shell curl --silent 'https://api.github.com/repos/crgz/$(name)/releases/latest' | jq -r .tag_name)
 remote = https://github.com/crgz/$(name)/archive/v$(version).zip
 
 all: about test
 
 about:
-	@echo $(name) $(local_version)/$(remote_version) -- $(title)
-	@if [ v$(version) != $(remote_version) ]; then printf 'Version out of synch\n'; fi
+	@echo $(name) v$(version) -- $(title)
+	@if [ v$(version) != $(remote_version) ]; then printf '[Warning!] Version out of synch\n'; fi
 
 test:
 	@script -qc "swipl -t 'load_test_files([]), run_tests.' prolog/$(name).pl" /dev/null | tail -n +8
@@ -34,11 +33,13 @@ install:
 
 .PHONY: deploy
 deploy: remove
-	if [ $(local_version) == $(remote_version) ]; then bumpversion patch; fi
-	git push
-	hub release create -m v$(version) v$(version)
-	while [ true ]; do \
+	bumpversion patch; \
+	git push ; \
+  LOCAL_VERSION=$(swipl -q -s pack -g 'version(V),writeln(V)' -t halt) ;\
+	hub release create -m v$(LOCAL_VERSION) v$(LOCAL_VERSION) ; \
+	while : ; do \
 		REMOTE_VERSION=$(curl --silent 'https://api.github.com/repos/crgz/$(name)/releases/latest' | jq -r .tag_name) ;\
-		printf '$(local_version)/$(REMOTE_VERSION)\n' && sleep 1; \
-	done;
+		printf '$(LOCAL_VERSION)/$(REMOTE_VERSION)\n' && sleep 1; \
+		if [ $(LOCAL_VERSION) == $(REMOTE_VERSION) ]; then break; fi ; \
+  done; \
 	swipl -q -g "pack_install('$(remote)',[interactive(false)]),halt(0)" -t 'halt(1)'
