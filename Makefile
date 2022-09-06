@@ -39,7 +39,7 @@ install-local:
 
 deploy:
 	bumpversion patch && git push ;\
-  if [ $$? ]; then exit; fi ;\
+  #if [ $$? ]; then exit; fi ;\
   LOCAL_VERSION=$$(swipl -q -s pack -g 'version(V),writeln(V)' -t halt) ;\
   echo $$LOCAL_VERSION ;\
 	hub release create -m v$$LOCAL_VERSION v$$LOCAL_VERSION ;\
