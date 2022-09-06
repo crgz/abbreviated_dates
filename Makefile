@@ -20,22 +20,20 @@ about:
 	@if [ "$version" == "$remote_version" ]; then printf '\e[1;34m[ Ok ]\e[m'; else printf '\e[1;34m[ Fail ]\e[m'; fi
 
 test:
-	@swipl -t 'load_test_files([]), run_tests.' prolog/$(name).pl 2>&1 /dev/null | tail -n +8
-
-test-visual-friendly:
 	@script -qc "swipl -t 'load_test_files([]), run_tests.' prolog/$(name).pl" /dev/null | tail -n +8
 
-bump:
-	@bumpversion patch
+test-plain:
+	@swipl -t 'load_test_files([]), run_tests.' prolog/$(name).pl 2>&1 /dev/null | tail -n +8
 
-push:
+remove:
+	@swipl -g "pack_remove($(name))"  -t halt
+
+install:
+	@swipl -q -g "pack_install('$(name)',[interactive(false)]),halt(0)" -t 'halt(1)'
+
+.PHONY: deploy
+deploy: remove
+	@if [ $(version) == $(remote_version) ]; then bumpversion patch; fi
 	@git push
-
-release:
 	@hub release create -m v$(version) v$(version)
-
-upload:
-	@swipl -q -g "pack_remove(abbreviated_dates),pack_install('$(remote)',[interactive(false)]),halt(0)" -t 'halt(1)'
-
-version:
-	@echo $(version)
+	@swipl -q -g "pack_install('$(remote)',[interactive(false)]),halt(0)" -t 'halt(1)'
