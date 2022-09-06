@@ -36,5 +36,5 @@ deploy: remove
 	if [ v$(version) == $(remote_version) ]; then bumpversion patch; fi
 	git push
 	hub release create -m v$(version) v$(version)
-	@while [ v$(version) != $(remote_version) ]; do printf '.'; done;
+	@while [ v$(version) != $(remote_version) ]; do printf '$(version)/$(remote_version)\n' && sleep 1; done;
 	swipl -q -g "pack_install('$(remote)',[interactive(false)]),halt(0)" -t 'halt(1)'
