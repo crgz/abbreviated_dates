@@ -32,6 +32,9 @@ remove:
 	@swipl -g "pack_remove($(name))"  -t halt
 
 install:
+	@echo "(none)"
+
+install-local:
 	@swipl -q -g "pack_install('$(name)',[interactive(false)]),halt(0)" -t 'halt(1)'
 
 deploy: remove
