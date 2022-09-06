@@ -38,14 +38,15 @@ install-local:
 	@swipl -q -g "pack_install('$(name)',[interactive(false)]),halt(0)" -t 'halt(1)'
 
 deploy: remove
-	bumpversion patch ;\
+	@bumpversion patch ;\
+  if [ $$? ]; then exit; fi ;\
   LOCAL_VERSION=$$(swipl -q -s pack -g 'version(V),writeln(V)' -t halt) ;\
   echo $$LOCAL_VERSION ;\
 	git push ;\
 	hub release create -m v$$LOCAL_VERSION v$$LOCAL_VERSION ;\
 	while : ; do \
 		REMOTE_VERSION=$$(curl --silent 'https://api.github.com/repos/crgz/$(name)/releases/latest' | jq -r .tag_name) ;\
-		printf '%s\n' $$LOCAL_VERSION/$$REMOTE_VERSION && sleep 1 ;\
+		printf '.' && sleep 1 ;\
 		if [ v$$LOCAL_VERSION == $$REMOTE_VERSION ]; then break; fi ;\
   done ;\
 	swipl -q -g "pack_install('$(remote)',[interactive(false)]),halt(0)" -t 'halt(1)'
