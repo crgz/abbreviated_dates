@@ -37,5 +37,8 @@ deploy: remove
 	if [ $(local_version) == $(remote_version) ]; then bumpversion patch; fi
 	git push
 	hub release create -m v$(version) v$(version)
-	@while [ $(local_version) != $(remote_version) ]; do printf '$(version)/$(remote_version)\n' && sleep 1; done;
+	while [ true ]; do \
+		REMOTE_VERSION=$(curl --silent 'https://api.github.com/repos/crgz/$(name)/releases/latest' | jq -r .tag_name) ;\
+		printf '$(local_version)/$(REMOTE_VERSION)\n' && sleep 1; \
+	done;
 	swipl -q -g "pack_install('$(remote)',[interactive(false)]),halt(0)" -t 'halt(1)'
