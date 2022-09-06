@@ -38,7 +38,7 @@ install-local:
 	@swipl -q -g "pack_install('$(name)',[interactive(false)]),halt(0)" -t 'halt(1)'
 
 deploy:
-	@bumpversion patch ;\
+	bumpversion patch ;\
   if [ $$? ]; then exit; fi ;\
   LOCAL_VERSION=$$(swipl -q -s pack -g 'version(V),writeln(V)' -t halt) ;\
   echo $$LOCAL_VERSION ;\
