@@ -8,10 +8,16 @@ SHELL = /bin/bash
 .SHELLFLAGS = -o pipefail -c
 
 name = $(shell swipl -q -s pack -g 'name(N),writeln(N)' -t halt)
-version = $(shell swipl -q -s pack -g 'version(V),writeln(V)' -t halt)
+title = $(shell swipl -q -s pack -g 'title(V),writeln(V)' -t halt)
+version = v$(shell swipl -q -s pack -g 'version(V),writeln(V)' -t halt)
+remote_version = $(shell curl --silent 'https://api.github.com/repos/crgz/$(name)/releases/latest' | jq -r .tag_name)
 remote = https://github.com/crgz/$(name)/archive/v$(version).zip
 
-all: test bump push release
+all: about test
+
+about:
+	@echo $(name) $(version)/$(remote_version) -- $(title)
+	@if [ "$version" == "$remote_version" ]; then printf '\e[1;34m[ Ok ]\e[m'; else printf '\e[1;34m[ Fail ]\e[m'; fi
 
 test:
 	@swipl -t 'load_test_files([]), run_tests.' prolog/$(name).pl 2>&1 /dev/null | tail -n +8
