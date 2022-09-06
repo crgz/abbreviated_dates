@@ -27,7 +27,7 @@ parse/4.  % parse an abbreviated incomplete date in multiple languages (today, t
 ```
 
 For further details have a look at the [implementation](prolog/abbreviated_dates.pl). In addition, the
-[new](prolog/abbreviated_dates.plt) and [old](test/test.pl) might give an impression on how to use this library.
+[new](prolog/abbreviated_dates.plt) might give an impression on how to use this library.
 
 ## Requirements
 
@@ -53,3 +53,6 @@ make test
 ### Define new Tests
 
 New tests should be defined in the [new test](prolog/abbreviated_dates.plt) file.
+
+## Review
+https://eu.swi-prolog.org/pack/review?p=abbreviated_dates

@@ -3,7 +3,7 @@
 # having a Makefile included and seeing all the weird results when make all was run in a location where it was not
 # expected. https://rlaanemets.com/post/show/prolog-pack-development-experience
 
-.PHONY: all test bump push release
+.PHONY: all check about test test-plain remove install deploy
 SHELL = /bin/bash
 .SHELLFLAGS = -o pipefail -c
 
@@ -13,7 +13,8 @@ version = $(shell swipl -q -s pack -g 'version(V),writeln(V)' -t halt)
 remote_version = $(shell curl --silent 'https://api.github.com/repos/crgz/$(name)/releases/latest' | jq -r .tag_name)
 remote = https://github.com/crgz/$(name)/archive/v$(version).zip
 
-all: about test
+all: check
+check: about test # pack_install execute make check
 
 about:
 	@echo $(name) v$(version) -- $(title)
@@ -33,15 +34,15 @@ remove:
 install:
 	@swipl -q -g "pack_install('$(name)',[interactive(false)]),halt(0)" -t 'halt(1)'
 
-.PHONY: deploy
 deploy: remove
-	bumpversion patch; \
-	git push ; \
+	bumpversion patch ;\
   LOCAL_VERSION=$$(swipl -q -s pack -g 'version(V),writeln(V)' -t halt) ;\
-	hub release create -m v$(LOCAL_VERSION) v$(LOCAL_VERSION) ; \
+  echo $$LOCAL_VERSION ;\
+	git push ;\
+	hub release create -m v$$LOCAL_VERSION v$$LOCAL_VERSION ;\
 	while : ; do \
 		REMOTE_VERSION=$$(curl --silent 'https://api.github.com/repos/crgz/$(name)/releases/latest' | jq -r .tag_name) ;\
-		printf '$(LOCAL_VERSION)/$(REMOTE_VERSION)\n' && sleep 1; \
-		if [ $(LOCAL_VERSION) == $(REMOTE_VERSION) ]; then break; fi ; \
-  done; \
+		printf '%s\n' $$LOCAL_VERSION/$$REMOTE_VERSION && sleep 1 ;\
+		if [ v$$LOCAL_VERSION == $$REMOTE_VERSION ]; then break; fi ;\
+  done ;\
 	swipl -q -g "pack_install('$(remote)',[interactive(false)]),halt(0)" -t 'halt(1)'
