@@ -17,7 +17,9 @@ all: about test
 
 about:
 	@echo $(name) v$(version) -- $(title)
-	@if [ v$(version) != $(remote_version) ]; then printf '[Warning!] Version out of synch\n'; fi
+	@if [ v$(version) != $(remote_version) ]; then \
+		printf '[Warning!] Version out of synch v$(version)/$(remote_version)\n'; \
+	fi
 
 test:
 	@script -qc "swipl -t 'load_test_files([]), run_tests.' prolog/$(name).pl" /dev/null | tail -n +8
@@ -35,10 +37,10 @@ install:
 deploy: remove
 	bumpversion patch; \
 	git push ; \
-  LOCAL_VERSION=$(swipl -q -s pack -g 'version(V),writeln(V)' -t halt) ;\
+  LOCAL_VERSION=$$(swipl -q -s pack -g 'version(V),writeln(V)' -t halt) ;\
 	hub release create -m v$(LOCAL_VERSION) v$(LOCAL_VERSION) ; \
 	while : ; do \
-		REMOTE_VERSION=$(curl --silent 'https://api.github.com/repos/crgz/$(name)/releases/latest' | jq -r .tag_name) ;\
+		REMOTE_VERSION=$$(curl --silent 'https://api.github.com/repos/crgz/$(name)/releases/latest' | jq -r .tag_name) ;\
 		printf '$(LOCAL_VERSION)/$(REMOTE_VERSION)\n' && sleep 1; \
 		if [ $(LOCAL_VERSION) == $(REMOTE_VERSION) ]; then break; fi ; \
   done; \
