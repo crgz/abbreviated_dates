@@ -44,6 +44,6 @@ deploy:
 	while : ; do \
 		REMOTE_VERSION=$$(curl --silent 'https://api.github.com/repos/crgz/$(name)/releases/latest' | jq -r .tag_name) ;\
 		printf '.' && sleep 1 ;\
-		if [ v$$LOCAL_VERSION == $$REMOTE_VERSION ]; then break; fi ;\
+		if [ v$$LOCAL_VERSION == $$REMOTE_VERSION ]; then printf '\n' && break; fi ;\
   done ;\
 	swipl -q -g "pack_remove($(name)),pack_install('$(remote)',[interactive(false)]),halt(0)" -t 'halt(1)'
