@@ -48,4 +48,4 @@ deploy:
 		printf '.' && sleep 1 ;\
 		if [ v$$LOCAL_VERSION == $$REMOTE_VERSION ]; then break; fi ;\
   done ;\
-	swipl -q -g "pack_install('$(remote)',[interactive(false)]),halt(0)" -t 'halt(1)'
+	swipl -q -g "pack_remove($(name)),pack_install('$(remote)',[interactive(false)]),halt(0)" -t 'halt(1)'
