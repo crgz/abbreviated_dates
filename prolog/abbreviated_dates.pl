@@ -112,17 +112,16 @@ month(MonthNumber, Language, '%b') --> % abbreviated month
     sub_atom(MonthName, 0, _, _, Prefix)
   }.
 
-week_day(WeekDayNumber, Language, Format) --> % abbreviated week day
-  string_without(". ", InputCodes), optional_period,
-  {
-    atom_codes(InputAtom, InputCodes),
-    downcase_atom(InputAtom, LowerCaseInputAtom),
-    week_day_name(Language, WeekDayNumber, WeekDayName),
-    downcase_atom(WeekDayName, LowerCaseWeekDayName),
+week_day(InputCodes) --> % abbreviated week day
+  string_without(". ", InputCodes), optional_period.
 
-    optional_abbreviation(LowerCaseWeekDayName, LowerCaseInputAtom, Abbreviated),
-    select_abbreviation_format(Abbreviated, Format)
-  }.
+week_day_facts(InputCodes, WeekDayNumber, Language, Format):-
+  atom_codes(InputAtom, InputCodes),
+  downcase_atom(InputAtom, LowerCaseInputAtom),
+  week_day_name(Language, WeekDayNumber, WeekDayName),
+  downcase_atom(WeekDayName, LowerCaseWeekDayName),
+  optional_abbreviation(LowerCaseWeekDayName, LowerCaseInputAtom, Abbreviated),
+  select_abbreviation_format(Abbreviated, Format).
 
 date_number(N) --> integer(N).
 date_number(N) --> integer(N), ".".
