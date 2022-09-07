@@ -43,6 +43,7 @@ deploy:
 	hub release create -m v$$LOCAL_VERSION v$$LOCAL_VERSION ;\
 	while : ; do \
 		REMOTE_VERSION=$$(curl --silent 'https://api.github.com/repos/crgz/$(name)/releases/latest' | jq -r .tag_name) ;\
-		[[ v$$LOCAL_VERSION != $$REMOTE_VERSION ]] && printf '.' && sleep 1 || printf '\n' && break ;\
+		[[ v$$LOCAL_VERSION != $$REMOTE_VERSION ]] || printf '\n' && break ;\
+    printf '.' && sleep 1 ;\
   done ;\
 	swipl -q -g "pack_remove($(name)),pack_install('$(remote)',[interactive(false)]),halt(0)" -t 'halt(1)'
