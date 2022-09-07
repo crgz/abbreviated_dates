@@ -37,18 +37,21 @@ parse(Context, Expression, Dates, Syntax, Language) :-
 multiple_days(_, [], _, []) --> [].
 multiple_days([LastKnownDate|Other], [SingleDay|MultipleDays], Language, [S1|S2]) -->
   single_day([LastKnownDate|Other], SingleDay, Language, S1),
-  (dash | eos),
+  (" - " | eos),
   multiple_days([SingleDay, LastKnownDate|Other], MultipleDays, Language, S2).
 
-% phrase(abbreviated_dates:single_day([date(2020, 2, 28)], Date, Language, Syntax), `1 July`).
-single_day([Context|_], date(Y, M, D), Language, Syntax) -->
-  date_number(D), b, month(M, Language, MonthFormat), 
-  {maybe_future_year(Context, M, D, Y), atom_concat('%d ', MonthFormat, Syntax)}.
+% Dates hinting week day name & month name
 
-% phrase(abbreviated_dates:single_day([date(2020, 2, 28)], Date, Language, Syntax), `Jan. 1`).
-single_day([Context|_], date(Y, M, D), Language, Syntax) -->
-  month(M, Language, MonthFormat), b, date_number(D), 
-  {maybe_future_year(Context, M, D, Y), atom_concat(MonthFormat,' %d', Syntax)}.
+% phrase(abbreviated_dates:single_day([date(2020, 2, 28)], Date, Language, Syntax), `Saturday, 1 July`).
+single_day(Context, Date, Language, Syntax) -->
+  string(Codes), ",", b, single_day(Context, Date, Language, DaySyntax),
+  {
+    atom_codes(InputWeekDay, Codes), downcase_atom(InputWeekDay, LowerCaseWeekDay),
+    week_day_name(Language, _, KnownWeekDay), downcase_atom(KnownWeekDay, LowerCaseWeekDay),
+    atom_concat('%A, ', DaySyntax, Syntax)
+  }.
+
+% Dates hinting week day names
 
 % phrase(abbreviated_dates:single_day([date(2022, 2, 28)], Date, Language, Syntax), `Pirm. 06-20`).
 single_day([Context|_], date(Y, M, D), Language, Syntax) -->
@@ -66,48 +69,32 @@ single_day([Context|_], date(Y, M, D), Language, Syntax) -->
     atomic_list_concat([DayMonthSyntax, WeekDaySyntax], ' ', Syntax)
   }.
 
+% Dates hinting wonth names
+
+% phrase(abbreviated_dates:single_day([date(2020, 2, 28)], Date, Language, Syntax), `1 July`).
+single_day([Context|_], date(Y, M, D), Language, Syntax) -->
+  date_number(D), b, month(M, Language, MonthFormat), 
+  {maybe_future_year(Context, M, D, Y), atom_concat('%d ', MonthFormat, Syntax)}.
+
+% phrase(abbreviated_dates:single_day([date(2020, 2, 28)], Date, Language, Syntax), `Jan. 1`).
+single_day([Context|_], date(Y, M, D), Language, Syntax) -->
+  month(M, Language, MonthFormat), b, date_number(D), 
+  {maybe_future_year(Context, M, D, Y), atom_concat(MonthFormat,' %d', Syntax)}.
+
+% Dates hinting just days
+
 % phrase(abbreviated_dates:single_day([date(2020, 2, 28)], Date, Language, Syntax), `31`).
 single_day([Context|_], Date, Language, '%d') --> 
   date_number(D), 
   {future_date(Context, D, Date), language(Language)}.
+
+% Dates hinting relative days
 
 % phrase(abbreviated_dates:single_day([date(2020, 2, 29)], Date, Language, Syntax), `Tomorrow`).
 single_day([Context|_], Date, Language, Syntax) -->
   nonblanks(Codes),
   {atom_codes(Adverb, Codes), adverb(Language, Adverb, Context, Date, Syntax)}.
 
-% phrase(abbreviated_dates:single_day([date(2020, 2, 28)], Date, Language, Syntax), `Saturday, 1 July`).
-single_day(Context, Date, Language, Syntax) -->
-  string(Codes), ",", b, single_day(Context, Date, Language, DaySyntax),
-  {
-    atom_codes(InputWeekDay, Codes), downcase_atom(InputWeekDay, LowerCaseWeekDay),
-    week_day_name(Language, _, KnownWeekDay), downcase_atom(KnownWeekDay, LowerCaseWeekDay),
-    atom_concat('%A, ', DaySyntax, Syntax)
-  }.
-
-best_date(Context, First, Second, WeekDayNumber, Language, Year, Day, Month, Syntax):-
-  possible_year(Context, Year),
-  top_country_language(Country, Language),
-  top_endianness(Country, Endianness),
-  day_month_order(Endianness, First, Second, Day, Month),
-  week_dayn(date(Year,Month,Day), WeekDayNumber),
-  day_month_syntax(Syntax, First, Second, Day, Month).
-
-possible_year(Context, Year):-
-  date_extract(Context, years(Y)),
-  Max is Y + 10,
-  between(Y, Max, Year).
-
-day_month_order(little, Day,   Month, Day, Month). % day is first number in little endian dates
-day_month_order(middle, Month, Day,   Day, Month). % day is second number in little middle dates
-day_month_order(big,    Month, Day,   Day, Month). % day is second number in big middle dates
-
-day_month_syntax('%d %m', Day, Month, Day, Month).
-day_month_syntax('%m %d', Month, Day, Day, Month).
-
-date_number(N) --> integer(N).
-date_number(N) --> integer(N), ".".
-separator --> "/"; "-"; "."; " ".
 
 month(MonthNumber, Language, '%B') --> % explicit month
   nonblanks(Codes),
@@ -136,7 +123,9 @@ week_day(WeekDayNumber, Language, Format) --> % abbreviated week day
     select_abbreviation_format(Abbreviated, Format)
   }.
 
-dash --> " - ".
+date_number(N) --> integer(N).
+date_number(N) --> integer(N), ".".
+separator --> "/"; "-"; "."; " ".
 b --> white.
 optional_period --> "."; "".
 optional_comma --> ","; "".
@@ -144,6 +133,26 @@ optional_comma --> ","; "".
 %-----------------------------------------------------------
 % Internal predicates
 %
+
+best_date(Context, First, Second, WeekDayNumber, Language, Year, Day, Month, Syntax):-
+  possible_year(Context, Year),
+  top_country_language(Country, Language),
+  top_endianness(Country, Endianness),
+  day_month_order(Endianness, First, Second, Day, Month),
+  week_dayn(date(Year,Month,Day), WeekDayNumber),
+  day_month_syntax(Syntax, First, Second, Day, Month).
+
+possible_year(Context, Year):-
+  date_extract(Context, years(Y)),
+  Max is Y + 10,
+  between(Y, Max, Year).
+
+day_month_order(little, Day,   Month, Day, Month). % day is first number in little endian dates
+day_month_order(middle, Month, Day,   Day, Month). % day is second number in little middle dates
+day_month_order(big,    Month, Day,   Day, Month). % day is second number in big middle dates
+
+day_month_syntax('%d %m', Day, Month, Day, Month).
+day_month_syntax('%m %d', Month, Day, Day, Month).
 
 % Find optional abbreviations ordering by length
 optional_abbreviation(Atom, Abbreviation, Abbreviated):-
