@@ -42,13 +42,14 @@ multiple_days([LastKnownDate|Other], [SingleDay|MultipleDays], Language, [S1|S2]
 
 % Dates hinting week day name & month name
 
-% phrase(abbreviated_dates:single_day([date(2020, 2, 28)], Date, Language, Syntax), `Saturday, 1 July`).
-single_day(Context, Date, Language, Syntax) -->
-  string(Codes), ",", b, single_day(Context, Date, Language, DaySyntax),
+% phrase(abbreviated_dates:single_day([date(2020, 2, 28)], Date, Language, Syntax), `Wednesday, 1 July`).
+single_day([Context|_], date(Year,Month,Day), Language, Syntax) -->
+  string(WeekDayCodes), ",", b, date_number(Day), b, month(Month, Language, MonthFormat),
   {
-    atom_codes(InputWeekDay, Codes), downcase_atom(InputWeekDay, LowerCaseWeekDay),
-    week_day_name(Language, _, KnownWeekDay), downcase_atom(KnownWeekDay, LowerCaseWeekDay),
-    atom_concat('%A, ', DaySyntax, Syntax)
+    possible_year(Context, Year),
+    week_day_facts(WeekDayCodes, WeekDayNumber, Language, WeekDaySyntax),
+    week_dayn(date(Year,Month,Day), WeekDayNumber),
+    atomic_list_concat([WeekDaySyntax, ', %d ', MonthFormat], Syntax)
   }.
 
 % Dates hinting week day names
