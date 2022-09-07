@@ -56,16 +56,18 @@ single_day([Context|_], date(Year,Month,Day), Language, Syntax) -->
 
 % phrase(abbreviated_dates:single_day([date(2022, 2, 28)], Date, Language, Syntax), `Pirm. 06-20`).
 single_day([Context|_], date(Y, M, D), Language, Syntax) -->
-  week_day(WeekDayNumber, Language, WeekDaySyntax), optional_comma, b, date_number(First), separator, date_number(Second),
+  week_day(WeekDayCodes), optional_comma, b, date_number(First), separator, date_number(Second),
   {
+    week_day_facts(WeekDayCodes, WeekDayNumber, Language, WeekDaySyntax),
     best_date(Context, First, Second, WeekDayNumber, Language, Y, D, M, DayMonthSyntax),
     atomic_list_concat([WeekDaySyntax, DayMonthSyntax], ' ', Syntax)
   }.
 
 % phrase(abbreviated_dates:single_day([date(2022, 2, 28)], Date, Language, Syntax), `06-20, Pirm.`).
 single_day([Context|_], date(Y, M, D), Language, Syntax) -->
-  date_number(First), separator, date_number(Second), optional_comma, b, week_day(WeekDayNumber, Language, WeekDaySyntax),
+  date_number(First), separator, date_number(Second), optional_comma, b, week_day(WeekDayCodes),
   {
+    week_day_facts(WeekDayCodes, WeekDayNumber, Language, WeekDaySyntax),
     best_date(Context, First, Second, WeekDayNumber, Language, Y, D, M, DayMonthSyntax),
     atomic_list_concat([DayMonthSyntax, WeekDaySyntax], ' ', Syntax)
   }.
