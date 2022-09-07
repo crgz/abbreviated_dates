@@ -23,8 +23,8 @@ test('Capitalized Abbreviated Month Name, Dash Deparated Zero prefixed Month Num
   all(Languages == ['Lithuanian']), all( Format==['%A %m %d']))
 :- phrase(abbreviated_dates:single_day([date(2022, 2, 28)], date(2022, 6, 20), Languages, Format), `Pirm. 06-20`).
 
-test('Capitalized full week day, day ', all(Syntax == ['%A, %d'])) :-
-  phrase(abbreviated_dates:single_day([date(2020, 2, 28)], date(2020, 3, 2), 'English', Syntax), `Saturday, 2`).
+test('Capitalized full week day, day ', all(Date==[date(2023, 9, 2),date(2023, 12, 2),date(2024, 3, 2)])) :-
+  phrase(abbreviated_dates:single_day([date(2022, 9, 7)], Date, 'English', '%A %d'), `Saturday, 2`).
 
 test('Capitalized full week day, day, dot, month number, dot', fixme(all(Syntax == ['%A %d %m','%a %d %m']))) :-
   phrase(abbreviated_dates:single_day([date(2022, 2, 28)], Date, 'Croatian', Syntax), `Petak 24.06.`),
