@@ -85,19 +85,19 @@ single_day([Context|_], date(Y, M, D), Language, Syntax) -->
 
 % phrase(abbreviated_dates:single_day([date(2020, 2, 28)], Date, Language, Syntax), `1 July`).
 single_day([Context|_], date(Y, M, D), Language, Syntax) -->
-  date_number(D), b, month(M, Language, MonthFormat), 
+  month_day(D), b, month(M, Language, MonthFormat),
   {maybe_future_year(Context, M, D, Y), atom_concat('%d ', MonthFormat, Syntax)}.
 
 % phrase(abbreviated_dates:single_day([date(2020, 2, 28)], Date, Language, Syntax), `Jan. 1`).
 single_day([Context|_], date(Y, M, D), Language, Syntax) -->
-  month(M, Language, MonthFormat), b, date_number(D), 
+  month(M, Language, MonthFormat), b, month_day(D),
   {maybe_future_year(Context, M, D, Y), atom_concat(MonthFormat,' %d', Syntax)}.
 
 % Dates hinting just days
 
 % phrase(abbreviated_dates:single_day([date(2020, 2, 28)], Date, Language, Syntax), `31`).
-single_day([Context|_], Date, Language, '%d') --> 
-  date_number(D), 
+single_day([Context|_], Date, Language, '%d') -->
+  month_day(D),
   {future_date(Context, D, Date), language(Language)}.
 
 % Dates hinting relative days
@@ -134,6 +134,7 @@ week_day_facts(InputCodes, WeekDayNumber, Language, Format):-
   optional_abbreviation(LowerCaseWeekDayName, LowerCaseInputAtom, Abbreviated),
   select_abbreviation_format(Abbreviated, Format).
 
+month_day(Day) --> integer(Day), {between(1, 31, Day)}.
 date_number(N) --> integer(N).
 date_number(N) --> integer(N), ".".
 separator --> "/"; "-"; "."; " ".
