@@ -1,6 +1,29 @@
-:- module(languages, [language/5]).
+:- module(languages, [language/1, month_name/3, week_day_name/3, adverb/5]).
 :- encoding(utf8).
+:- use_module(library(date_time)).
 
+%
+% Accessors
+%
+language(Language):- language(Language, _, _, _, _).
+
+month_name(Language, MonthNumber, MonthName):-
+	language(Language, Months, _, _, _),
+	nth1(MonthNumber, Months, MonthName).
+
+week_day_name(Language, WeekDayNumber, WeekDayName):-
+	language(Language, _, Weeks, _, _),
+	nth0(WeekDayNumber, Weeks, WeekDayName).
+
+adverb(Language, Today, Date, Date, today):-
+	language(Language, _, _, Today, _).
+
+adverb(Language, Tomorrow, Date, Next, tomorrow):-
+	language(Language, _, _, _, Tomorrow), date_add(Date, days(1), Next).
+
+%
+% Facts
+%
 language('Bulgarian',
 	['Януари', 'Февруари', 'Март', 'Април', 'Май', 'Юни', 'Юли', 'Август', 'Септември', 'Октомври', 'Ноември', 'Декември'],
 	['Понеделник', 'Вторник', 'Сряда', 'Четвъртък', 'Петък', 'Събота', 'Неделя'],

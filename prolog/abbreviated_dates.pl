@@ -198,22 +198,3 @@ date_month_days(13,_,31).
 date_leap_year(Y) :-
    ( ( 0 =:= Y mod 100, 0 =:= Y mod 400 ) ;
      ( 0 =\= Y mod 100, 0 =:= Y mod 4 ) ).
-
-%   
-% Accessors
-%
-language(Language):- language(Language, _, _, _, _).
-
-month_name(Language, MonthNumber, MonthName):-
-	language(Language, Months, _, _, _),
-	nth1(MonthNumber, Months, MonthName).
-  
-week_day_name(Language, WeekDayNumber, WeekDayName):-
-	language(Language, _, Weeks, _, _),
-	nth0(WeekDayNumber, Weeks, WeekDayName).
-
-adverb(Language, Today, Date, Date, today):-
-	language(Language, _, _, Today, _).
-
-adverb(Language, Tomorrow, Date, Next, tomorrow):-
-	language(Language, _, _, _, Tomorrow), date_add(Date, days(1), Next).
