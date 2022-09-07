@@ -53,6 +53,15 @@ single_day([Context|_], date(Year,Month,Day), Language, Syntax) -->
   }.
 
 % Dates hinting week day names
+% phrase(abbreviated_dates:single_day([date(2022, 2, 28)], Date, Language, Syntax), `saturday, 23`).
+single_day([Context|_], Date, Language, Syntax) -->
+  string(WeekDayCodes), optional_comma, b, month_day(Day),
+  {
+    week_day_facts(WeekDayCodes, WeekDayNumber, Language, WeekDaySyntax),
+    possible_day(Context, Day, Date),
+    week_dayn(Date, WeekDayNumber),
+    atomic_list_concat([WeekDaySyntax, ' %d'], Syntax)
+  }.
 
 % phrase(abbreviated_dates:single_day([date(2022, 2, 28)], Date, Language, Syntax), `Pirm. 06-20`).
 single_day([Context|_], date(Y, M, D), Language, Syntax) -->
@@ -148,6 +157,13 @@ possible_year(Context, Year):-
   date_extract(Context, years(Y)),
   Max is Y + 10,
   between(Y, Max, Year).
+
+possible_day(Context, Day, Date):-
+  date_extract(Context, years(Year)),
+  date_extract(Context, months(M)),
+  Max is M + 24,
+  between(M, Max, Month),
+  future_date(date(Year,Month,Day), Date).
 
 day_month_order(little, Day,   Month, Day, Month). % day is first number in little endian dates
 day_month_order(middle, Month, Day,   Day, Month). % day is second number in little middle dates
