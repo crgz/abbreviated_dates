@@ -107,7 +107,6 @@ single_day([Context|_], Date, Language, Syntax) -->
   nonblanks(Codes),
   {atom_codes(Adverb, Codes), adverb(Language, Adverb, Context, Date, Syntax)}.
 
-
 month(MonthNumber, Language, '%B') --> % explicit month
   nonblanks(Codes),
   {
@@ -117,7 +116,7 @@ month(MonthNumber, Language, '%B') --> % explicit month
 
 month(MonthNumber, Language, '%b') --> % abbreviated month
   string(Abbreviation), optional_period,
-  { 
+  {
     atom_codes(Prefix, Abbreviation),
     month_name(Language, MonthNumber, MonthName),
     sub_atom(MonthName, 0, _, _, Prefix)
