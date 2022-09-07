@@ -40,6 +40,6 @@ deploy:
 		if [ v$$NEW_VERSION == $$REMOTE_VERSION ]; then printf '\n' && break; fi ;\
 		printf '.' && sleep 1 ;\
   done ;\
-  NAME = $$(swipl -q -s pack -g 'name(N),writeln(N)' -t halt) ;\
-  REMOTE = https://github.com/crgz/$$NAME/archive/v$$NEW_VERSION.zip ;\
+  NAME=$$(swipl -q -s pack -g 'name(N),writeln(N)' -t halt) ;\
+  REMOTE=https://github.com/crgz/$$NAME/archive/v$$NEW_VERSION.zip ;\
 	swipl -q -g "pack_remove($$NAME),pack_install('$$REMOTE',[interactive(false)]),halt(0)" -t 'halt(1)'
