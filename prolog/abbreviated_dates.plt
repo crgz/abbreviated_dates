@@ -2,6 +2,11 @@
 :- use_module(facts/country_language).
 :- use_module(facts/country_date_endianness).
 
+
+case(Case, Date, Languages, Format):-
+  phrase(abbreviated_dates:single_day([date(2022, 9, 7)], Date, Languages, Format), Case).
+
+
 % Dates hinting week day name & month name
 
 test('Lowercased full week day, comma, day, month name', all(Syntax == ['%A, %d %B'])) :-
@@ -13,6 +18,10 @@ test('Capitalized full Week Day, comma, Dot Postfixed Day & Full Month Name',
   phrase(abbreviated_dates:single_day([date(2021, 9, 21)], date(2022, 5, 7), 'English', Syntax), `Friday, 7. May`).
 
 % Dates hinting week day names
+
+test(di_13_9_d, set(Date == [date(2022,9,13)])):- case(`Di. 13.9.`, Date, _, _).
+test(di_13_9_l, set(L == ['Dutch','German'])):- case(`Di. 13.9.`, _, L, _).
+test(di_13_9_f, set(Format == ['%a %d %m'])):- case(`Di. 13.9.`, _, _, Format).
 
 test('Capitalized Abbreviated Month Name, Dash Deparated Day & Zero prefixed Month Number',
   all(Languages == ['Latvian','Lithuanian']), all( Format==['%A %m %d']))

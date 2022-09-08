@@ -158,7 +158,7 @@ valid(date(Year,Month,Day)):- Month =< 12, date_month_days(Month,Year,MD), Day =
 
 possible_year(Context, Year):-
   date_extract(Context, years(Y)),
-  Max is Y + 10,
+  Max is Y + 2,
   between(Y, Max, Year).
 
 possible_day(Context, Day, Date):-
