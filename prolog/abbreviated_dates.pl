@@ -150,8 +150,11 @@ best_date(Context, First, Second, WeekDayNumber, Language, Year, Day, Month, Syn
   top_country_language(Country, Language),
   top_endianness(Country, Endianness),
   day_month_order(Endianness, First, Second, Day, Month),
+  valid(date(Year,Month,Day)),
   week_dayn(date(Year,Month,Day), WeekDayNumber),
   day_month_syntax(Syntax, First, Second, Day, Month).
+
+valid(date(Year,Month,Day)):- Month =< 12, date_month_days(Month,Year,MD), Day =< MD.
 
 possible_year(Context, Year):-
   date_extract(Context, years(Y)),
