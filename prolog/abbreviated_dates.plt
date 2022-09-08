@@ -19,9 +19,21 @@ test('Capitalized full Week Day, comma, Dot Postfixed Day & Full Month Name',
 
 % Dates hinting week day names
 
-test(di_13_9_d, set(Date == [date(2022,9,13)])):- case(`Di. 13.9.`, Date, _, _).
-test(di_13_9_l, set(L == ['Dutch','German'])):- case(`Di. 13.9.`, _, L, _).
-test(di_13_9_f, set(Format == ['%a %d %m'])):- case(`Di. 13.9.`, _, _, Format).
+test(di_13_9_d, set(Date==[date(2022,9,13)])):- case(`Di. 13.9.`, Date, _, _).
+test(di_13_9_l, set(L==['Dutch','German'])):- case(`Di. 13.9.`, _, L, _).
+test(di_13_9_f, set(Format==['%a %d %m'])):- case(`Di. 13.9.`, _, _, Format).
+
+test(t_13_9_d, set(Date==[date(2022,9,13),date(2023,9,13),date(2024,9,13)])):-
+  case(`T 13.9`, Date, _, _).
+test(t_13_9_l, set(
+  L==['Croatian','Danish','English','Estonian','Finnish','Latvian','Lithuanian',
+      'Portuguese','Slovak','Slovenian','Swedish','Vietnamese']
+)):- case(`T 13.9.`, _, L, _).
+test(t_13_9_f, set(Format == ['%a %d %m'])):- case(`T 13.9.`, _, _, Format).
+
+test(pt_16_9_d, set(Date==[date(2022,9,16)])):- case(`pt. 16.09`, Date, _, _).
+test(pt_16_9_l, set(L==['Croatian','Slovak','Slovenian'])):- case(`pt. 16.09`, _, L, _).
+test(pt_16_9_f, set(Format==['%a %d %m'])):- case(`pt. 16.09`, _, _, Format).
 
 test('Capitalized Abbreviated Month Name, Dash Deparated Day & Zero prefixed Month Number',
   all(Languages == ['Latvian','Lithuanian']), all( Format==['%A %m %d']))
