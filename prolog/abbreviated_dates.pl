@@ -125,14 +125,6 @@ month(MonthNumber, Language, '%b') --> % abbreviated month
 week_day(InputCodes) --> % abbreviated week day
   string_without(". ", InputCodes), optional_period.
 
-week_day_facts(InputCodes, WeekDayNumber, Language, Format):-
-  atom_codes(InputAtom, InputCodes),
-  downcase_atom(InputAtom, LowerCaseInputAtom),
-  week_day_name(Language, WeekDayNumber, WeekDayName),
-  downcase_atom(WeekDayName, LowerCaseWeekDayName),
-  optional_abbreviation(LowerCaseWeekDayName, LowerCaseInputAtom, Abbreviated),
-  select_abbreviation_format(Abbreviated, Format).
-
 month_day(Day) --> integer(Day), {between(1, 31, Day)}.
 date_number(N) --> integer(N).
 date_number(N) --> integer(N), ".".
@@ -142,8 +134,40 @@ optional_period --> "."; "".
 optional_comma --> ","; "".
 
 %-----------------------------------------------------------
-% Internal predicates
+% Grammar supporting predicates
 %
+
+week_day_facts(InputCodes, WeekDayNumber, Language, Format):-
+  atom_codes(InputAtom, InputCodes),
+  downcase_atom(InputAtom, LowerCaseInputAtom),
+  week_day_name(Language, WeekDayNumber, WeekDayName),
+  downcase_atom(WeekDayName, LowerCaseWeekDayName),
+  optional_abbreviation(LowerCaseWeekDayName, LowerCaseInputAtom, Abbreviated),
+  select_abbreviation_format(Abbreviated, Format).
+
+% Find optional abbreviations ordering by length
+optional_abbreviation(Atom, Abbreviation, IsAbbreviated):-
+  abbreviation(Atom, Abbreviation, IsAbbreviated);
+  consonant_abbreviation(Atom, Abbreviation, IsAbbreviated).
+
+abbreviation(Atom, Abbreviation, IsAbbreviated):-
+  order_by([desc(L)], (sub_atom(Atom, 0, _, After, Abbreviation), atom_length(Abbreviation,L))),
+  L > 0,
+  (After = 0 -> IsAbbreviated = false; IsAbbreviated = true).
+
+consonant_abbreviation(Atom, Abbreviation, IsAbbreviated):-
+  atom_remove_vowels(Atom, AtomConsonants),
+  abbreviation(AtomConsonants, Abbreviation, IsAbbreviated).
+
+atom_remove_vowels(Atom, AtomConsonants):-
+  atom_chars(Atom, Chars),
+  remove_vowels(Chars, Consonants),
+  atom_chars(AtomConsonants, Consonants).
+
+remove_vowels([], []).
+remove_vowels([X|Xs], Ys) :-
+  (member(X, [a,e,i,o,u]) -> Ys = Ys2;  Ys = [X|Ys2]),
+  remove_vowels(Xs, Ys2).
 
 best_date(Context, First, Second, WeekDayNumber, Language, date(Year,Month,Day), Syntax):-
   possible_year(Context, Year),
@@ -174,12 +198,6 @@ day_month_order(big,    Month, Day,   Day, Month). % day is second number in big
 
 day_month_syntax('%d %m', Day, Month, Day, Month).
 day_month_syntax('%m %d', Month, Day, Day, Month).
-
-% Find optional abbreviations ordering by length
-optional_abbreviation(Atom, Abbreviation, Abbreviated):-
-  order_by([desc(L)], (sub_atom(Atom, 0, _, After, Abbreviation), atom_length(Abbreviation,L))),
-  L > 0,
-  (After = 0 -> Abbreviated = false; Abbreviated = true).
 
 select_abbreviation_format(true, '%a').
 select_abbreviation_format(false, '%A').
