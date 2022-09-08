@@ -64,20 +64,20 @@ single_day([Context|_], Date, Language, Syntax) -->
   }.
 
 % phrase(abbreviated_dates:single_day([date(2022, 2, 28)], Date, Language, Syntax), `Pirm. 06-20`).
-single_day([Context|_], date(Y, M, D), Language, Syntax) -->
+single_day([Context|_], Date, Language, Syntax) -->
   week_day(WeekDayCodes), optional_comma, b, date_number(First), separator, date_number(Second),
   {
     week_day_facts(WeekDayCodes, WeekDayNumber, Language, WeekDaySyntax),
-    best_date(Context, First, Second, WeekDayNumber, Language, Y, D, M, DayMonthSyntax),
+    best_date(Context, First, Second, WeekDayNumber, Language, Date, DayMonthSyntax),
     atomic_list_concat([WeekDaySyntax, DayMonthSyntax], ' ', Syntax)
   }.
 
 % phrase(abbreviated_dates:single_day([date(2022, 2, 28)], Date, Language, Syntax), `06-20, Pirm.`).
-single_day([Context|_], date(Y, M, D), Language, Syntax) -->
+single_day([Context|_], Date, Language, Syntax) -->
   date_number(First), separator, date_number(Second), optional_comma, b, week_day(WeekDayCodes),
   {
     week_day_facts(WeekDayCodes, WeekDayNumber, Language, WeekDaySyntax),
-    best_date(Context, First, Second, WeekDayNumber, Language, Y, D, M, DayMonthSyntax),
+    best_date(Context, First, Second, WeekDayNumber, Language, Date, DayMonthSyntax),
     atomic_list_concat([DayMonthSyntax, WeekDaySyntax], ' ', Syntax)
   }.
 
@@ -145,7 +145,7 @@ optional_comma --> ","; "".
 % Internal predicates
 %
 
-best_date(Context, First, Second, WeekDayNumber, Language, Year, Day, Month, Syntax):-
+best_date(Context, First, Second, WeekDayNumber, Language, date(Year,Month,Day), Syntax):-
   possible_year(Context, Year),
   top_country_language(Country, Language),
   top_endianness(Country, Endianness),
