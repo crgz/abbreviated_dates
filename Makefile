@@ -11,8 +11,7 @@ name = $(shell swipl -q -s pack -g 'name(N),writeln(N)' -t halt)
 title = $(shell swipl -q -s pack -g 'title(V),writeln(V)' -t halt)
 version = $(shell swipl -q -s pack -g 'version(V),writeln(V)' -t halt)
 
-all: check
-check: about test # pack_install execute make check and install
+all: about test # pack_install execute make check and install
 install:
 	@echo "(none)"
 
@@ -29,7 +28,7 @@ remove:
 	@swipl -g "pack_remove($(name))"  -t halt
 
 install-local:
-	@swipl -q -g "pack_install('$(name)',[interactive(false)]),halt(0)" -t 'halt(1)'
+	@swipl -q -g "pack_install('.',[interactive(false)]),halt(0)" -t 'halt(1)'
 
 deploy:
 	@bumpversion patch && git push --quiet ;\
