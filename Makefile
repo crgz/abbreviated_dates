@@ -10,6 +10,7 @@ SHELL = /bin/bash
 name = $(shell swipl -q -s pack -g 'name(N),writeln(N)' -t halt)
 title = $(shell swipl -q -s pack -g 'title(V),writeln(V)' -t halt)
 version = $(shell swipl -q -s pack -g 'version(V),writeln(V)' -t halt)
+requires = $(shell swipl -q -s pack -g 'requires(V),writeln(V)' -t halt)
 
 all: about test # pack_install execute make check and install
 install:
@@ -27,8 +28,11 @@ test-plain:
 remove:
 	@swipl -g "pack_remove($(name))"  -t halt
 
-install-local:
-	@swipl -q -g "pack_install('.',[interactive(false),test(false)]),halt(0)" -t 'halt(1)'
+install-local: install-dependencies
+	@swipl -q -g "pack_install('.',[interactive(false)]),halt(0)" -t 'halt(1)'
+
+install-dependencies:
+	@swipl -q -g "pack_install('$(requires)',[interactive(false)]),halt(0)" -t 'halt(1)'
 
 deploy:
 	@bumpversion patch && git push --quiet ;\
