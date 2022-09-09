@@ -28,7 +28,7 @@ remove:
 	@swipl -g "pack_remove($(name))"  -t halt
 
 install-local:
-	@swipl -q -g "pack_install('.',[interactive(false)]),halt(0)" -t 'halt(1)'
+	@swipl -q -g "pack_install('.',[interactive(false),test(false)]),halt(0)" -t 'halt(1)'
 
 deploy:
 	@bumpversion patch && git push --quiet ;\
