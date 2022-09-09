@@ -12,7 +12,8 @@ title = $(shell swipl -q -s pack -g 'title(V),writeln(V)' -t halt)
 version = $(shell swipl -q -s pack -g 'version(V),writeln(V)' -t halt)
 requires = $(shell swipl -q -s pack -g 'requires(V),writeln(V)' -t halt)
 
-all: about test # pack_install execute make check and install
+all: about
+check: test # pack_install execute make check and install
 install:
 	@echo "(none)"
 
