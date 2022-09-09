@@ -14,6 +14,7 @@ requires = $(shell swipl -q -s pack -g 'requires(V),writeln(V)' -t halt)
 
 all: about
 check: test # pack_install execute make check and install
+
 install:
 	@echo "(none)"
 
@@ -33,7 +34,7 @@ install-local: install-dependencies
 	@swipl -q -g "pack_install('$(name)',[interactive(false)]),halt(0)" -t 'halt(1)'
 
 install-dependencies:
-	@swipl -q -g "O=[interactive(false)],pack_install(tap,O),pack_install($(requires),O),halt(0)" -t 'halt(1)'
+	@swipl -q -g "O=[interactive(false)],pack_install(tap,O),pack_install(date_time,O),halt(0)" -t 'halt(1)'
 
 deploy:
 	@bumpversion patch && git push --quiet ;\
