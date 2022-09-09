@@ -34,9 +34,9 @@ install-local: install-dependencies
 	@swipl -q -g "pack_install('$(name)',[interactive(false)]),halt(0)" -t 'halt(1)'
 
 install-dependencies:
-	@swipl -q -g "O=[interactive(false)],pack_install(tap,O),pack_install(date_time,O),halt(0)" -t 'halt(1)'
+	@swipl -g "O=[interactive(false)],pack_install(tap,O),pack_install(date_time,O),halt(0)" -t 'halt(1)'
 
-deploy:
+deploy: install-dependencies
 	@bumpversion patch && git push --quiet ;\
 	NEW_VERSION=$$(swipl -q -s pack -g 'version(V),writeln(V)' -t halt) ;\
 	hub release create -m v$$NEW_VERSION v$$NEW_VERSION ;\
@@ -47,4 +47,4 @@ deploy:
   done ;\
   NAME=$$(swipl -q -s pack -g 'name(N),writeln(N)' -t halt) ;\
   REMOTE=https://github.com/crgz/$$NAME/archive/v$$NEW_VERSION.zip ;\
-	swipl -q -g "pack_remove($$NAME),pack_install('$$REMOTE',[interactive(false)]),halt(0)" -t 'halt(1)'
+	swipl -g "pack_remove($$NAME),pack_install('$$REMOTE',[interactive(false)]),halt(0)" -t 'halt(1)'
