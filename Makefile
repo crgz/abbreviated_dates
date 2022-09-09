@@ -30,10 +30,10 @@ remove:
 	@swipl -g "pack_remove($(name))"  -t halt
 
 install-local: install-dependencies
-	@swipl -q -g "pack_install('.',[interactive(false)]),halt(0)" -t 'halt(1)'
+	@swipl -q -g "pack_install('$(name)',[interactive(false)]),halt(0)" -t 'halt(1)'
 
 install-dependencies:
-	@swipl -q -g "pack_install('$(requires)',[interactive(false)]),halt(0)" -t 'halt(1)'
+	@swipl -q -g "O=[interactive(false)],pack_install(tap,O),pack_install($(requires),O),halt(0)" -t 'halt(1)'
 
 deploy:
 	@bumpversion patch && git push --quiet ;\
