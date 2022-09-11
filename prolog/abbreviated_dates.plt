@@ -32,7 +32,7 @@ test('day_of_the_week_as_consonant_abbreviation'):-
   solutions([date(2022, 9, 7)], `pt. 16.09`, Dates, Languages, Formats),
 
   assertion(Dates == [date(2022, 9, 16)]),
-  assertion(Languages == ['Croatian','Slovak','Slovenian']),
+  assertion(Languages == ['Croatian', 'Polish', 'Slovak', 'Slovenian']),
   assertion(Formats == ['%a %d %m']).
 
 test('day_of_the_week_as_single_consonant_abbreviation'):-

@@ -166,7 +166,7 @@ atom_remove_vowels(Atom, AtomConsonants):-
 
 remove_vowels([], []).
 remove_vowels([X|Xs], Ys) :-
-  (member(X, [a,e,i,o,u]) -> Ys = Ys2;  Ys = [X|Ys2]),
+  (member(X, [a, ą, e, ę, i, o, ó, u]) -> Ys = Ys2;  Ys = [X|Ys2]),
   remove_vowels(Xs, Ys2).
 
 best_date(Context, First, Second, WeekDayNumber, Language, date(Year,Month,Day), Syntax):-
