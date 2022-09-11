@@ -19,22 +19,36 @@ test('Capitalized full Week Day, comma, Dot Postfixed Day & Full Month Name',
 
 % Dates hinting week day names
 
-test(di_13_9_d, set(Date==[date(2022,9,13)])):- case(`Di. 13.9.`, Date, _, _).
-test(di_13_9_l, set(L==['Dutch','German'])):- case(`Di. 13.9.`, _, L, _).
-test(di_13_9_f, set(Format==['%a %d %m'])):- case(`Di. 13.9.`, _, _, Format).
+test('day_of_the_week_as_abbreviation'):-
+  
+  solutions([date(2022, 9, 7)], `Di. 13.9.`, Dates, Languages, Formats),
+  
+  assertion(Dates == [date(2022, 9, 13)]),
+  assertion(Languages == ['Dutch','German']),
+  assertion(Formats == ['%a %d %m']).
 
-test(t_13_9_d, set(Date==[date(2022,9,13),date(2023,9,13),date(2024,9,13)])):-
-  case(`T 13.9`, Date, _, _).
-test(t_13_9_l, set(
-  L==['Croatian','Danish','English','Estonian','Finnish','Latvian','Lithuanian',
-      'Portuguese','Slovak','Slovenian','Swedish','Vietnamese']
-)):- case(`T 13.9.`, _, L, _).
-test(t_13_9_f, set(Format == ['%a %d %m'])):- case(`T 13.9.`, _, _, Format).
+test('day_of_the_week_as_consonant_abbreviation'):-
+  
+  solutions([date(2022, 9, 7)], `pt. 16.09`, Dates, Languages, Formats),
 
-test(pt_16_9_d, set(Date==[date(2022,9,16)])):- case(`pt. 16.09`, Date, _, _).
-test(pt_16_9_l, set(L==['Croatian','Slovak','Slovenian'])):- case(`pt. 16.09`, _, L, _).
-test(pt_16_9_f, set(Format==['%a %d %m'])):- case(`pt. 16.09`, _, _, Format).
+  assertion(Dates == [date(2022, 9, 16)]),
+  assertion(Languages == ['Croatian','Slovak','Slovenian']),
+  assertion(Formats == ['%a %d %m']).
 
+test('day_of_the_week_as_single_consonant_abbreviation'):-
+
+  solutions([date(2022, 9, 7)], `T 13.9`, Dates, Languages, Formats),
+
+  assertion(Dates == [date(2022,9,13),date(2023,9,13),date(2024,9,13)]),
+
+  assertion(Languages == [
+    'Croatian', 'Danish', 'English', 'Estonian', 'Finnish', 'Latvian',
+    'Lithuanian', 'Portuguese', 'Slovak', 'Slovenian', 'Swedish', 'Vietnamese'
+  ]),
+
+  assertion(Formats == ['%a %d %m']).
+  
+  
 test('Capitalized Abbreviated Month Name, Dash Deparated Day & Zero prefixed Month Number',
   all(Languages == ['Latvian','Lithuanian']), all( Format==['%A %m %d']))
 :-
@@ -76,5 +90,14 @@ test('Today', all(Syntax == [today])) :-
 
 test('Tomorrow', all(Syntax == [tomorrow])) :-
   phrase(abbreviated_dates:single_day([date(2020, 2, 29)], date(2020, 3, 1), 'English', Syntax), `Tomorrow`).
+
+
+solutions(Context, Case, Dates, Languages, Formats):-
+  setof(Date, L^F^result(Context, Case, Date, L, F), Dates),
+  setof(Language, D^F^result(Context, Case, D, Language, F), Languages),
+  setof(Format, D^L^result(Context, Case, D, L, Format), Formats).
+
+result(Context, Case, Dates, Languages, Formats):-
+  phrase(abbreviated_dates:single_day(Context, Dates, Languages, Formats), Case).
 
 :- end_tests(abbreviated_dates_tests).
