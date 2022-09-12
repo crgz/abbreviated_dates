@@ -1,7 +1,10 @@
 .*          export-ignore
+.plt        export-ignore
 test        export-ignore
 LICENSE     export-ignore
 README.md   export-ignore
+Makefile    export-ignore
+
 
 ###############################
 # Git Line Endings            #
