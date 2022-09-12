@@ -20,34 +20,49 @@ test('Capitalized full Week Day, comma, Dot Postfixed Day & Full Month Name',
 % Dates hinting week day names
 
 test('day_of_the_week_as_abbreviation'):-
-  
   solutions([date(2022, 9, 7)], `Di. 13.9.`, Dates, Languages, Formats),
-  
   assertion(Dates == [date(2022, 9, 13)]),
   assertion(Languages == ['Dutch','German']),
   assertion(Formats == ['%a %d %m']).
 
 test('day_of_the_week_as_consonant_abbreviation'):-
-  
   solutions([date(2022, 9, 7)], `pt. 16.09`, Dates, Languages, Formats),
-
   assertion(Dates == [date(2022, 9, 16)]),
   assertion(Languages == ['Croatian', 'Polish', 'Slovak', 'Slovenian']),
   assertion(Formats == ['%a %d %m']).
 
 test('day_of_the_week_as_single_consonant_abbreviation'):-
-
   solutions([date(2022, 9, 7)], `T 13.9`, Dates, Languages, Formats),
-
   assertion(Dates == [date(2022,9,13),date(2023,9,13),date(2024,9,13)]),
-
   assertion(Languages == [
     'Croatian', 'Danish', 'English', 'Estonian', 'Finnish', 'Latvian',
     'Lithuanian', 'Portuguese', 'Slovak', 'Slovenian', 'Swedish', 'Vietnamese'
   ]),
-
   assertion(Formats == ['%a %d %m']).
+
+test('day_of_the_week_as_abbreviation'):-
+  solutions([date(2022, 9, 7)], `09-17, št`, Dates, Languages, Formats),
+  assertion(Dates == [date(2022, 9, 17)]),
+  assertion(Languages == ['Lithuanian']),
+  assertion(Formats == ['%m %d %a']).
   
+test('day_of_the_week_as_abbreviation'):-
+  solutions([date(2022, 9, 7)], `09-15, kt`, Dates, Languages, Formats),
+  assertion(Dates == [date(2022, 9, 15)]),
+  assertion(Languages == ['Lithuanian']),
+  assertion(Formats == ['%m %d %a']).
+
+test('day_of_the_week_as_abbreviation'):-
+  solutions([date(2022, 9, 7)], `čt 15. 9.`, Dates, Languages, Formats),
+  assertion(Dates == [date(2022, 9, 15)]),
+  assertion(Languages == ['Croatian','Czech','Slovenian']),
+  assertion(Formats == ['%a %d %m']).
+         
+test('day_of_the_week_as_abbreviation'):-
+  solutions([date(2022, 9, 7)], `st 14. 9.`, Dates, Languages, Formats),
+  assertion(Dates == [date(2022,9,14),date(2024,9,14)]),
+  assertion(Languages == ['Czech','English','Latvian','Slovak']),
+  assertion(Formats == ['%a %d %m']).
   
 test('Capitalized Abbreviated Month Name, Dash Deparated Day & Zero prefixed Month Number',
   all(Languages == ['Latvian','Lithuanian']), all( Format==['%A %m %d']))
