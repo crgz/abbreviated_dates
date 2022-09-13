@@ -2,11 +2,6 @@
 :- use_module(facts/country_language).
 :- use_module(facts/country_date_endianness).
 
-
-case(Case, Date, Languages, Format):-
-  phrase(abbreviated_dates:single_day([date(2022, 9, 7)], Date, Languages, Format), Case).
-
-
 % Dates hinting week day name & month name
 
 test('Lowercased full week day, comma, day, month name', all(Syntax == ['%A, %d %B'])) :-
@@ -84,7 +79,7 @@ test('Capitalized full week day, day,dot, month number, dot', fixme(all(Syntax =
   phrase(abbreviated_dates:single_day([date(2022, 2, 28)], Date, 'Croatian', Syntax), `Ponedjeljak 20.06.`),
   assertion(Date == date(2022, 6, 20)).
 
-% Dates hinting wonth names
+% Dates hinting month names
 
 test('Capitalized full Month Name & Day', fixme(all(Syntax == ['%B %d','%b %d']))) :-
   phrase(abbreviated_dates:single_day([date(2021, 9, 21)], date(2022, 7, 4), 'English', Syntax), `July 4`).
