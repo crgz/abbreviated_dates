@@ -161,23 +161,9 @@ consonant_abbreviation(Atom, Abbreviation, IsAbbreviated):-
 
 atom_remove_vowels(Atom, AtomConsonants):-
   atom_chars(Atom, Chars),
-  remove_vowels(Chars, Consonants),
+  subtract(Chars, [a, ą, e, ę, i, o, ó, u], Consonants),
   remove_duplicates(Consonants, Uniques),
   atom_chars(AtomConsonants, Uniques).
-
-remove_vowels([], []).
-remove_vowels([X|Xs], Ys) :-
-  (member(X, [a, ą, e, ę, i, o, ó, u]) -> Ys = Ys2;  Ys = [X|Ys2]),
-  remove_vowels(Xs, Ys2).
-
-remove_duplicates(List, Uniques):- remove_duplicates(List, Uniques, []).
-remove_duplicates([], [], _).
-remove_duplicates([Head|Tail], Result, Seen) :-
-  (  member(Head, Seen)
-  -> (Result = Uniques, NewSeen = Seen)
-  ;  (Result = [Head|Uniques], NewSeen = [Head])
-  ),
-  remove_duplicates(Tail, Uniques, NewSeen).
 
 best_date(Context, First, Second, WeekDayNumber, Language, date(Year,Month,Day), Syntax):-
   possible_year(Context, Year),
@@ -254,3 +240,15 @@ date_month_days(13,_,31).
 date_leap_year(Y) :-
    ( ( 0 =:= Y mod 100, 0 =:= Y mod 400 ) ;
      ( 0 =\= Y mod 100, 0 =:= Y mod 4 ) ).
+
+%
+% Utility predicates
+%
+remove_duplicates(List, Uniques):- remove_duplicates(List, Uniques, []).
+remove_duplicates([], [], _).
+remove_duplicates([Head|Tail], Result, Seen) :-
+  (  member(Head, Seen)
+  -> (Result = Uniques, NewSeen = Seen)
+  ;  (Result = [Head|Uniques], NewSeen = [Head])
+  ),
+  remove_duplicates(Tail, Uniques, NewSeen).
