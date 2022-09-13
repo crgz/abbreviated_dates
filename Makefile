@@ -26,13 +26,14 @@ test-plain:
 remove:
 	@swipl -g "pack_remove($(name))"  -t halt
 
-install-local: install-dependencies
-	@swipl -q -g "pack_install('$(name)',[interactive(false)]),halt(0)" -t 'halt(1)'
+PACK_PATH ?= ${HOME}/.local/share/swi-prolog/pack
+install: install-dependencies  $(PACK_PATH)/$(name)
+install-dependencies: $(PACK_PATH)/tap  $(PACK_PATH)/date_time
 
-install-dependencies:
-	@swipl -g "O=[interactive(false)],pack_install(tap,O),pack_install(date_time,O),halt(0)" -t 'halt(1)'
+$(PACK_PATH)/%:
+	@swipl -q -g "pack_install('$(notdir $@)',[interactive(false)]),halt(0)" -t 'halt(1)'
 
-deploy: install-dependencies
+deploy:
 	@bumpversion patch && git push --quiet ;\
 	NEW_VERSION=$$(swipl -q -s pack -g 'version(V),writeln(V)' -t halt) ;\
 	hub release create -m v$$NEW_VERSION v$$NEW_VERSION ;\
