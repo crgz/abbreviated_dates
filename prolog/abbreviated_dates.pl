@@ -166,15 +166,13 @@ atom_remove_vowels(Atom, AtomConsonants):-
   atom_chars(AtomConsonants, Uniques).
 
 best_date(Context, First, Second, WeekDayNumber, Language, date(Year,Month,Day), Syntax):-
-  possible_year(Context, Year),
+  possible_year(Context, Y),
   top_country_language(Country, Language),
   top_endianness(Country, Endianness),
-  day_month_order(Endianness, First, Second, Day, Month),
-  valid(date(Year,Month,Day)),
+  day_month_order(Endianness, First, Second, D, M),
+  future_date(date(Y,M,D), date(Year,Month,Day)),
   week_dayn(date(Year,Month,Day), WeekDayNumber),
   day_month_syntax(Syntax, First, Second, Day, Month).
-
-valid(date(Year,Month,Day)):- Month =< 12, date_month_days(Month,Year,MD), Day =< MD.
 
 possible_year(Context, Year):-
   date_extract(Context, years(Y)),
