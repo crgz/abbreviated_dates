@@ -33,7 +33,7 @@ install-dependencies: $(PACK_PATH)/tap  $(PACK_PATH)/date_time
 $(PACK_PATH)/%:
 	@swipl -q -g "pack_install('$(notdir $@)',[interactive(false)]),halt(0)" -t 'halt(1)'
 
-deploy:
+deploy: install-dependencies remove
 	@bumpversion patch && git push --quiet ;\
 	NEW_VERSION=$$(swipl -q -s pack -g 'version(V),writeln(V)' -t halt) ;\
 	hub release create -m v$$NEW_VERSION v$$NEW_VERSION ;\
@@ -44,4 +44,4 @@ deploy:
   done ;\
   NAME=$$(swipl -q -s pack -g 'name(N),writeln(N)' -t halt) ;\
   REMOTE=https://github.com/crgz/$$NAME/archive/v$$NEW_VERSION.zip ;\
-	swipl -g "pack_remove($$NAME),pack_install('$$REMOTE',[interactive(false)]),halt(0)" -t 'halt(1)'
+	swipl -g "pack_install('$$REMOTE',[interactive(false)]),halt(0)" -t 'halt(1)'
