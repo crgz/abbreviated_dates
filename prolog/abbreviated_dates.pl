@@ -147,7 +147,7 @@ month_facts(Month, IsAbbreviated, Language, MonthNumber, MonthFormat):-
   abbreviation(MonthName, Abbreviation, IsAbbreviated),
   atom_codes(MaybeAbbreviation, Month),
   capitalize_sentence(MaybeAbbreviation, Abbreviation),
-  (IsAbbreviated -> (MonthFormat = '%b');  (MonthFormat = '%B')).
+  (IsAbbreviated -> MonthFormat = '%b'; MonthFormat = '%B').
 
 % Find optional abbreviations ordering by length
 abbreviation(Atom, Abbreviation, IsAbbreviated):-
