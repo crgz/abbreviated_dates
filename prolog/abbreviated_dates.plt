@@ -58,6 +58,12 @@ test('day_of_the_week_as_abbreviation'):-
   assertion(Dates == [date(2022,9,14),date(2024,9,14)]),
   assertion(Languages == ['Czech','English','Latvian','Slovak']),
   assertion(Formats == ['%a %d %m']).
+
+test('day_of_the_week_as_abbreviation_with_comma'):-
+  solutions([date(2022, 9, 14)], `sri, 21. 09.`, Dates, Languages, Formats),
+  assertion(Dates == [date(2022,9,21)]),
+  assertion(Languages == ['Croatian']),
+  assertion(Formats == ['%a %d %m']).
   
 test('Capitalized Abbreviated Month Name, Dash Deparated Day & Zero prefixed Month Number',
   all(Languages == ['Latvian','Lithuanian']), all( Format==['%A %m %d']))
