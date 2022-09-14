@@ -31,16 +31,13 @@ For further details have a look at the [implementation](prolog/abbreviated_dates
 
 ## Requirements
 
-Only for development purposes the [`tap` pack](http://www.swi-prolog.org/pack/list?p=tap) is needed:
+Only for development purposes the [`date_time` pack](http://www.swi-prolog.org/pack/list?p=date_time) is needed:
 
 ```prolog
-?- pack_install(tap).
+?- pack_install(date_time).
 ```
-For maintenance tasks [bumpversion](https://github.com/peritus/bumpversion) and [hub](https://github.com/github/hub) might be required.
-
-## Test Suite
-
-We are migrating the test suit from tap to PL-Unit aiming to implement test coverage metrics.
+For maintenance tasks [bumpversion](https://github.com/peritus/bumpversion) and [hub](https://github.com/github/hub) 
+might be required.
 
 ### Run Tests
 
@@ -52,7 +49,7 @@ make test
 
 ### Define new Tests
 
-New tests should be defined in the [new test](prolog/abbreviated_dates.plt) file.
+New tests should be defined in the [test](prolog/abbreviated_dates.plt) file.
 
 ## Review
 https://eu.swi-prolog.org/pack/review?p=abbreviated_dates
