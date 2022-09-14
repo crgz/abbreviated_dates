@@ -43,13 +43,14 @@ multiple_days([LastKnownDate|Other], [SingleDay|MultipleDays], Language, [S1|S2]
 % Dates hinting week day name & month name
 
 % phrase(abbreviated_dates:single_day([date(2020, 2, 28)], Date, Language, Syntax), `Wednesday, 1 July`).
-single_day([Context|_], date(Year,Month,Day), Language, Syntax) -->
-  string_without(",", WeekDayCodes), ",", b, date_number(Day), b, month(Month, Language, MonthFormat),
+single_day([Context|_], date(Year,MonthNumber,Day), Language, Syntax) -->
+  string_without(",", WeekDay), ",", b, date_number(Day), b, abbreviation(Month, IsAbbreviated),
   {
-    week_day_facts(WeekDayCodes, WeekDayNumber, Language, WeekDaySyntax),
+    month_facts(Month, IsAbbreviated, Language, MonthNumber, MonthFormat),
+    week_day_facts(WeekDay, WeekDayNumber, Language, WeekDaySyntax),
     possible_year(Context, Year),
-    week_dayn(date(Year,Month,Day), WeekDayNumber),
-    date_compare(date(Year,Month,Day), >=, Context),
+    week_dayn(date(Year,MonthNumber,Day), WeekDayNumber),
+    date_compare(date(Year,MonthNumber,Day), >=, Context),
     atomic_list_concat([WeekDaySyntax, ', %d ', MonthFormat], Syntax)
   }.
 
@@ -85,14 +86,22 @@ single_day([Context|_], Date, Language, Syntax) -->
 % Dates hinting wonth names
 
 % phrase(abbreviated_dates:single_day([date(2020, 2, 28)], Date, Language, Syntax), `1 July`).
-single_day([Context|_], date(Y, M, D), Language, Syntax) -->
-  month_day(D), b, month(M, Language, MonthFormat),
-  {maybe_future_year(Context, M, D, Y), atom_concat('%d ', MonthFormat, Syntax)}.
+single_day([Context|_], date(Y, MonthNumber, D), Language, Syntax) -->
+  month_day(D), b,  abbreviation(Month, IsAbbreviated),
+  {
+    month_facts(Month, IsAbbreviated, Language, MonthNumber, MonthFormat),
+    maybe_future_year(Context, MonthNumber, D, Y), 
+    atom_concat('%d ', MonthFormat, Syntax)
+  }.
 
 % phrase(abbreviated_dates:single_day([date(2020, 2, 28)], Date, Language, Syntax), `Jan. 1`).
-single_day([Context|_], date(Y, M, D), Language, Syntax) -->
-  month(M, Language, MonthFormat), b, month_day(D),
-  {maybe_future_year(Context, M, D, Y), atom_concat(MonthFormat,' %d', Syntax)}.
+single_day([Context|_], date(Y, MonthNumber, D), Language, Syntax) -->
+  abbreviation(Month, IsAbbreviated), b, month_day(D),
+  {
+    month_facts(Month, IsAbbreviated, Language, MonthNumber, MonthFormat),
+    maybe_future_year(Context, MonthNumber, D, Y), 
+    atom_concat(MonthFormat,' %d', Syntax)
+  }.
 
 % Dates hinting just days
 
@@ -108,25 +117,11 @@ single_day([Context|_], Date, Language, Syntax) -->
   nonblanks(Codes),
   {atom_codes(Adverb, Codes), adverb(Language, Adverb, Context, Date, Syntax)}.
 
-month(MonthNumber, Language, '%B') --> % explicit month
-  nonblanks(Codes),
-  {
-    atom_codes(InputMonthName, Codes),
-    capitalize_sentence(InputMonthName, UpperCaseMonthName),
-    month_name(Language, MonthNumber, UpperCaseMonthName)
-  }.
-
-month(MonthNumber, Language, '%b') --> % abbreviated month
-  string(AbbreviationCodes), ".",
-  {
-    atom_codes(Abbreviation, AbbreviationCodes),
-    month_name(Language, MonthNumber, MonthName),
-    abbreviation(MonthName, Abbreviation, true)
-  }.
-
 week_day(InputCodes) --> % abbreviated week day
   string_without("., ", InputCodes), optional_period.
 
+abbreviation(Codes, true) --> string_without(".", Codes), ".", {!}.
+abbreviation(Codes, false) --> nonblanks(Codes).
 month_day(Day) --> integer(Day), {between(1, 31, Day)}.
 date_number(N) --> integer(N).
 date_number(N) --> integer(N), ".".
@@ -146,6 +141,13 @@ week_day_facts(InputCodes, WeekDayNumber, Language, Format):-
   downcase_atom(WeekDayName, LowerCaseWeekDayName),
   abbreviation(LowerCaseWeekDayName, LowerCaseInputAtom, Abbreviated),
   select_abbreviation_format(Abbreviated, Format).
+
+month_facts(Month, IsAbbreviated, Language, MonthNumber, MonthFormat):-
+  month_name(Language, MonthNumber, MonthName),
+  abbreviation(MonthName, Abbreviation, IsAbbreviated),
+  atom_codes(MaybeAbbreviation, Month),
+  capitalize_sentence(MaybeAbbreviation, Abbreviation),
+  (IsAbbreviated -> (MonthFormat = '%b');  (MonthFormat = '%B')).
 
 % Find optional abbreviations ordering by length
 abbreviation(Atom, Abbreviation, IsAbbreviated):-
