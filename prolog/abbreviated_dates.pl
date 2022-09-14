@@ -110,8 +110,9 @@ single_day([Context|_], Date, Language, Syntax) -->
 month(MonthNumber, Language, '%B') --> % explicit month
   nonblanks(Codes),
   {
-    atom_codes(InputMonthName, Codes), downcase_atom(InputMonthName, LowerCaseMonthName),
-    month_name(Language, MonthNumber , KnownMonthName), downcase_atom(KnownMonthName, LowerCaseMonthName)
+    atom_codes(InputMonthName, Codes),
+    month_name(Language, MonthNumber , KnownMonthName),
+    downcase_atom(KnownMonthName, InputMonthName)
   }.
 
 month(MonthNumber, Language, '%b') --> % abbreviated month
