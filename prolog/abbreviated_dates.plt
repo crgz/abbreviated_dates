@@ -10,18 +10,19 @@ test('Lowercased full week day, comma, day, month name'):-
   assertion(Languages == ['English']),
   assertion(Formats == ['%A, %d %B']).
 
-test('Capitalized full Week Day, comma, Dot Postfixed Day & Full Month Name', fixme('type_error')):-
+test('Capitalized full Week Day, comma, Dot Postfixed Day & Full Month Name'):-
   solutions([date(2021, 9, 21)], 'Friday, 7. May', Dates, Languages, Formats),
-  assertion(Dates == [date(2022, 5, 7)]),
+  assertion(Dates == [date(2027,5,7)]),
   assertion(Languages == ['English']),
-  assertion(Formats == ['%A, %d %B','%A, %d %b']).
+  assertion(Formats == ['%A, %d %B']).
+
 
 % Dates hinting week day names
 
 test('day_of_the_week_as_abbreviation'):-
   solutions([date(2022, 9, 7)], 'Di. 13.9.', Dates, Languages, Formats),
-  assertion(Dates == [date(2022, 9, 13)]),
-  assertion(Languages == ['Dutch','German']),
+  assertion(Dates == [date(2022,9,13),date(2026,9,13)]),
+  assertion(Languages == ['Dutch','French','German']),
   assertion(Formats == ['%a %d %m']).
 
 test('day_of_the_week_as_consonant_abbreviation'):-
@@ -32,10 +33,12 @@ test('day_of_the_week_as_consonant_abbreviation'):-
 
 test('day_of_the_week_as_single_consonant_abbreviation'):-
   solutions([date(2022, 9, 7)], 'T 13.9', Dates, Languages, Formats),
-  assertion(Dates == [date(2022,9,13),date(2023,9,13),date(2024,9,13)]),
+  assertion(Dates == [
+    date(2022,9,13),date(2023,9,13),date(2024,9,13),date(2025,9,13),
+    date(2027,9,13),date(2028,9,13)]),
   assertion(Languages == [
-    'Croatian','Danish','English','Estonian','Finnish','Latvian','Lithuanian','Portuguese','Slovak','Slovenian',
-    'Swedish','Vietnamese'
+    'Croatian','Danish','English','Estonian','Finnish','Latvian','Lithuanian',
+    'Portuguese','Slovak','Slovenian','Swedish','Vietnamese'
   ]),
   assertion(Formats == ['%a %d %m']).
 
@@ -101,23 +104,24 @@ test('Capitalized full week day, day,dot, month number, dot'):-
 
 % Dates hinting month names
 
-test('Capitalized full Month Name & Day', fixme('')):-
+test('Capitalized full Month Name & Day'):-
   solutions([date(2021, 9, 21)], 'July 4', Dates, Languages, Formats),
   assertion(Dates == [date(2022, 7, 4)]),
   assertion(Languages == ['English']),
-  assertion(Formats == ['%B %d','%b %d']).
+  assertion(Formats == ['%B %d']).
 
-test('Day & Capitalized full Month Name', fixme('')):-
+test('Day & Capitalized full Month Name'):-
   solutions([date(2021, 9, 21)], '4 July', Dates, Languages, Formats),
   assertion(Dates == [date(2022, 7, 4)]),
   assertion(Languages == ['English']),
-  assertion(Formats == ['%B %d','%b %d']).
+  assertion(Formats == ['%d %B']).
 
 test('Day & Capitalized Explicitly Abbreviated Month Name'):-
   solutions([date(2021, 9, 21)], '23 Sep.', Dates, Languages, Formats),
   assertion(Dates == [date(2021, 9, 23)]),
-  assertion(Languages == ['Danish','Dutch','English','Estonian','French','German','Latvian','Norwegian','Romanian',
-  'Slovak','Slovenian','Spanish','Swedish']),
+  assertion(Languages == [
+    'Danish','Dutch','English','Estonian','French','German','Latvian',
+    'Norwegian','Romanian','Slovak','Slovenian','Spanish','Swedish']),
   assertion(Formats == ['%d %b']).
 
 % Dates hinting just days
@@ -126,9 +130,11 @@ test('Absolute Day'):-
   solutions([date(2021, 9, 21)], '4', Dates, Languages, Formats),
   assertion(Dates == [date(2021, 10, 4)]),
   assertion(Languages == [
-    'Bulgarian','Chinese','Croatian','Czech','Danish','Dutch','English','Estonian','Finnish','French','German','Greek',
-    'Hebrew','Hungarian','Italian','Japanese','Latvian','Lithuanian','Norwegian','Polish','Portuguese','Romanian',
-    'Russian','Slovak','Slovenian','Spanish','Swedish','Turkish','Ukrainian','Vietnamese']),
+    'Bulgarian','Chinese','Croatian','Czech','Danish','Dutch','English',
+    'Estonian','Finnish','French','German','Greek','Hebrew','Hungarian',
+    'Italian','Japanese','Latvian','Lithuanian','Norwegian','Polish',
+    'Portuguese','Romanian','Russian','Slovak','Slovenian','Spanish','Swedish',
+    'Turkish','Ukrainian','Vietnamese']),
   assertion(Formats == ['%d']).
 
 % Dates hinting relative days

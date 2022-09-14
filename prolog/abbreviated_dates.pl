@@ -44,11 +44,12 @@ multiple_days([LastKnownDate|Other], [SingleDay|MultipleDays], Language, [S1|S2]
 
 % phrase(abbreviated_dates:single_day([date(2020, 2, 28)], Date, Language, Syntax), `Wednesday, 1 July`).
 single_day([Context|_], date(Year,Month,Day), Language, Syntax) -->
-  string(WeekDayCodes), ",", b, date_number(Day), b, month(Month, Language, MonthFormat),
+  string_without(",", WeekDayCodes), ",", b, date_number(Day), b, month(Month, Language, MonthFormat),
   {
-    possible_year(Context, Year),
     week_day_facts(WeekDayCodes, WeekDayNumber, Language, WeekDaySyntax),
+    possible_year(Context, Year),
     week_dayn(date(Year,Month,Day), WeekDayNumber),
+    date_compare(date(Year,Month,Day), >=, Context),
     atomic_list_concat([WeekDaySyntax, ', %d ', MonthFormat], Syntax)
   }.
 
@@ -111,8 +112,8 @@ month(MonthNumber, Language, '%B') --> % explicit month
   nonblanks(Codes),
   {
     atom_codes(InputMonthName, Codes),
-    month_name(Language, MonthNumber , KnownMonthName),
-    downcase_atom(KnownMonthName, InputMonthName)
+    capitalize_sentence(InputMonthName, UpperCaseMonthName),
+    month_name(Language, MonthNumber, UpperCaseMonthName)
   }.
 
 month(MonthNumber, Language, '%b') --> % abbreviated month
@@ -177,7 +178,7 @@ best_date(Context, First, Second, WeekDayNumber, Language, date(Year,Month,Day),
 
 possible_year(Context, Year):-
   date_extract(Context, years(Y)),
-  Max is Y + 2,
+  Max is Y + 6,
   between(Y, Max, Year).
 
 possible_day(Context, Day, Date):-
@@ -251,3 +252,8 @@ remove_duplicates([Head|Tail], Result, Seen) :-
   ;  (Result = [Head|Uniques], NewSeen = [Head])
   ),
   remove_duplicates(Tail, Uniques, NewSeen).
+
+capitalize_sentence(LowerCase, UpperCase):-
+  atom_chars(LowerCase, [Lower|Tail]),
+  char_type(Lower, to_lower(Upper)),
+  atom_chars(UpperCase, [Upper|Tail]).
