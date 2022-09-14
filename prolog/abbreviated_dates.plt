@@ -4,8 +4,11 @@
 
 % Dates hinting week day name & month name
 
-test('Lowercased full week day, comma, day, month name', all(Syntax == ['%A, %d %B'])) :-
-  phrase(abbreviated_dates:single_day([date(2021, 9, 21)], date(2022, 4, 23), 'English', Syntax), `saturday, 23 april`).
+test('Lowercased full week day, comma, day, month name'):-
+  solutions([date(2021, 9, 21)], 'saturday, 23 april', Dates, Languages, Formats),
+  assertion(Dates == [date(2022, 4, 23)]),
+  assertion(Languages == ['English']),
+  assertion(Formats == ['%A, %d %B']).
 
 test('Capitalized full Week Day, comma, Dot Postfixed Day & Full Month Name',
   fixme(all(Syntax == ['%A, %d %B','%A, %d %b'])))
@@ -15,19 +18,19 @@ test('Capitalized full Week Day, comma, Dot Postfixed Day & Full Month Name',
 % Dates hinting week day names
 
 test('day_of_the_week_as_abbreviation'):-
-  solutions([date(2022, 9, 7)], `Di. 13.9.`, Dates, Languages, Formats),
+  solutions([date(2022, 9, 7)], 'Di. 13.9.', Dates, Languages, Formats),
   assertion(Dates == [date(2022, 9, 13)]),
   assertion(Languages == ['Dutch','German']),
   assertion(Formats == ['%a %d %m']).
 
 test('day_of_the_week_as_consonant_abbreviation'):-
-  solutions([date(2022, 9, 7)], `pt. 16.09`, Dates, Languages, Formats),
+  solutions([date(2022, 9, 7)], 'pt. 16.09', Dates, Languages, Formats),
   assertion(Dates == [date(2022, 9, 16)]),
   assertion(Languages == ['Croatian', 'Polish', 'Slovak', 'Slovenian']),
   assertion(Formats == ['%a %d %m']).
 
 test('day_of_the_week_as_single_consonant_abbreviation'):-
-  solutions([date(2022, 9, 7)], `T 13.9`, Dates, Languages, Formats),
+  solutions([date(2022, 9, 7)], 'T 13.9', Dates, Languages, Formats),
   assertion(Dates == [date(2022,9,13),date(2023,9,13),date(2024,9,13)]),
   assertion(Languages == [
     'Croatian', 'Danish', 'English', 'Estonian', 'Finnish', 'Latvian',
@@ -36,31 +39,31 @@ test('day_of_the_week_as_single_consonant_abbreviation'):-
   assertion(Formats == ['%a %d %m']).
 
 test('day_of_the_week_as_abbreviation'):-
-  solutions([date(2022, 9, 7)], `09-17, št`, Dates, Languages, Formats),
+  solutions([date(2022, 9, 7)], '09-17, št', Dates, Languages, Formats),
   assertion(Dates == [date(2022, 9, 17)]),
   assertion(Languages == ['Lithuanian']),
   assertion(Formats == ['%m %d %a']).
   
 test('day_of_the_week_as_abbreviation'):-
-  solutions([date(2022, 9, 7)], `09-15, kt`, Dates, Languages, Formats),
+  solutions([date(2022, 9, 7)], '09-15, kt', Dates, Languages, Formats),
   assertion(Dates == [date(2022, 9, 15)]),
   assertion(Languages == ['Lithuanian']),
   assertion(Formats == ['%m %d %a']).
 
 test('day_of_the_week_as_abbreviation'):-
-  solutions([date(2022, 9, 7)], `čt 15. 9.`, Dates, Languages, Formats),
+  solutions([date(2022, 9, 7)], 'čt 15. 9.', Dates, Languages, Formats),
   assertion(Dates == [date(2022, 9, 15)]),
   assertion(Languages == ['Croatian','Czech','Slovenian']),
   assertion(Formats == ['%a %d %m']).
          
 test('day_of_the_week_as_abbreviation'):-
-  solutions([date(2022, 9, 7)], `st 14. 9.`, Dates, Languages, Formats),
+  solutions([date(2022, 9, 7)], 'st 14. 9.', Dates, Languages, Formats),
   assertion(Dates == [date(2022,9,14),date(2024,9,14)]),
   assertion(Languages == ['Czech','English','Latvian','Slovak']),
   assertion(Formats == ['%a %d %m']).
 
 test('day_of_the_week_as_abbreviation_with_comma'):-
-  solutions([date(2022, 9, 14)], `sri, 21. 09.`, Dates, Languages, Formats),
+  solutions([date(2022, 9, 14)], 'sri, 21. 09.', Dates, Languages, Formats),
   assertion(Dates == [date(2022,9,21)]),
   assertion(Languages == ['Croatian']),
   assertion(Formats == ['%a %d %m']).
@@ -109,9 +112,10 @@ test('Tomorrow', all(Syntax == [tomorrow])) :-
 
 
 solutions(Context, Case, Dates, Languages, Formats):-
-  setof(Date, L^F^result(Context, Case, Date, L, F), Dates),
-  setof(Language, D^F^result(Context, Case, D, Language, F), Languages),
-  setof(Format, D^L^result(Context, Case, D, L, Format), Formats).
+  atom_codes(Case, Codes),
+  setof(Date, L^F^result(Context, Codes, Date, L, F), Dates),
+  setof(Language, D^F^result(Context, Codes, D, Language, F), Languages),
+  setof(Format, D^L^result(Context, Codes, D, L, Format), Formats).
 
 result(Context, Case, Dates, Languages, Formats):-
   phrase(abbreviated_dates:single_day(Context, Dates, Languages, Formats), Case).
