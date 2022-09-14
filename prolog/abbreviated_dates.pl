@@ -115,11 +115,11 @@ month(MonthNumber, Language, '%B') --> % explicit month
   }.
 
 month(MonthNumber, Language, '%b') --> % abbreviated month
-  string(Abbreviation), optional_period,
+  string(AbbreviationCodes), ".",
   {
-    atom_codes(Prefix, Abbreviation),
+    atom_codes(Abbreviation, AbbreviationCodes),
     month_name(Language, MonthNumber, MonthName),
-    sub_atom(MonthName, 0, _, _, Prefix)
+    abbreviation(MonthName, Abbreviation, true)
   }.
 
 week_day(InputCodes) --> % abbreviated week day
@@ -142,22 +142,22 @@ week_day_facts(InputCodes, WeekDayNumber, Language, Format):-
   downcase_atom(InputAtom, LowerCaseInputAtom),
   week_day_name(Language, WeekDayNumber, WeekDayName),
   downcase_atom(WeekDayName, LowerCaseWeekDayName),
-  optional_abbreviation(LowerCaseWeekDayName, LowerCaseInputAtom, Abbreviated),
+  abbreviation(LowerCaseWeekDayName, LowerCaseInputAtom, Abbreviated),
   select_abbreviation_format(Abbreviated, Format).
 
 % Find optional abbreviations ordering by length
-optional_abbreviation(Atom, Abbreviation, IsAbbreviated):-
-  abbreviation(Atom, Abbreviation, IsAbbreviated);
-  consonant_abbreviation(Atom, Abbreviation, IsAbbreviated).
-
 abbreviation(Atom, Abbreviation, IsAbbreviated):-
+  abbreviation_all_letters(Atom, Abbreviation, IsAbbreviated);
+  abbreviation_consonant(Atom, Abbreviation, IsAbbreviated).
+
+abbreviation_all_letters(Atom, Abbreviation, IsAbbreviated):-
   order_by([desc(L)], (sub_atom(Atom, 0, _, After, Abbreviation), atom_length(Abbreviation,L))),
   L > 0,
   (After = 0 -> IsAbbreviated = false; IsAbbreviated = true).
 
-consonant_abbreviation(Atom, Abbreviation, IsAbbreviated):-
+abbreviation_consonant(Atom, Abbreviation, IsAbbreviated):-
   atom_remove_vowels(Atom, AtomConsonants),
-  abbreviation(AtomConsonants, Abbreviation, IsAbbreviated).
+  abbreviation_all_letters(AtomConsonants, Abbreviation, IsAbbreviated).
 
 atom_remove_vowels(Atom, AtomConsonants):-
   atom_chars(Atom, Chars),
