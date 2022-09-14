@@ -124,6 +124,8 @@ month(MonthNumber, Language, '%b') --> % abbreviated month
 
 week_day(InputCodes) --> % abbreviated week day
   string_without(". ", InputCodes), optional_period.
+week_day(InputCodes) --> % abbreviated week day
+  string_without("., ", InputCodes), optional_period.
 
 month_day(Day) --> integer(Day), {between(1, 31, Day)}.
 date_number(N) --> integer(N).
