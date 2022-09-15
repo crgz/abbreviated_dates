@@ -24,7 +24,7 @@ test-plain:
 	@swipl -t 'load_test_files([]), run_tests.' prolog/$(name).pl 2>&1 /dev/null | tail -n +8
 
 remove:
-	@swipl -g "pack_remove($(name))"  -t halt
+	@swipl -qg "pack_remove($(name)),halt"
 
 PACK_PATH ?= ${HOME}/.local/share/swi-prolog/pack
 install: install-dependencies  $(PACK_PATH)/$(name)
@@ -36,7 +36,7 @@ $(PACK_PATH)/%:
 deploy: install-dependencies remove
 	@bumpversion patch && git push --quiet ;\
 	NEW_VERSION=$$(swipl -q -s pack -g 'version(V),writeln(V)' -t halt) ;\
-	hub release create -m v$$NEW_VERSION v$$NEW_VERSION ;\
+	@hub release create -m v$$NEW_VERSION v$$NEW_VERSION ;\
 	while : ; do \
 		REMOTE_VERSION=$$(curl --silent 'https://api.github.com/repos/crgz/$(name)/releases/latest' | jq -r .tag_name) ;\
 		if [ v$$NEW_VERSION == $$REMOTE_VERSION ]; then printf '\n' && break; fi ;\
