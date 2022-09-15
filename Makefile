@@ -7,24 +7,23 @@
 SHELL = /bin/bash
 .SHELLFLAGS = -o pipefail -c
 
-name = $(shell swipl -q -s pack -g 'name(N),writeln(N)' -t halt)
-title = $(shell swipl -q -s pack -g 'title(V),writeln(V)' -t halt)
-version = $(shell swipl -q -s pack -g 'version(V),writeln(V)' -t halt)
-requires = $(shell swipl -q -s pack -g 'requires(V),writeln(V)' -t halt)
+NAME = $(shell swipl -q -s pack -g 'name(N),writeln(N)' -t halt)
+TITLE = $(shell swipl -q -s pack -g 'title(V),writeln(V)' -t halt)
+VERSION = $(shell swipl -q -s pack -g 'version(V),writeln(V)' -t halt)
+PACK_PATH ?= ${HOME}/.local/share/swi-prolog/pack
 
 all: about test
 
 about:
-	@echo $(name) v$(version) -- $(title)
+	@echo $(NAME) v$(VERSION) -- $(TITLE)
 
 test:
-	@swipl -g 'load_test_files([]),run_tests,halt' prolog/$(name).pl
+	@swipl -g 'load_test_files([]),run_tests,halt' prolog/$(NAME).pl
 
 remove:
-	@swipl -qg "pack_remove($(name)),halt"
+	@swipl -qg "pack_remove($(NAME)),halt"
 
-PACK_PATH ?= ${HOME}/.local/share/swi-prolog/pack
-install: install-dependencies  $(PACK_PATH)/$(name)
+install: install-dependencies  $(PACK_PATH)/$(NAME)
 install-dependencies: $(PACK_PATH)/tap  $(PACK_PATH)/date_time
 
 $(PACK_PATH)/%:
@@ -33,12 +32,11 @@ $(PACK_PATH)/%:
 deploy: install-dependencies remove
 	@bumpversion patch && git push --quiet ;\
 	NEW_VERSION=$$(swipl -q -s pack -g 'version(V),writeln(V)' -t halt) ;\
-	hub release create -m v$$NEW_VERSION v$$NEW_VERSION;\
+	hub release create -m v$$NEW_VERSION v$$NEW_VERSION ;\
 	while : ; do \
-		REMOTE_VERSION=$$(curl --silent 'https://api.github.com/repos/crgz/$(name)/releases/latest' | jq -r .tag_name) ;\
-		if [ v$$NEW_VERSION == $$REMOTE_VERSION ]; then printf '\n' && break; fi ;\
-		printf '.' && sleep 1 ;\
-  done ;\
-  NAME=$$(swipl -q -s pack -g 'name(N),writeln(N)' -t halt) ;\
-  REMOTE=https://github.com/crgz/$$NAME/archive/v$$NEW_VERSION.zip ;\
-	swipl -qg "pack_install('$$REMOTE',[interactive(false)]),halt"
+		REMOTE_VERSION=$$(curl --silent 'https://api.github.com/repos/crgz/$(NAME)/releases/latest' | jq -r .tag_name) ;\
+		if [ v$$NEW_VERSION == $$REMOTE_VERSION ]; then printf '\n' && break; fi;\
+		printf '.' && sleep 1;\
+	done ;\
+	REMOTE=https://github.com/crgz/$$NAME/archive/v$$NEW_VERSION.zip ;\
+	swipl -g "pack_install('$$REMOTE',[interactive(false)]),halt"
