@@ -4,8 +4,6 @@
 # expected. https://rlaanemets.com/post/show/prolog-pack-development-experience
 
 .PHONY: all about test remove install install-dependencies deploy
-SHELL = /bin/bash
-.SHELLFLAGS = -o pipefail -c
 
 name = $(shell swipl -q -s pack -g 'name(N),writeln(N)' -t halt)
 title = $(shell swipl -q -s pack -g 'title(V),writeln(V)' -t halt)
