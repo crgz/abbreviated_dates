@@ -1,6 +1,15 @@
-:- begin_tests(abbreviated_dates_tests).  % for plunit
-:- use_module(facts/country_language).
-:- use_module(facts/country_date_endianness).
+:- module(test_abbreviated_dates, [test_abbreviated_dates/0]).
+
+solutions(Context, Case, Dates, Languages, Formats):-
+  atom_codes(Case, Codes),
+  setof(Date, L^F^result(Context, Codes, Date, L, F), Dates),
+  setof(Language, D^F^result(Context, Codes, D, Language, F), Languages),
+  setof(Format, D^L^result(Context, Codes, D, L, Format), Formats).
+
+result(Context, Case, Dates, Languages, Formats):-
+  phrase(abbreviated_dates:single_day(Context, Dates, Languages, Formats), Case).
+
+:- begin_tests(abbreviated_dates).  % for plunit
 
 % Dates hinting week day name & month name
 
@@ -151,16 +160,4 @@ test('Tomorrow'):-
   assertion(Languages == ['English']),
   assertion(Formats == ['tomorrow']).
 
-%
-% Solution wrapper
-%
-solutions(Context, Case, Dates, Languages, Formats):-
-  atom_codes(Case, Codes),
-  setof(Date, L^F^result(Context, Codes, Date, L, F), Dates),
-  setof(Language, D^F^result(Context, Codes, D, Language, F), Languages),
-  setof(Format, D^L^result(Context, Codes, D, L, Format), Formats).
-
-result(Context, Case, Dates, Languages, Formats):-
-  phrase(abbreviated_dates:single_day(Context, Dates, Languages, Formats), Case).
-
-:- end_tests(abbreviated_dates_tests).
+:- end_tests(abbreviated_dates).
