@@ -1,5 +1,7 @@
 :- module(test_abbreviated_dates, [test_abbreviated_dates/0]).
 
+test_abbreviated_dates :- run_tests.
+
 solutions(Context, Case, Dates, Languages, Formats):-
   atom_codes(Case, Codes),
   setof(Date, L^F^result(Context, Codes, Date, L, F), Dates),
@@ -9,7 +11,8 @@ solutions(Context, Case, Dates, Languages, Formats):-
 result(Context, Case, Dates, Languages, Formats):-
   phrase(abbreviated_dates:single_day(Context, Dates, Languages, Formats), Case).
 
-:- begin_tests(abbreviated_dates).  % for plunit
+
+:- begin_tests(abbreviated_dates).
 
 % Dates hinting week day name & month name
 
