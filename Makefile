@@ -36,7 +36,7 @@ $(PACK_PATH)/%:
 deploy: install-dependencies remove
 	@bumpversion patch && git push --quiet ;\
 	NEW_VERSION=$$(swipl -q -s pack -g 'version(V),writeln(V)' -t halt) ;\
-	hub release create -m v$$NEW_VERSION v$$NEW_VERSION 2>&1 /dev/null;\
+	hub release create -m v$$NEW_VERSION v$$NEW_VERSION;\
 	while : ; do \
 		REMOTE_VERSION=$$(curl --silent 'https://api.github.com/repos/crgz/$(name)/releases/latest' | jq -r .tag_name) ;\
 		if [ v$$NEW_VERSION == $$REMOTE_VERSION ]; then printf '\n' && break; fi ;\
