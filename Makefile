@@ -29,7 +29,7 @@ install-dependencies: $(PACK_PATH)/tap  $(PACK_PATH)/date_time
 $(PACK_PATH)/%:
 	@swipl -qg "pack_install('$(notdir $@)',[interactive(false)]),halt"
 
-deploy: install-dependencies remove
+deploy: install-dependencies
 	@bumpversion patch && git push --quiet ;\
 	NEW_VERSION=$$(swipl -q -s pack -g 'version(V),writeln(V)' -t halt) ;\
 	hub release create -m v$$NEW_VERSION v$$NEW_VERSION ;\
