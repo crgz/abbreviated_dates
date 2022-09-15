@@ -44,4 +44,4 @@ deploy: install-dependencies remove
   done ;\
   NAME=$$(swipl -q -s pack -g 'name(N),writeln(N)' -t halt) ;\
   REMOTE=https://github.com/crgz/$$NAME/archive/v$$NEW_VERSION.zip ;\
-	swipl -g "pack_install('$$REMOTE',[interactive(false)]),halt(0)" -t 'halt(1)'
+	swipl -qg "pack_install('$$REMOTE',[interactive(false)]),halt"
