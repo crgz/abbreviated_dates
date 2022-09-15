@@ -10,7 +10,6 @@ SHELL = /bin/bash
 name = $(shell swipl -q -s pack -g 'name(N),writeln(N)' -t halt)
 title = $(shell swipl -q -s pack -g 'title(V),writeln(V)' -t halt)
 version = $(shell swipl -q -s pack -g 'version(V),writeln(V)' -t halt)
-requires = $(shell swipl -q -s pack -g 'requires(V),writeln(V)' -t halt)
 
 all: about test
 
