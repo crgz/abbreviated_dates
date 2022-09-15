@@ -31,7 +31,7 @@ install: install-dependencies  $(PACK_PATH)/$(name)
 install-dependencies: $(PACK_PATH)/tap  $(PACK_PATH)/date_time
 
 $(PACK_PATH)/%:
-	@swipl -q -g "pack_install('$(notdir $@)',[interactive(false)]),halt(0)" -t 'halt(1)'
+	@swipl -qg "pack_install('$(notdir $@)',[interactive(false)]),halt"
 
 deploy: install-dependencies remove
 	@bumpversion patch && git push --quiet ;\
