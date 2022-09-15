@@ -37,7 +37,7 @@ install-dependencies:
 	@swipl -g "O=[interactive(false)],pack_install(tap,O),pack_install(date_time,O),halt(0)" -t 'halt(1)'
 
 deploy: install-dependencies
-	@bumpversion patch && git push --quiet ;\
+	bumpversion patch && git push --quiet ;\
 	NEW_VERSION=$$(swipl -q -s pack -g 'version(V),writeln(V)' -t halt) ;\
 	hub release create -m v$$NEW_VERSION v$$NEW_VERSION ;\
 	while : ; do \
