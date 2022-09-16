@@ -1,5 +1,4 @@
 :- module(test_abbreviated_dates, [test_abbreviated_dates/0]).
-:- use_module(abbreviated_dates).
 
 test_abbreviated_dates :- run_tests.
 
