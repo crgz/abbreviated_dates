@@ -3,9 +3,10 @@ Author: Conrado M. Rodriguez <Conrado.Rgz@gmail.com> https://github.com/crgz
 */
 :- module(abbreviated_dates,
 [
-  parse/3,   % +Context, +Expression, ?Dates
-  parse/4,   % +Context, +Expression, ?Dates, ?Syntax
-  parse/5    % +Context, +Expression, ?Dates, ?Syntax, ?Language
+  parse/3,      % +Context, +Expression, ?Dates
+  parse/4,      % +Context, +Expression, ?Dates, ?Syntax
+  parse/5,      % +Context, +Expression, ?Dates, ?Syntax, ?Language
+  single_day/6  % Esported for testing purpose. (See: abbreviated_dates.plt)
 ]).
 
 :- [library(dcg/basics)].
