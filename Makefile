@@ -14,10 +14,10 @@ PACK_PATH ?= ${HOME}/.local/share/swi-prolog/pack
 PPA_FILE = /etc/apt/sources.list.d/swi-prolog-ubuntu-stable-bionic.list
 
 # The following 3 goals are called by swipl -t "pack_install(.)"
-all: about
+all: about packs
 check: test
-install: packs
-	@echo "Packs Installed"
+install:
+	@echo "Unrequested call to install"
 
 about:
 	@echo $(NAME) v$(VERSION) -- $(TITLE)
