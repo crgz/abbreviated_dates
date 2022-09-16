@@ -8,7 +8,7 @@ Author: Conrado M. Rodriguez <Conrado.Rgz@gmail.com> https://github.com/crgz
   parse/5,      % +Context, +Expression, ?Dates, ?Syntax, ?Language
   single_day/6  % Esported for testing purpose. (See: abbreviated_dates.plt)
 ]).
-
+:- encoding(utf8).
 :- [library(dcg/basics)].
 :- use_module(library(date_time)).
 :- use_module(facts/languages).  % Facts about languages
