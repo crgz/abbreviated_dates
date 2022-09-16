@@ -15,4 +15,4 @@ jobs:
       matrix:
         os: [Ubuntu]
     steps:
-      - uses: actions/checkout@v2
+      - run: make test
