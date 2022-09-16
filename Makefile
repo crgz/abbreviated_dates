@@ -7,9 +7,9 @@
 SHELL = /bin/bash
 .SHELLFLAGS = -o pipefail -c
 
-NAME = $(shell swipl -q -s pack -g 'name(N),writeln(N)' -t halt)
-TITLE = $(shell swipl -q -s pack -g 'title(V),writeln(V)' -t halt)
-VERSION = $(shell swipl -q -s pack -g 'version(V),writeln(V)' -t halt)
+NAME = $(shell awk -F"[()]" '/name/{print $$2}' pack.pl)
+TITLE = $(shell awk -F"[()]" '/title/{print $$2}' pack.pl)
+VERSION = $(shell awk -F"[()]" '/version/{print $$2}' pack.pl)
 PACK_PATH ?= ${HOME}/.local/share/swi-prolog/pack
 PPA_FILE = /etc/apt/sources.list.d/swi-prolog-ubuntu-stable-bionic.list
 
