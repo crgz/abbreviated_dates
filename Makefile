@@ -13,7 +13,7 @@ VERSION = $(shell awk -F"[()]" '/version/{print $$2}' pack.pl)
 PACK_PATH ?= ${HOME}/.local/share/swi-prolog/pack
 PPA_FILE = /etc/apt/sources.list.d/swi-prolog-ubuntu-stable-bionic.list
 
-all: about test
+all: about packs
 
 about:
 	@echo $(NAME) v$(VERSION) -- $(TITLE)
