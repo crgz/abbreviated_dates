@@ -13,7 +13,11 @@ VERSION = $(shell awk -F"[()]" '/version/{print $$2}' pack.pl)
 PACK_PATH ?= ${HOME}/.local/share/swi-prolog/pack
 PPA_FILE = /etc/apt/sources.list.d/swi-prolog-ubuntu-stable-bionic.list
 
-all: about packs
+# The following 3 goals are called by swipl -t "pack_install(.)"
+all: about
+check: test
+install: packs
+	@echo "Packs Installed"
 
 about:
 	@echo $(NAME) v$(VERSION) -- $(TITLE)
@@ -23,8 +27,6 @@ test:
 
 remove:
 	@swipl -qg "pack_remove($(NAME)),halt"
-
-install: packages $(NAME)
 
 packages: swi-prolog
 swi-prolog: swi-prolog-ppa /usr/bin/swipl
