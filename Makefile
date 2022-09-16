@@ -3,7 +3,7 @@
 # having a Makefile included and seeing all the weird results when make all was run in a location where it was not
 # expected. https://rlaanemets.com/post/show/prolog-pack-development-experience
 
-.PHONY: all about test remove install install-dependencies deploy
+.PHONY: all about test remove install packs packages deploy
 SHELL = /bin/bash
 .SHELLFLAGS = -o pipefail -c
 
@@ -11,6 +11,7 @@ NAME = $(shell swipl -q -s pack -g 'name(N),writeln(N)' -t halt)
 TITLE = $(shell swipl -q -s pack -g 'title(V),writeln(V)' -t halt)
 VERSION = $(shell swipl -q -s pack -g 'version(V),writeln(V)' -t halt)
 PACK_PATH ?= ${HOME}/.local/share/swi-prolog/pack
+PPA_FILE = /etc/apt/sources.list.d/swi-prolog-ubuntu-stable-bionic.list
 
 all: about test
 
@@ -23,13 +24,23 @@ test:
 remove:
 	@swipl -qg "pack_remove($(NAME)),halt"
 
-install: install-dependencies  $(PACK_PATH)/$(NAME)
-install-dependencies: $(PACK_PATH)/tap  $(PACK_PATH)/date_time
+install: packages $(NAME)
 
+packages: swi-prolog
+swi-prolog: swi-prolog-ppa /usr/bin/swipl
+swi-prolog-ppa: $(PPA_FILE)
+$(PPA_FILE):
+	@echo "deb http://ppa.launchpad.net/swi-prolog/stable/ubuntu bionic main" | sudo dd status=none of=$(PPA_FILE)
+	@sudo apt update
+/usr/bin/swipl:
+	sudo apt-get install swi-prolog -y
+
+$(NAME): packs $(PACK_PATH)/$(NAME)
+packs: $(PACK_PATH)/tap  $(PACK_PATH)/date_time
 $(PACK_PATH)/%:
 	@swipl -qg "pack_install('$(notdir $@)',[interactive(false)]),halt"
 
-deploy: install-dependencies
+deploy: packs
 	@bumpversion patch && git push --quiet ;\
 	NEW_VERSION=$$(swipl -q -s pack -g 'version(V),writeln(V)' -t halt) ;\
 	hub release create -m v$$NEW_VERSION v$$NEW_VERSION ;\
