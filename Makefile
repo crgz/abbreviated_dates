@@ -19,7 +19,7 @@ all: about
 about:
 	@echo $(NAME) v$(VERSION) -- $(TITLE)
 
-deploy: test
+deploy: test bumpversion
 	@bumpversion patch && git push --quiet ;\
 	NEW_VERSION=$$(swipl -q -s pack -g 'version(V),writeln(V)' -t halt) ;\
 	hub release create -m v$$NEW_VERSION v$$NEW_VERSION ;\
@@ -41,10 +41,12 @@ $(PACK_PATH)/%: packages
 packages: swi-prolog
 swi-prolog: /usr/bin/swipl
 /usr/bin/swipl:  swi-prolog-ppa
-	sudo apt-get install swi-prolog -y
+	sudo apt install swi-prolog -y
 swi-prolog-ppa: $(PPA_FILE)
 $(PPA_FILE):
 	sudo add-apt-repository -y ppa:swi-prolog/stable
+bumpversion:
+	sudo apt install bumpversion -y
 
 remove:
 	@swipl -qg "pack_remove($(NAME)),halt"
