@@ -14,20 +14,19 @@ PACK_PATH ?= ${HOME}/.local/share/swi-prolog/pack
 PPA_FILE = /etc/apt/sources.list.d/swi-prolog-ubuntu-stable-bionic.list
 
 # The following 3 goals are called by swipl -t "pack_install(.)"
-all: about packs
-check: test
-install:
-	@echo "Unrequested call to install"
+all: about
 
 about:
 	@echo $(NAME) v$(VERSION) -- $(TITLE)
 
-test:
+test: install
 	@swipl -g 'load_test_files([]),run_tests,halt' prolog/$(NAME).pl
 
-remove:
-	@swipl -qg "pack_remove($(NAME)),halt"
-
+install: $(NAME)
+$(NAME): packs $(PACK_PATH)/$(NAME)
+packs: $(PACK_PATH)/tap  $(PACK_PATH)/date_time
+$(PACK_PATH)/%: packages
+	@swipl -qg "pack_install('$(notdir $@)',[interactive(false)]),halt"
 packages: swi-prolog
 swi-prolog: swi-prolog-ppa /usr/bin/swipl
 swi-prolog-ppa: $(PPA_FILE)
@@ -36,11 +35,6 @@ $(PPA_FILE):
 	@sudo apt update
 /usr/bin/swipl:
 	sudo apt-get install swi-prolog -y
-
-$(NAME): packs $(PACK_PATH)/$(NAME)
-packs: $(PACK_PATH)/tap  $(PACK_PATH)/date_time
-$(PACK_PATH)/%:
-	@swipl -qg "pack_install('$(notdir $@)',[interactive(false)]),halt"
 
 deploy: packs
 	@bumpversion patch && git push --quiet ;\
@@ -53,3 +47,6 @@ deploy: packs
 	done ;\
 	REMOTE=https://github.com/crgz/$(NAME)/archive/v$$NEW_VERSION.zip ;\
 	swipl -qg "pack_remove($(NAME)),pack_install('$$REMOTE',[interactive(false)]),halt(0)" -t 'halt(1)'
+
+remove:
+	@swipl -qg "pack_remove($(NAME)),halt"
