@@ -19,23 +19,7 @@ all: about
 about:
 	@echo $(NAME) v$(VERSION) -- $(TITLE)
 
-test: install
-	@swipl -g 'load_test_files([]),run_tests,halt' prolog/$(NAME).pl
-
-install: $(NAME)
-$(NAME): packs $(PACK_PATH)/$(NAME)
-packs: $(PACK_PATH)/tap  $(PACK_PATH)/date_time
-$(PACK_PATH)/%: packages
-	@swipl -qg "pack_install('$(notdir $@)',[interactive(false)]),halt"
-packages: swi-prolog
-swi-prolog: swi-prolog-ppa /usr/bin/swipl
-swi-prolog-ppa: $(PPA_FILE)
-$(PPA_FILE):
-	sudo add-apt-repository -y ppa:swi-prolog/stable
-/usr/bin/swipl:
-	sudo apt-get install swi-prolog -y
-
-deploy: packs
+deploy: test
 	@bumpversion patch && git push --quiet ;\
 	NEW_VERSION=$$(swipl -q -s pack -g 'version(V),writeln(V)' -t halt) ;\
 	hub release create -m v$$NEW_VERSION v$$NEW_VERSION ;\
@@ -46,6 +30,21 @@ deploy: packs
 	done ;\
 	REMOTE=https://github.com/crgz/$(NAME)/archive/v$$NEW_VERSION.zip ;\
 	swipl -qg "pack_remove($(NAME)),pack_install('$$REMOTE',[interactive(false)]),halt(0)" -t 'halt(1)'
+
+test: install
+	@swipl -g 'load_test_files([]),run_tests,halt' prolog/$(NAME).pl
+install: $(NAME)
+$(NAME): packs $(PACK_PATH)/$(NAME)
+packs: $(PACK_PATH)/tap  $(PACK_PATH)/date_time
+$(PACK_PATH)/%: packages
+	@swipl -qg "pack_install('$(notdir $@)',[interactive(false)]),halt"
+packages: swi-prolog
+swi-prolog: /usr/bin/swipl
+/usr/bin/swipl:  swi-prolog-ppa
+	sudo apt-get install swi-prolog -y
+swi-prolog-ppa: $(PPA_FILE)
+$(PPA_FILE):
+	sudo add-apt-repository -y ppa:swi-prolog/stable
 
 remove:
 	@swipl -qg "pack_remove($(NAME)),halt"
