@@ -12,7 +12,7 @@ TITLE = $(shell awk -F"[()]" '/title/{print $$2}' pack.pl)
 VERSION = $(shell awk -F"[()]" '/version/{print $$2}' pack.pl)
 PACK_PATH ?= ${HOME}/.local/share/swi-prolog/pack
 PACKAGE_PATH ?= /usr/bin
-PPA_FILE = /etc/apt/sources.list.d/swi-prolog-ubuntu-stable-bionic.list
+PPA_PATH ?= /etc/apt/sources.list.d/
 
 # The following 3 goals are called by swipl -t "pack_install(.)"
 all: about
@@ -20,7 +20,7 @@ all: about
 about:
 	@echo $(NAME) v$(VERSION) -- $(TITLE)
 
-deploy: test setup-git $(PACKAGE_PATH)/bumpversion
+deploy: prepare test setup-git
 	bumpversion patch && git push --quiet ;\
 	NEW_VERSION=$$(swipl -q -s pack -g 'version(V),writeln(V)' -t halt) ;\
 	hub release create -m v$$NEW_VERSION v$$NEW_VERSION ;\
@@ -34,26 +34,31 @@ deploy: test setup-git $(PACKAGE_PATH)/bumpversion
 
 test: install
 	@swipl -g 'load_test_files([]),run_tests,halt' prolog/$(NAME).pl
-install: $(NAME)
-$(NAME): packs $(PACK_PATH)/$(NAME)
-packs: $(PACK_PATH)/tap  $(PACK_PATH)/date_time
-$(PACK_PATH)/%: swi-prolog
-	@swipl -qg "pack_install('$(notdir $@)',[interactive(false)]),halt"
 
-swi-prolog: $(PACKAGE_PATH)/swipl
-$(PACKAGE_PATH)/swipl:  swi-prolog-ppa
-	sudo apt install swi-prolog -y
-swi-prolog-ppa: $(PPA_FILE)
-$(PPA_FILE):
+install: prepare $(NAME)
+
+REPOS: $(PPA_PATH)/swi-prolog-ubuntu-stable-bionic.list
+PACKAGES: $(PACKAGE_PATH)/swipl $(PACKAGE_PATH)/bumpversion $(PACKAGE_PATH)/hub
+prepare: $(REPOS) $(PACKAGES)
+
+$(REPOS):
 	sudo add-apt-repository -y ppa:swi-prolog/stable
+	sudo add-apt-repository ppa:cpick/hub -y
+
+$(PACKAGES):
+	sudo apt install swi-prolog bumpversion hub -y
 
 $(PACKAGE_PATH)/%:
 	sudo apt install $(notdir $@) -y
 
+$(NAME): packs $(PACK_PATH)/$(NAME)
+packs: $(PACK_PATH)/tap  $(PACK_PATH)/date_time
+$(PACK_PATH)/%:
+	@swipl -qg "pack_install('$(notdir $@)',[interactive(false)]),halt"
+
 setup-git:
 	git config --global user.email "conrado.rgz@gmail.com"
 	git config --global user.name "Conrado Rodriguez"
-
 
 remove:
 	@swipl -qg "pack_remove($(NAME)),halt"
