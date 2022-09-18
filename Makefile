@@ -19,7 +19,7 @@ all: about
 about:
 	@echo $(NAME) v$(VERSION) -- $(TITLE)
 
-deploy: test bumpversion
+deploy: test setup-git bumpversion
 	@bumpversion patch && git push --quiet ;\
 	NEW_VERSION=$$(swipl -q -s pack -g 'version(V),writeln(V)' -t halt) ;\
 	hub release create -m v$$NEW_VERSION v$$NEW_VERSION ;\
@@ -45,6 +45,9 @@ swi-prolog: /usr/bin/swipl
 swi-prolog-ppa: $(PPA_FILE)
 $(PPA_FILE):
 	sudo add-apt-repository -y ppa:swi-prolog/stable
+setup-git:
+	git config --global user.email "conrado.rgz@gmail.com"
+	git config --global user.name "Conrado Rodriguez"
 bumpversion:
 	sudo apt install bumpversion -y
 
