@@ -31,8 +31,7 @@ packages: swi-prolog
 swi-prolog: swi-prolog-ppa /usr/bin/swipl
 swi-prolog-ppa: $(PPA_FILE)
 $(PPA_FILE):
-	@echo "deb http://ppa.launchpad.net/swi-prolog/stable/ubuntu bionic main" | sudo dd status=none of=$(PPA_FILE)
-	@sudo apt update
+	sudo add-apt-repository -y ppa:swi-prolog/stable
 /usr/bin/swipl:
 	sudo apt-get install swi-prolog -y
 
