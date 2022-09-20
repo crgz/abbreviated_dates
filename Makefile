@@ -31,12 +31,12 @@ deploy: test setup-git
 		printf '.' && sleep 1 ;\
 	done ;\
 	REMOTE=https://github.com/crgz/$(NAME)/archive/v$$NEW_VERSION.zip ;\
-	swipl -qg "pack_remove($(NAME)),pack_install('$$REMOTE',[interactive(false)]),halt(0)" -t 'halt(1)'
+	swipl -qg "pack_install('$$REMOTE',[interactive(false)]),halt(0)" -t 'halt(1)'
 
 test: install
 	@swipl -g 'load_test_files([]),run_tests,halt' prolog/$(NAME).pl
 
-install: infrastructure $(NAME)
+install: infrastructure packs
 infrastructure: repositories packages
 
 repositories: $(REPOS)
@@ -51,7 +51,6 @@ $(PACKAGE_PATH)/swipl:
 $(PACKAGE_PATH)/%: # Install packages from default repo
 	@sudo apt install $(notdir $@) -y
 
-$(NAME): packs $(PACK_PATH)/$(NAME)
 packs: $(PACK_PATH)/tap  $(PACK_PATH)/date_time
 $(PACK_PATH)/%:
 	@swipl -qg "pack_install('$(notdir $@)',[interactive(false)]),halt"
