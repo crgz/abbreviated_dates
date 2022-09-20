@@ -3,24 +3,25 @@
 # having a Makefile included and seeing all the weird results when make all was run in a location where it was not
 # expected. https://rlaanemets.com/post/show/prolog-pack-development-experience
 
-.PHONY: all about test remove install packs packages deploy
+.PHONY: all about test install infrastructure packs repositories packages deploy
 SHELL = /bin/bash
 .SHELLFLAGS = -o pipefail -c
 
 NAME = $(shell awk -F"[()]" '/name/{print $$2}' pack.pl)
 TITLE = $(shell awk -F"[()]" '/title/{print $$2}' pack.pl)
 VERSION = $(shell awk -F"[()]" '/version/{print $$2}' pack.pl)
-PACK_PATH ?= ${HOME}/.local/share/swi-prolog/pack
-PACKAGE_PATH ?= /usr/bin
-PPA_PATH ?= /etc/apt/sources.list.d/
+PACK_PATH = ${HOME}/.local/share/swi-prolog/pack
+PACKAGE_PATH = /usr/bin
+PPA_PATH = /etc/apt/sources.list.d
+REPOS = $(PPA_PATH)/swi-prolog-ubuntu-stable-bionic.list $(PPA_PATH)/cpick-ubuntu-hub-bionic.list
 
-# The following 3 goals are called by swipl -t "pack_install(.)"
 all: about
 
 about:
-	@echo $(NAME) v$(VERSION) -- $(TITLE)
+	@echo $(NAME) v$(VERSION) -- $(TITLE) $(current_dir)
 
-deploy: prepare test setup-git
+deploy: test setup-git
+	@git diff --quiet || echo 'Exiting operation on dirty repo' && exit ;\
 	bumpversion patch && git push --quiet ;\
 	NEW_VERSION=$$(swipl -q -s pack -g 'version(V),writeln(V)' -t halt) ;\
 	hub release create -m v$$NEW_VERSION v$$NEW_VERSION ;\
@@ -35,21 +36,20 @@ deploy: prepare test setup-git
 test: install
 	@swipl -g 'load_test_files([]),run_tests,halt' prolog/$(NAME).pl
 
-install: prepare $(NAME)
+install: infrastructure $(NAME)
+infrastructure: repositories packages
 
-REPOS: $(PPA_PATH)/swi-prolog-ubuntu-stable-bionic.list
-PACKAGES: $(PACKAGE_PATH)/swipl $(PACKAGE_PATH)/bumpversion $(PACKAGE_PATH)/hub
-prepare: $(REPOS) $(PACKAGES)
+repositories: $(REPOS)
+$(PPA_PATH)/swi-prolog-ubuntu-stable-bionic.list:
+	@sudo add-apt-repository -ny ppa:swi-prolog/stable # Let the last repo do the update
+$(PPA_PATH)/cpick-ubuntu-hub-bionic.list:
+	@sudo add-apt-repository -y ppa:cpick/hub
 
-$(REPOS):
-	sudo add-apt-repository -y ppa:swi-prolog/stable
-	sudo add-apt-repository ppa:cpick/hub -y
-
-$(PACKAGES):
-	sudo apt install swi-prolog bumpversion hub -y
-
-$(PACKAGE_PATH)/%:
-	sudo apt install $(notdir $@) -y
+packages: $(PACKAGE_PATH)/swipl $(PACKAGE_PATH)/bumpversion $(PACKAGE_PATH)/hub
+$(PACKAGE_PATH)/swipl:
+	@sudo apt install -y swi-prolog
+$(PACKAGE_PATH)/%: # Install packages from default repo
+	@sudo apt install $(notdir $@) -y
 
 $(NAME): packs $(PACK_PATH)/$(NAME)
 packs: $(PACK_PATH)/tap  $(PACK_PATH)/date_time
@@ -57,8 +57,13 @@ $(PACK_PATH)/%:
 	@swipl -qg "pack_install('$(notdir $@)',[interactive(false)]),halt"
 
 setup-git:
-	git config --global user.email "conrado.rgz@gmail.com"
-	git config --global user.name "Conrado Rodriguez"
+	@git config --global user.email "conrado.rgz@gmail.com"
+	@git config --global user.name "Conrado Rodriguez"
 
-remove:
-	@swipl -qg "pack_remove($(NAME)),halt"
+remove-all:
+	@swipl -g "(member(P,[abbreviated_dates,date_time,tap]),pack_property(P,library(P)),pack_remove(P),fail);true,halt"
+	@sudo dpkg --purge swi-prolog bumpversion hub
+	@sudo add-apt-repository --remove -y ppa:swi-prolog/stable
+	@sudo add-apt-repository --remove -y ppa:cpick/hub
+	@sudo rm -f $(REPOS)
+	@sudo apt -y autoremove
