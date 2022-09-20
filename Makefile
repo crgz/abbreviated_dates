@@ -21,7 +21,7 @@ about:
 	@echo $(NAME) v$(VERSION) -- $(TITLE) $(current_dir)
 
 deploy: test setup-git
-	git diff --quiet || (echo 'Exiting operation on dirty repo' && exit );\
+	@git diff --quiet || (echo 'Exiting operation on dirty repo' && exit );\
 	bumpversion patch && git push --quiet ;\
 	NEW_VERSION=$$(swipl -q -s pack -g 'version(V),writeln(V)' -t halt) ;\
 	hub release create -m v$$NEW_VERSION v$$NEW_VERSION ;\
