@@ -41,7 +41,7 @@ might be required.
 
 ### Run Tests
 
-The old tap & new tests can be run using the following command:
+The tests can be run using the following command:
 
 ```shell
 make test
