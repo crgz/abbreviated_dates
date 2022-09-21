@@ -31,7 +31,7 @@ deploy: test setup-git
 		printf '.' && sleep 1 ;\
 	done ;\
 	REMOTE=https://github.com/crgz/$(NAME)/archive/v$$NEW_VERSION.zip ;\
-	swipl -qg "pack_install('$$REMOTE',[interactive(false)]),halt(0)" -t 'halt(1)'
+	swipl -qg "pack_remove($(NAME)),pack_install('$$REMOTE',[interactive(false)]),halt(0)" -t 'halt(1)'
 
 test: install
 	@swipl -g 'load_test_files([]),run_tests,halt' prolog/$(NAME).pl
