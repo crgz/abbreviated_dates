@@ -119,19 +119,20 @@ test('Capitalized full week day, day,dot, month number, dot'):-
 
 test('Capitalized full Month Name & Day'):-
   solutions([date(2021, 9, 21)], 'July 4', Dates, Languages, Formats),
-  assertion(Dates == [date(2022, 7, 4)]),
+  assertion(Dates == [date(2022,7,4),date(2023,7,4),date(2024,7,4),date(2025,7,4),date(2026,7,4),date(2027,7,4)]),
   assertion(Languages == ['English']),
   assertion(Formats == ['%B %d']).
 
 test('Day & Capitalized full Month Name'):-
   solutions([date(2021, 9, 21)], '4 July', Dates, Languages, Formats),
-  assertion(Dates == [date(2022, 7, 4)]),
+  assertion(Dates == [date(2022,7,4),date(2023,7,4),date(2024,7,4),date(2025,7,4),date(2026,7,4),date(2027,7,4)]),
   assertion(Languages == ['English']),
   assertion(Formats == ['%d %B']).
 
 test('Day & Capitalized Explicitly Abbreviated Month Name'):-
   solutions([date(2021, 9, 21)], '23 Sep.', Dates, Languages, Formats),
-  assertion(Dates == [date(2021, 9, 23)]),
+  assertion(Dates == 
+    [date(2021,9,23),date(2022,9,23),date(2023,9,23),date(2024,9,23),date(2025,9,23),date(2026,9,23),date(2027,9,23)]),
   assertion(Languages == [
     'Danish','Dutch','English','Estonian','French','German','Latvian',
     'Norwegian','Romanian','Slovak','Slovenian','Spanish','Swedish']),

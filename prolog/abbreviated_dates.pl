@@ -47,8 +47,8 @@ multiple_days([LastKnownDate|Other], [SingleDay|MultipleDays], Language, [S1|S2]
 single_day([Context|_], date(Year,MonthNumber,Day), Language, Syntax) -->
   string_without(",", WeekDay), ",", b, date_number(Day), b, abbreviation(Month, IsAbbreviated),
   {
-    month_facts(Month, IsAbbreviated, Language, MonthNumber, MonthFormat),
-    week_day_facts(WeekDay, WeekDayNumber, Language, WeekDaySyntax),
+    factor_month(Month, IsAbbreviated, Language, MonthNumber, MonthFormat),
+    factor_week_day(WeekDay, WeekDayNumber, Language, WeekDaySyntax),
     possible_year(Context, Year),
     week_dayn(date(Year,MonthNumber,Day), WeekDayNumber),
     date_compare(date(Year,MonthNumber,Day), >=, Context),
@@ -56,11 +56,12 @@ single_day([Context|_], date(Year,MonthNumber,Day), Language, Syntax) -->
   }.
 
 % Dates hinting week day names
+
 % phrase(abbreviated_dates:single_day([date(2022, 2, 28)], Date, Language, Syntax), `saturday, 23`).
 single_day([Context|_], Date, Language, Syntax) -->
   string(WeekDayCodes), optional_comma, b, month_day(Day),
   {
-    week_day_facts(WeekDayCodes, WeekDayNumber, Language, WeekDaySyntax),
+    factor_week_day(WeekDayCodes, WeekDayNumber, Language, WeekDaySyntax),
     possible_day(Context, Day, Date),
     week_dayn(Date, WeekDayNumber),
     atomic_list_concat([WeekDaySyntax, ' %d'], Syntax)
@@ -70,8 +71,7 @@ single_day([Context|_], Date, Language, Syntax) -->
 single_day([Context|_], Date, Language, Syntax) -->
   week_day(WeekDayCodes), optional_comma, b, date_number(First), separator, date_number(Second),
   {
-    week_day_facts(WeekDayCodes, WeekDayNumber, Language, WeekDaySyntax),
-    best_date(Context, First, Second, WeekDayNumber, Language, Date, DayMonthSyntax),
+    solve_date_numbers(Context, WeekDayCodes, First, Second, Date, Language, DayMonthSyntax, WeekDaySyntax),
     atomic_list_concat([WeekDaySyntax, DayMonthSyntax], ' ', Syntax)
   }.
 
@@ -79,28 +79,29 @@ single_day([Context|_], Date, Language, Syntax) -->
 single_day([Context|_], Date, Language, Syntax) -->
   date_number(First), separator, date_number(Second), optional_comma, b, week_day(WeekDayCodes),
   {
-    week_day_facts(WeekDayCodes, WeekDayNumber, Language, WeekDaySyntax),
-    best_date(Context, First, Second, WeekDayNumber, Language, Date, DayMonthSyntax),
+    solve_date_numbers(Context, WeekDayCodes, First, Second, Date, Language, DayMonthSyntax, WeekDaySyntax),
     atomic_list_concat([DayMonthSyntax, WeekDaySyntax], ' ', Syntax)
   }.
 
 % Dates hinting wonth names
 
 % phrase(abbreviated_dates:single_day([date(2020, 2, 28)], Date, Language, Syntax), `1 July`).
-single_day([Context|_], date(Y, MonthNumber, D), Language, Syntax) -->
-  month_day(D), b,  abbreviation(Month, IsAbbreviated),
+single_day([Context|_], date(Year, MonthNumber, Day), Language, Syntax) -->
+  month_day(Day), b,  abbreviation(Month, IsAbbreviated),
   {
-    month_facts(Month, IsAbbreviated, Language, MonthNumber, MonthFormat),
-    maybe_future_year(Context, MonthNumber, D, Y), 
+    factor_month(Month, IsAbbreviated, Language, MonthNumber, MonthFormat),
+    possible_year(Context, Year),
+    date_compare(date(Year,MonthNumber,Day), >=, Context),
     atom_concat('%d ', MonthFormat, Syntax)
   }.
 
 % phrase(abbreviated_dates:single_day([date(2020, 2, 28)], Date, Language, Syntax), `Jan. 1`).
-single_day([Context|_], date(Y, MonthNumber, D), Language, Syntax) -->
-  abbreviation(Month, IsAbbreviated), b, month_day(D),
+single_day([Context|_], date(Year, MonthNumber, Day), Language, Syntax) -->
+  abbreviation(Month, IsAbbreviated), b, month_day(Day),
   {
-    month_facts(Month, IsAbbreviated, Language, MonthNumber, MonthFormat),
-    maybe_future_year(Context, MonthNumber, D, Y), 
+    factor_month(Month, IsAbbreviated, Language, MonthNumber, MonthFormat),
+    possible_year(Context, Year),
+    date_compare(date(Year,MonthNumber,Day), >=, Context),
     atom_concat(MonthFormat,' %d', Syntax)
   }.
 
@@ -135,20 +136,50 @@ optional_comma --> ","; "".
 % Grammar supporting predicates
 %
 
-week_day_facts(InputCodes, WeekDayNumber, Language, Format):-
+solve_date_numbers(Context, WeekDayCodes, First, Second, date(Year,Month,Day), Language, DayMonthSyntax, WeekDaySyntax):-
+  factor_week_day(WeekDayCodes, WeekDayNumber, Language, WeekDaySyntax),
+  possible_year(Context, Year),
+  factor_country_endianness(Language, First, Second, date(Year,Month,Day), DayMonthSyntax),
+  week_dayn(date(Year,Month,Day), WeekDayNumber).
+
+factor_week_day(InputCodes, WeekDayNumber, Language, Format):-
   atom_codes(InputAtom, InputCodes),
   downcase_atom(InputAtom, LowerCaseInputAtom),
   week_day_name(Language, WeekDayNumber, WeekDayName),
   downcase_atom(WeekDayName, LowerCaseWeekDayName),
-  abbreviation(LowerCaseWeekDayName, LowerCaseInputAtom, Abbreviated),
-  select_abbreviation_format(Abbreviated, Format).
+  abbreviation(LowerCaseWeekDayName, LowerCaseInputAtom, IsAbbreviated),
+  (IsAbbreviated -> Format = '%a'; Format = '%A').
 
-month_facts(Month, IsAbbreviated, Language, MonthNumber, MonthFormat):-
+factor_month(Month, IsAbbreviated, Language, MonthNumber, MonthFormat):-
   month_name(Language, MonthNumber, MonthName),
   abbreviation(MonthName, Abbreviation, IsAbbreviated),
   atom_codes(MaybeAbbreviation, Month),
   capitalize_sentence(MaybeAbbreviation, Abbreviation),
   (IsAbbreviated -> MonthFormat = '%b'; MonthFormat = '%B').
+
+factor_country_endianness(Language, First, Second, date(Year,Month,Day), Syntax):-
+  top_endianness(Country, Endianness),     % Find a country with defined endianness
+  top_country_language(Country, Language), % Check if the language is spoken there
+  day_month_order(Endianness, First, Second, Day, Month, Syntax),
+  valid(date(Year,Month,Day)).
+
+day_month_order(little, Day,   Month, Day, Month, '%d %m'). % day is first number in little endian dates
+day_month_order(middle, Month, Day,   Day, Month, '%m %d'). % day is second number in little middle dates
+day_month_order(big,    Month, Day,   Day, Month, '%m %d'). % day is second number in big middle dates
+
+valid(date(Year,Month,Day)):- Month =< 12, date_month_days(Month,Year,MD), Day =< MD.
+
+possible_year(Context, Year):-
+  date_extract(Context, years(Y)),
+  Max is Y + 6,
+  between(Y, Max, Year).
+
+possible_day(Context, Day, Date):-
+  date_extract(Context, years(Year)),
+  date_extract(Context, months(M)),
+  Max is M + 24,
+  between(M, Max, Month),
+  future_date(date(Year,Month,Day), Date).
 
 % Find optional abbreviations ordering by length
 abbreviation(Atom, Abbreviation, IsAbbreviated):-
@@ -170,37 +201,6 @@ atom_remove_vowels(Atom, AtomConsonants):-
   remove_duplicates(Consonants, Uniques),
   atom_chars(AtomConsonants, Uniques).
 
-best_date(Context, First, Second, WeekDayNumber, Language, date(Year,Month,Day), Syntax):-
-  possible_year(Context, Y),
-  top_country_language(Country, Language),
-  top_endianness(Country, Endianness),
-  day_month_order(Endianness, First, Second, D, M),
-  future_date(date(Y,M,D), date(Year,Month,Day)),
-  week_dayn(date(Year,Month,Day), WeekDayNumber),
-  day_month_syntax(Syntax, First, Second, Day, Month).
-
-possible_year(Context, Year):-
-  date_extract(Context, years(Y)),
-  Max is Y + 6,
-  between(Y, Max, Year).
-
-possible_day(Context, Day, Date):-
-  date_extract(Context, years(Year)),
-  date_extract(Context, months(M)),
-  Max is M + 24,
-  between(M, Max, Month),
-  future_date(date(Year,Month,Day), Date).
-
-day_month_order(little, Day,   Month, Day, Month). % day is first number in little endian dates
-day_month_order(middle, Month, Day,   Day, Month). % day is second number in little middle dates
-day_month_order(big,    Month, Day,   Day, Month). % day is second number in big middle dates
-
-day_month_syntax('%d %m', Day, Month, Day, Month).
-day_month_syntax('%m %d', Month, Day, Day, Month).
-
-select_abbreviation_format(true, '%a').
-select_abbreviation_format(false, '%A').
-
 future_date(date(Y, M, D), Day, date(YY,MM,DD)):-
   date_month_days(M,Y,MD),
   D =< Day, Day =< MD, % Day in current month
@@ -219,10 +219,6 @@ future_date(date(Y, M, D), date(YY,MM,DD)):-
   Y2 is Y + 1,
   future_date(date(Y2,M2,D), date(YY,MM,DD)).
 future_date(date(Y,M,D), date(Y,M,D)).
-
-maybe_future_year(Context, Month, Day, Year) :-
-  date_extract(Context, years(Y)),
-  ( date_compare(date(Y, Month, Day), >=, Context) -> Year = Y; Year is Y + 1).
 
 date_month_days(0,_,31).
 date_month_days(1,_,31).
