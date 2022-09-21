@@ -6,6 +6,9 @@ test_abbreviated_dates :- run_tests.
 solutions(Context, Case, Dates, Languages, Formats):-
   atom_codes(Case, Codes),
   setof(Date, L^F^result(Context, Codes, Date, L, F), Dates),
+  Context = [Start|_],
+  findall(Date, (member(Date, Dates),date_time:date_compare(Date, <, Start)),PastDates),
+  assertion(PastDates == []),
   setof(Language, D^F^result(Context, Codes, D, Language, F), Languages),
   setof(Format, D^L^result(Context, Codes, D, L, Format), Formats).
 
