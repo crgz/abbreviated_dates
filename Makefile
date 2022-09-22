@@ -13,7 +13,8 @@ VERSION = $(shell awk -F"[()]" '/version/{print $$2}' pack.pl)
 PACK_PATH = ${HOME}/.local/share/swi-prolog/pack
 PACKAGE_PATH = /usr/bin
 PPA_PATH = /etc/apt/sources.list.d
-REPOS = $(PPA_PATH)/swi-prolog-ubuntu-stable-bionic.list $(PPA_PATH)/cpick-ubuntu-hub-bionic.list
+HUB_PPA := $(shell [ $$(lsb_release -r|cut -f2) = 18.04 ] && echo $(PPA_PATH)/cpick-ubuntu-hub-bionic.list || echo "")
+REPOS = $(PPA_PATH)/swi-prolog-ubuntu-stable-bionic.list $(HUB_PPA)
 
 all: about
 
