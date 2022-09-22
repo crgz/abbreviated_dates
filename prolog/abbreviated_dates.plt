@@ -18,7 +18,7 @@ result(Context, Case, Dates, Languages, Formats):-
 
 :- begin_tests(abbreviated_dates).
 
-% Dates hinting week day name & month name
+% DATES HINTING WEEKDAY NAME, DAY NUMBER AND MONTH NAME
 
 test('Lowercased full week day, comma, day, month name'):-
   solutions([date(2021, 9, 21)], 'saturday, 23 april', Dates, Languages, Formats),
@@ -32,22 +32,39 @@ test('Capitalized full Week Day, comma, Dot Postfixed Day & Full Month Name'):-
   assertion(Languages == ['English']),
   assertion(Formats == ['%A, %d %B']).
 
+test('Capitalized full Week Day, comma, Day & Implicitly Abbreviated Month Name'):-
+  solutions([date(2021, 9, 21)], 'Friday, 17 Jun', Dates, Languages, Formats),
+  assertion(Dates == [date(2022,6,17)]),
+  assertion(Languages == ['English']),
+  assertion(Formats == ['%A, %d %b']).
 
-% Dates hinting week day names
+test('Capitalized full Week Day, comma, Dot Postfixed Day & Implicitly Abbreviated Month Name'):-
+  solutions([date(2021, 9, 21)], 'Friday, 17. Jun', Dates, Languages, Formats),
+  assertion(Dates == [date(2022,6,17)]),
+  assertion(Languages == ['English']),
+  assertion(Formats == ['%A, %d %b']).
 
-test('day_of_the_week_as_abbreviation'):-
+% DATES HINTING WEEKDAY NAMES AND TWO NUMBERS
+
+test('Capitalized week day name as explicit abbreviation'):-
   solutions([date(2022, 9, 7)], 'Di. 13.9.', Dates, Languages, Formats),
   assertion(Dates == [date(2022,9,13),date(2026,9,13)]),
   assertion(Languages == ['Dutch','French','German']),
   assertion(Formats == ['%a %d %m']).
 
-test('day_of_the_week_as_consonant_abbreviation'):-
-  solutions([date(2022, 9, 7)], 'pt. 16.09', Dates, Languages, Formats),
-  assertion(Dates == [date(2022, 9, 16)]),
-  assertion(Languages == ['Croatian', 'Polish', 'Slovak', 'Slovenian']),
+test('Capitalized week day name as explicit abbreviation, Dash Deparated Day & Zero prefixed Month Number'):-
+  solutions([date(2022, 2, 28)], 'Pirm. 20-06', Dates, Languages, Formats),
+  assertion(Dates == [date(2022, 6, 20)]),
+  assertion(Languages == ['Latvian','Lithuanian']),
   assertion(Formats == ['%a %d %m']).
 
-test('day_of_the_week_as_single_consonant_abbreviation'):-
+test('Capitalized week day name as explicit abbreviation, Dash Deparated Zero prefixed Month Number & Day'):-
+  solutions([date(2022, 2, 28)], 'Pirm. 06-20', Dates, Languages, Formats),
+  assertion(Dates == [date(2022, 6, 20)]),
+  assertion(Languages == ['Lithuanian']),
+  assertion(Formats == ['%a %m %d']).
+
+test('Capitalized week day name as implicit single consonant abbreviation'):-
   solutions([date(2022, 9, 7)], 'T 13.9', Dates, Languages, Formats),
   assertion(Dates == [
     date(2022,9,13),date(2023,9,13),date(2024,9,13),date(2025,9,13),
@@ -57,54 +74,6 @@ test('day_of_the_week_as_single_consonant_abbreviation'):-
     'Portuguese','Slovak','Slovenian','Swedish','Vietnamese'
   ]),
   assertion(Formats == ['%a %d %m']).
-
-test('day_of_the_week_as_abbreviation'):-
-  solutions([date(2022, 9, 7)], '09-17, št', Dates, Languages, Formats),
-  assertion(Dates == [date(2022, 9, 17)]),
-  assertion(Languages == ['Lithuanian']),
-  assertion(Formats == ['%m %d %a']).
-  
-test('day_of_the_week_as_abbreviation'):-
-  solutions([date(2022, 9, 7)], '09-15, kt', Dates, Languages, Formats),
-  assertion(Dates == [date(2022, 9, 15)]),
-  assertion(Languages == ['Lithuanian']),
-  assertion(Formats == ['%m %d %a']).
-
-test('day_of_the_week_as_abbreviation'):-
-  solutions([date(2022, 9, 7)], 'čt 15. 9.', Dates, Languages, Formats),
-  assertion(Dates == [date(2022, 9, 15)]),
-  assertion(Languages == ['Croatian','Czech','Slovenian']),
-  assertion(Formats == ['%a %d %m']).
-         
-test('day_of_the_week_as_abbreviation'):-
-  solutions([date(2022, 9, 7)], 'st 14. 9.', Dates, Languages, Formats),
-  assertion(Dates == [date(2022,9,14),date(2024,9,14)]),
-  assertion(Languages == ['Czech','English','Latvian','Slovak']),
-  assertion(Formats == ['%a %d %m']).
-
-test('day_of_the_week_as_abbreviation_with_comma'):-
-  solutions([date(2022, 9, 14)], 'sri, 21. 09.', Dates, Languages, Formats),
-  assertion(Dates == [date(2022,9,21)]),
-  assertion(Languages == ['Croatian']),
-  assertion(Formats == ['%a %d %m']).
-  
-test('Capitalized Abbreviated Month Name, Dash Deparated Day & Zero prefixed Month Number'):-
-  solutions([date(2022, 2, 28)], 'Pirm. 20-06', Dates, Languages, Formats),
-  assertion(Dates == [date(2022, 6, 20)]),
-  assertion(Languages == ['Latvian','Lithuanian']),
-  assertion(Formats == ['%a %d %m']).
-
-test('Capitalized Abbreviated Month Name, Dash Deparated Zero prefixed Month Number & Day'):-
-  solutions([date(2022, 2, 28)], 'Pirm. 06-20', Dates, Languages, Formats),
-  assertion(Dates == [date(2022, 6, 20)]),
-  assertion(Languages == ['Lithuanian']),
-  assertion(Formats == ['%a %m %d']).
-
-test('Capitalized full week day, day'):-
-  solutions([date(2022, 2, 28)], 'Saturday, 2', Dates, Languages, Formats),
-  assertion(Dates == [date(2022,4,2),date(2022,7,2),date(2023,9,2),date(2023,12,2)]),
-  assertion(Languages == ['English']),
-  assertion(Formats == ['%A %d']).
 
 test('Capitalized full week day, day, dot, month number, dot'):-
   solutions([date(2022, 2, 28)], 'Petak 24.06.', Dates, Languages, Formats),
@@ -118,13 +87,55 @@ test('Capitalized full week day, day,dot, month number, dot'):-
   assertion(Languages == ['Croatian']),
   assertion(Formats == ['%A %d %m']).
 
-% Dates hinting month names
+test('Lowercase week day name as explicit consonant abbreviation'):-
+  solutions([date(2022, 9, 7)], 'pt. 16.09', Dates, Languages, Formats),
+  assertion(Dates == [date(2022, 9, 16)]),
+  assertion(Languages == ['Croatian', 'Polish', 'Slovak', 'Slovenian']),
+  assertion(Formats == ['%a %d %m']).
 
-test('Capitalized full Month Name & Day'):-
-  solutions([date(2021, 9, 21)], 'July 4', Dates, Languages, Formats),
-  assertion(Dates == [date(2022,7,4),date(2023,7,4),date(2024,7,4),date(2025,7,4),date(2026,7,4),date(2027,7,4)]),
+test('Lowercase week day name as explicit consonant abbreviation and space separated numbers'):-
+  solutions([date(2022, 9, 7)], 'čt 15. 9.', Dates, Languages, Formats),
+  assertion(Dates == [date(2022, 9, 15)]),
+  assertion(Languages == ['Croatian','Czech','Slovenian']),
+  assertion(Formats == ['%a %d %m']).
+         
+test('Lowercase week day name as explicit duplicated consonant abbreviation and space separated numbers'):-
+  solutions([date(2022, 9, 7)], 'st 14. 9.', Dates, Languages, Formats),
+  assertion(Dates == [date(2022,9,14),date(2024,9,14)]),
+  assertion(Languages == ['Czech','English','Latvian','Slovak']),
+  assertion(Formats == ['%a %d %m']).
+
+test('Lowercase week day name as implicit vowel abbreviation with comma and space separated numbers'):-
+  solutions([date(2022, 9, 14)], 'sri, 21. 09.', Dates, Languages, Formats),
+  assertion(Dates == [date(2022,9,21)]),
+  assertion(Languages == ['Croatian']),
+  assertion(Formats == ['%a %d %m']).
+  
+
+% DATES HINTING TWO NUMBERS AND WEEKDAY NAMES
+
+test('day_of_the_week_as_abbreviation'):-
+  solutions([date(2022, 9, 7)], '09-17, št', Dates, Languages, Formats),
+  assertion(Dates == [date(2022, 9, 17)]),
+  assertion(Languages == ['Lithuanian']),
+  assertion(Formats == ['%m %d %a']).
+  
+test('day_of_the_week_as_abbreviation'):-
+  solutions([date(2022, 9, 7)], '09-15, kt', Dates, Languages, Formats),
+  assertion(Dates == [date(2022, 9, 15)]),
+  assertion(Languages == ['Lithuanian']),
+  assertion(Formats == ['%m %d %a']).
+
+% DATES HINTING WEEKDAY NAMES AND ONE NUMBER
+
+test('Capitalized full week day, day'):-
+  solutions([date(2022, 2, 28)], 'Saturday, 2', Dates, Languages, Formats),
+  assertion(Dates == [date(2022,4,2),date(2022,7,2),date(2023,9,2),date(2023,12,2)]),
   assertion(Languages == ['English']),
-  assertion(Formats == ['%B %d']).
+  assertion(Formats == ['%A %d']).
+
+
+% DATES HINTING ONE NUMBER AND A MONTH NAME
 
 test('Day & Capitalized full Month Name'):-
   solutions([date(2021, 9, 21)], '4 July', Dates, Languages, Formats),
@@ -139,9 +150,49 @@ test('Day & Capitalized Explicitly Abbreviated Month Name'):-
   assertion(Languages == [
     'Danish','Dutch','English','Estonian','French','German','Latvian',
     'Norwegian','Romanian','Slovak','Slovenian','Spanish','Swedish']),
+  assertion(Formats == ['%d %b.']).
+
+test('Day & Capitalized Implicitly Abbreviated Month Name'):-
+  solutions([date(2021, 9, 21)], '17 Jun', Dates, Languages, Formats),
+  assertion(Dates == [date(2022,6,17),date(2023,6,17),date(2024,6,17),date(2025,6,17),date(2026,6,17),date(2027,6,17)]),
+  assertion(Languages == ['Danish','Dutch','English','German','Norwegian','Portuguese','Slovenian','Spanish','Swedish']),
   assertion(Formats == ['%d %b']).
 
-% Dates hinting just days
+test('Day & Capitalized Implicitly Full Month Name'):-
+  solutions([date(2021, 9, 21)], '17 June', Dates, Languages, Formats),
+  assertion(Dates == [date(2022,6,17),date(2023,6,17),date(2024,6,17),date(2025,6,17),date(2026,6,17),date(2027,6,17)]),
+  assertion(Languages == ['English']),
+  assertion(Formats == ['%d %B']).
+
+test('Day & Capitalized Implicitly Abbreviated Month Name'):-
+  solutions([date(2021, 9, 21)], '17. Jun', Dates, Languages, Formats),
+  assertion(Dates == [date(2022,6,17),date(2023,6,17),date(2024,6,17),date(2025,6,17),date(2026,6,17),date(2027,6,17)]),
+  assertion(Languages == ['Danish','Dutch','English','German','Norwegian','Portuguese','Slovenian','Spanish','Swedish']),
+  assertion(Formats == ['%d %b']).
+
+test('Day & Capitalized Explicitly Abbreviated Month Name'):-
+  solutions([date(2021, 9, 21)], '17. Jun.', Dates, Languages, Formats),
+  assertion(Dates == [date(2022,6,17),date(2023,6,17),date(2024,6,17),date(2025,6,17),date(2026,6,17),date(2027,6,17)]),
+  assertion(Languages == [ 'Danish','Dutch','English','German','Norwegian','Portuguese','Slovenian','Spanish','Swedish']),
+  assertion(Formats == ['%d %b']).
+
+
+% DATES HINTING MONTH NAMES AND ONE NUMBER
+
+test('Capitalized full Month Name & Day'):-
+  solutions([date(2021, 9, 21)], 'July 4', Dates, Languages, Formats),
+  assertion(Dates == [date(2022,7,4),date(2023,7,4),date(2024,7,4),date(2025,7,4),date(2026,7,4),date(2027,7,4)]),
+  assertion(Languages == ['English']),
+  assertion(Formats == ['%B %d']).
+
+test('Capitalized Implicitly Abbreviated Month Name & Day'):-
+  solutions([date(2021, 9, 21)], 'Jun 17', Dates, Languages, Formats),
+  assertion(Dates == [date(2022,6,17),date(2023,6,17),date(2024,6,17),date(2025,6,17),date(2026,6,17),date(2027,6,17)]),
+  assertion(Languages == ['Danish','Dutch','English','German','Norwegian','Portuguese','Slovenian','Spanish','Swedish']),
+  assertion(Formats == ['%b %d']).
+
+
+% DATES HINTING JUST DAYS
 
 test('Absolute Day'):-
   solutions([date(2021, 9, 21)], '4', Dates, Languages, Formats),
@@ -152,7 +203,7 @@ test('Absolute Day'):-
     'Slovak','Slovenian','Spanish','Swedish','Turkish','Ukrainian','Vietnamese']),
   assertion(Formats == ['%d']).
 
-% Dates hinting relative days
+% DATES HINTING RELATIVE DAYS
 
 test('Today'):-
   solutions([date(2021, 9, 21)], 'Today', Dates, Languages, Formats),
