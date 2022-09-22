@@ -41,10 +41,10 @@ install: infrastructure packs
 infrastructure: repositories packages
 
 repositories: $(REPOS)
-$(PPA_PATH)/swi-prolog-ubuntu-stable-bionic.list:
-	@sudo add-apt-repository -ny ppa:swi-prolog/stable # Let the last repo do the update
 $(PPA_PATH)/cpick-ubuntu-hub-bionic.list:
-	@sudo add-apt-repository -y ppa:cpick/hub
+	@sudo add-apt-repository -ny ppa:cpick/hub  # Let the last repo do the update
+$(PPA_PATH)/swi-prolog-ubuntu-stable-bionic.list:
+	@sudo add-apt-repository -y ppa:swi-prolog/stable
 
 packages: $(PACKAGE_PATH)/swipl $(PACKAGE_PATH)/bumpversion $(PACKAGE_PATH)/hub
 $(PACKAGE_PATH)/swipl:
