@@ -21,12 +21,8 @@ all: about
 about:
 	@echo $(NAME) v$(VERSION) -- $(TITLE) $(current_dir)
 
-deploy: test setup-git
-	@git diff --quiet || (echo 'Exiting operation on dirty repo' && exit );\
-	bumpversion patch && git push --quiet ;\
-	NEW_VERSION=$$(swipl -q -s pack -g 'version(V),writeln(V)' -t halt) ;\
-	hub release create -m v$$NEW_VERSION v$$NEW_VERSION ;\
-	while : ; do \
+deploy: test setup-git release
+	@while : ; do \
 		REMOTE_VERSION=$$(curl --silent 'https://api.github.com/repos/crgz/$(NAME)/releases/latest' | jq -r .tag_name) ;\
 		if [ v$$NEW_VERSION == $$REMOTE_VERSION ]; then printf '\n' && break; fi ;\
 		printf '.' && sleep 1 ;\
@@ -59,6 +55,12 @@ $(PACK_PATH)/%:
 setup-git:
 	@git config --global user.email "conrado.rgz@gmail.com"
 	@git config --global user.name "Conrado Rodriguez"
+
+release:
+	git diff --quiet || (echo 'Exiting operation on dirty repo' && exit );\
+	bumpversion patch && git push --quiet ;\
+	NEW_VERSION=$$(swipl -q -s pack -g 'version(V),writeln(V)' -t halt) ;\
+	hub release create -m v$$NEW_VERSION v$$NEW_VERSION
 
 remove-all:
 	@swipl -g "(member(P,[abbreviated_dates,date_time,tap]),pack_property(P,library(P)),pack_remove(P),fail);true,halt"
