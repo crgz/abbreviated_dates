@@ -66,13 +66,10 @@ test('Capitalized week day name as explicit abbreviation, Dash Deparated Zero pr
 
 test('Capitalized week day name as implicit single consonant abbreviation'):-
   solutions([date(2022, 9, 7)], 'T 13.9', Dates, Languages, Formats),
-  assertion(Dates == [
-    date(2022,9,13),date(2023,9,13),date(2024,9,13),date(2025,9,13),
-    date(2027,9,13),date(2028,9,13)]),
+  assertion(Dates == [date(2022,9,13),date(2023,9,13),date(2024,9,13),date(2025,9,13),date(2027,9,13),date(2028,9,13)]),
   assertion(Languages == [
-    'Croatian','Danish','English','Estonian','Finnish','Latvian','Lithuanian',
-    'Portuguese','Slovak','Slovenian','Swedish','Vietnamese'
-  ]),
+    'Croatian','Danish','English','Estonian','Finnish','Latvian','Lithuanian','Portuguese','Slovak','Slovenian','Swedish',
+    'Vietnamese']),
   assertion(Formats == ['%a %d %m']).
 
 test('Capitalized full week day, day, dot, month number, dot'):-
