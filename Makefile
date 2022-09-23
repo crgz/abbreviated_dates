@@ -57,8 +57,8 @@ setup-git:
 	@git config --global user.name "Conrado Rodriguez"
 
 release:
+	git pull ;\
 	git diff --quiet || (echo 'Exiting operation on dirty repo' && exit ) ;\
-  git pull ;\
 	bumpversion patch && git push --quiet ;\
 	NEW_VERSION=$$(swipl -q -s pack -g 'version(V),writeln(V)' -t halt) ;\
 	hub release create -m v$$NEW_VERSION v$$NEW_VERSION
