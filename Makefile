@@ -9,40 +9,27 @@ SHELL = /bin/bash
 
 NAME = $(shell awk -F"[()]" '/name/{print $$2}' pack.pl)
 TITLE = $(shell awk -F"[()]" '/title/{print $$2}' pack.pl)
-VERSION = $(shell awk -F"[()]" '/version/{print $$2}' pack.pl)
+VERSION ?= $(shell awk -F"[()]" '/version/{print $$2}' pack.pl) # Let the VERSION com as a parameter
+REMOTE := https://github.com/crgz/abbreviated_dates/archive/v$(VERSION).zip
+
 PACK_PATH = ${HOME}/.local/share/swi-prolog/pack
 PACKAGE_PATH = /usr/bin
 PPA_PATH = /etc/apt/sources.list.d
 HUB_PPA := $(shell [ $$(lsb_release -r|cut -f2) = 18.04 ] && echo $(PPA_PATH)/cpick-ubuntu-hub-bionic.list || echo "")
-REPOS = $(PPA_PATH)/swi-prolog-ubuntu-stable-bionic.list $(HUB_PPA)
 
 all: about
 
 about:
-	@echo $(NAME) v$(VERSION) -- $(TITLE) $(current_dir)
+	@echo $(NAME) v$(VERSION) -- $(TITLE)
 
-deploy: test setup-git release
-	@while : ; do \
-		REMOTE_VERSION=$$(curl --silent 'https://api.github.com/repos/crgz/$(NAME)/releases/latest' | jq -r .tag_name) ;\
-		if [ v$$NEW_VERSION == $$REMOTE_VERSION ]; then printf '\n' && break; fi ;\
-		printf '.' && sleep 1 ;\
-	done ;\
-	REMOTE=https://github.com/crgz/$(NAME)/archive/v$$NEW_VERSION.zip ;\
-	swipl -qg "pack_remove($(NAME)),pack_install('$$REMOTE',[interactive(false)]),halt(0)" -t 'halt(1)'
-
-test: install
+test: $(PPA_PATH)/swi-prolog-ubuntu-stable-bionic.list $(PACKAGE_PATH)/swipl packs
 	@swipl -g 'load_test_files([]),run_tests,halt' prolog/$(NAME).pl
 
-install: infrastructure packs
-infrastructure: repositories packages
-
-repositories: $(REPOS)
-$(PPA_PATH)/cpick-ubuntu-hub-bionic.list:
-	@sudo add-apt-repository -ny ppa:cpick/hub  # Let the last repo do the update
 $(PPA_PATH)/swi-prolog-ubuntu-stable-bionic.list:
 	@sudo add-apt-repository -y ppa:swi-prolog/stable
+$(PPA_PATH)/cpick-ubuntu-hub-bionic.list:
+	@sudo add-apt-repository -y ppa:cpick/hub
 
-packages: $(PACKAGE_PATH)/swipl $(PACKAGE_PATH)/bumpversion $(PACKAGE_PATH)/hub
 $(PACKAGE_PATH)/swipl:
 	@sudo apt install -y swi-prolog
 $(PACKAGE_PATH)/%: # Install packages from default repo
@@ -52,16 +39,30 @@ packs: $(PACK_PATH)/tap  $(PACK_PATH)/date_time
 $(PACK_PATH)/%:
 	@swipl -qg "pack_install('$(notdir $@)',[interactive(false)]),halt"
 
-setup-git:
-	@git config --global user.email "conrado.rgz@gmail.com"
-	@git config --global user.name "Conrado Rodriguez"
-
-release:
-	git pull ;\
+release: test $(PACKAGE_PATH)/bumpversion $(HUB_PPA) $(PACKAGE_PATH)/hub setup-git
+	git pull --no-edit origin main;\
 	git diff --quiet || (echo 'Exiting operation on dirty repo' && exit ) ;\
 	bumpversion patch && git push --quiet ;\
 	NEW_VERSION=$$(swipl -q -s pack -g 'version(V),writeln(V)' -t halt) ;\
 	hub release create -m v$$NEW_VERSION v$$NEW_VERSION
+
+setup-git:
+	@git config --global user.email "conrado.rgz@gmail.com"
+	@git config --global user.name "Conrado Rodriguez"
+
+deploy:
+	@while : ; do \
+		REMOTE_VERSION=$$(curl --silent 'https://api.github.com/repos/crgz/$(NAME)/releases/latest' | jq -r .tag_name) ;\
+		if [ v$$NEW_VERSION == $$REMOTE_VERSION ]; then printf '\n' && break; fi ;\
+		printf '.' && sleep 1 ;\
+	done ;\
+	REMOTE=https://github.com/crgz/$(NAME)/archive/v$$NEW_VERSION.zip ;\
+	swipl -qg "pack_remove($(NAME)),pack_install('$$REMOTE',[interactive(false)]),halt(0)" -t 'halt(1)'
+
+deploy-from-github:
+	REMOTE=https://github.com/crgz/abbreviated_dates/archive/v$$VERSION.zip ;\
+	echo $$REMOTE ;\
+	swipl -qg "pack_remove(abbreviated_dates),pack_install('$$REMOTE',[interactive(false)]),halt(0)" -t 'halt(1)'
 
 remove-all:
 	@swipl -g "(member(P,[abbreviated_dates,date_time,tap]),pack_property(P,library(P)),pack_remove(P),fail);true,halt"
