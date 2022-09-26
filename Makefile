@@ -33,7 +33,7 @@ submit: test $(PACKAGE_PATH)/bumpversion $(HUB_PPA) $(PACKAGE_PATH)/hub setup-gi
 	while : ; do \
 		REMOTE_VERSION=$$(curl --silent 'https://api.github.com/repos/crgz/$(NAME)/releases/latest' | jq -r .tag_name) ;\
 		if [ v$$NEW_VERSION == $$REMOTE_VERSION ]; then printf '\n' && break; fi ;\
-		printf '.' && sleep 1 ;\
+		printf '.' && sleep 3 ;\
 	done ;\
 	REMOTE=https://github.com/crgz/$(NAME)/archive/v$$NEW_VERSION.zip ;\
 	swipl -qg "pack_remove($(NAME)),pack_install('$$REMOTE',[interactive(false)]),halt(0)" -t 'halt(1)'
