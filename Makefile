@@ -22,29 +22,29 @@ all: about
 about:
 	@echo $(NAME) v$(VERSION) -- $(TITLE)
 
-test: $(PPA_PATH)/swi-prolog-ubuntu-stable-bionic.list $(PACKAGE_PATH)/swipl packs
-	@swipl -g 'load_test_files([]),run_tests,halt' prolog/$(NAME).pl
-
-$(PPA_PATH)/swi-prolog-ubuntu-stable-bionic.list:
-	@sudo add-apt-repository -y ppa:swi-prolog/stable
-$(PPA_PATH)/cpick-ubuntu-hub-bionic.list:
-	@sudo add-apt-repository -y ppa:cpick/hub
-
-$(PACKAGE_PATH)/swipl:
-	@sudo apt install -y swi-prolog
-$(PACKAGE_PATH)/%: # Install packages from default repo
-	@sudo apt install $(notdir $@) -y
-
-packs: $(PACK_PATH)/tap  $(PACK_PATH)/date_time
-$(PACK_PATH)/%:
-	@swipl -qg "pack_install('$(notdir $@)',[interactive(false)]),halt"
-
 release: test $(PACKAGE_PATH)/bumpversion $(HUB_PPA) $(PACKAGE_PATH)/hub setup-git
 	git pull --no-edit origin main;\
 	git diff --quiet || (echo 'Exiting operation on dirty repo' && exit ) ;\
 	bumpversion patch && git push --quiet ;\
 	NEW_VERSION=$$(swipl -q -s pack -g 'version(V),writeln(V)' -t halt) ;\
 	hub release create -m v$$NEW_VERSION v$$NEW_VERSION
+
+test: packs
+	@swipl -g 'load_test_files([]),run_tests,halt' prolog/$(NAME).pl
+
+packs: $(PACKAGE_PATH)/swipl $(PACK_PATH)/tap  $(PACK_PATH)/date_time
+$(PACK_PATH)/%:
+	@swipl -qg "pack_install('$(notdir $@)',[interactive(false)]),halt"
+
+$(PACKAGE_PATH)/swipl: $(PPA_PATH)/swi-prolog-ubuntu-stable-bionic.list
+	@sudo apt install -y swi-prolog
+$(PACKAGE_PATH)/%: # Install packages from default repo
+	@sudo apt install $(notdir $@) -y
+
+$(PPA_PATH)/swi-prolog-ubuntu-stable-bionic.list:
+	@sudo add-apt-repository -y ppa:swi-prolog/stable
+$(PPA_PATH)/cpick-ubuntu-hub-bionic.list:
+	@sudo add-apt-repository -y ppa:cpick/hub
 
 setup-git:
 	@git config --global user.email "conrado.rgz@gmail.com"
