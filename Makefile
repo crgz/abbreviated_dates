@@ -69,5 +69,5 @@ remove-all:
 	@sudo dpkg --purge swi-prolog bumpversion hub
 	@sudo add-apt-repository --remove -y ppa:swi-prolog/stable
 	@sudo add-apt-repository --remove -y ppa:cpick/hub
-	@sudo rm -f $(REPOS)
+	@sudo rm -f $(PPA_PATH)/swi-prolog-ubuntu-stable-bionic.list $(HUB_PPA)
 	@sudo apt -y autoremove
