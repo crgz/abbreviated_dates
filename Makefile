@@ -25,7 +25,7 @@ about:
 install: test $(PACK_PATH)/$(NAME)
 
 submit: test $(PACKAGE_PATH)/bumpversion $(HUB_PPA) $(PACKAGE_PATH)/hub setup-git
-	git pull --no-edit origin main ;\
+	@git pull --no-edit origin main ;\
 	git diff --quiet || (echo 'Exiting operation on dirty repo' && exit ) ;\
 	bumpversion patch && git push --quiet ;\
 	NEW_VERSION=$$(swipl -q -s pack -g 'version(V),writeln(V)' -t halt) ;\
