@@ -126,6 +126,13 @@ test('Lowercase week day name as implicit vowel abbreviation with comma and spac
   assertion(Languages == ['Croatian']),
   assertion(Formats == ['%a %d %m']).
   
+% DATES HINTING WEEKDAY NAMES AND ONE NUMBER
+
+test('Capitalized full week day, day'):-
+  solutions([date(2022, 2, 28)], 'Saturday, 2', Dates, Languages, Formats),
+  assertion(Dates == [date(2022,4,2),date(2022,7,2),date(2023,9,2),date(2023,12,2)]),
+  assertion(Languages == ['English']),
+  assertion(Formats == ['%A %d']).
 
 % DATES HINTING TWO NUMBERS AND WEEKDAY NAMES
 
@@ -140,14 +147,6 @@ test('day_of_the_week_as_abbreviation'):-
   assertion(Dates == [date(2022, 9, 15)]),
   assertion(Languages == ['Lithuanian']),
   assertion(Formats == ['%m %d %a']).
-
-% DATES HINTING WEEKDAY NAMES AND ONE NUMBER
-
-test('Capitalized full week day, day'):-
-  solutions([date(2022, 2, 28)], 'Saturday, 2', Dates, Languages, Formats),
-  assertion(Dates == [date(2022,4,2),date(2022,7,2),date(2023,9,2),date(2023,12,2)]),
-  assertion(Languages == ['English']),
-  assertion(Formats == ['%A %d']).
 
 
 % DATES HINTING ONE NUMBER AND A MONTH NAME
