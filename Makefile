@@ -46,7 +46,7 @@ install: dependencies
 dependencies: infrastructure requirements
 infrastructure: repositories packages
 repositories: $(REPOS)
-packages: $(PACKAGE_PATH)/swipl $(PACKAGE_PATH)/bumpversion $(PACKAGE_PATH)/hub
+packages: $(PACKAGE_PATH)/swipl $(PACKAGE_PATH)/bumpversion $(PACKAGE_PATH)/hub $(PACKAGE_PATH)/git
 requirements: $(PACK_PATH)/tap  $(PACK_PATH)/date_time
 
 scm:
