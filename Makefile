@@ -3,7 +3,7 @@
 # having a Makefile included and seeing all the weird results when make all was run in a location where it was not
 # expected. https://rlaanemets.com/post/show/prolog-pack-development-experience
 
-#.PHONY: all about test install infrastructure packs repositories packages deploy
+.PHONY: all about deploy test release install dependencies infrastructure repositories packages requirements scm remove-all
 SHELL = /bin/bash
 .SHELLFLAGS = -o pipefail -c
 
@@ -18,15 +18,14 @@ REPOS = $(HUB_PPA) $(PPA_PATH)/swi-prolog-ubuntu-stable-bionic.list # Order mate
 all: about
 
 about:
-	@: $${VERSION:=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt')} ;\
-	echo $(NAME) $$VERSION -- $(TITLE)
+	@: $${VERSION:=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt')} ; echo $(NAME) $$VERSION -- $(TITLE)
 
 deploy: test release install
 
 test: dependencies
 	@swipl -g 'load_test_files([]),run_tests,halt' prolog/$(NAME).pl
 
-release: dependencies setup-git
+release: dependencies scm
 	@git pull --quiet --no-edit origin main ;\
 	git diff --quiet || (echo 'Exiting operation on dirty repo' && exit ) ;\
 	bumpversion patch && git push --quiet ;\
@@ -50,6 +49,17 @@ repositories: $(REPOS)
 packages: $(PACKAGE_PATH)/swipl $(PACKAGE_PATH)/bumpversion $(PACKAGE_PATH)/hub
 requirements: $(PACK_PATH)/tap  $(PACK_PATH)/date_time
 
+scm:
+	@git config --global user.email "conrado.rgz@gmail.com" && git config --global user.name "Conrado Rodriguez"
+
+remove-all:
+	@swipl -g "(member(P,[abbreviated_dates,date_time,tap]),pack_property(P,library(P)),pack_remove(P),fail);true,halt"
+	@sudo dpkg --purge swi-prolog bumpversion hub
+	@sudo add-apt-repository --remove -y ppa:swi-prolog/stable
+	@sudo add-apt-repository --remove -y ppa:cpick/hub
+	@sudo rm -f $(REPOS)
+	@sudo apt -y autoremove
+
 $(PPA_PATH)/cpick-ubuntu-hub-bionic.list:
 	@sudo add-apt-repository -ny ppa:cpick/hub  # Let the last repo do the update
 $(PPA_PATH)/swi-prolog-ubuntu-stable-bionic.list:
@@ -62,15 +72,3 @@ $(PACKAGE_PATH)/%: # Install packages from default repo
 
 $(PACK_PATH)/%:
 	@swipl -qg "pack_install('$(notdir $@)',[interactive(false)]),halt"
-
-setup-git:
-	@git config --global user.email "conrado.rgz@gmail.com"
-	@git config --global user.name "Conrado Rodriguez"
-
-remove-all:
-	@swipl -g "(member(P,[abbreviated_dates,date_time,tap]),pack_property(P,library(P)),pack_remove(P),fail);true,halt"
-	@sudo dpkg --purge swi-prolog bumpversion hub
-	@sudo add-apt-repository --remove -y ppa:swi-prolog/stable
-	@sudo add-apt-repository --remove -y ppa:cpick/hub
-	@sudo rm -f $(PPA_PATH)/swi-prolog-ubuntu-stable-bionic.list $(HUB_PPA)
-	@sudo apt -y autoremove
