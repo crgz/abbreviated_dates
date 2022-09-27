@@ -38,7 +38,7 @@ test: dependencies
 	@swipl -g 'load_test_files([]),run_tests,halt' prolog/$(NAME).pl
 
 release: dependencies setup-git
-	@git pull --no-edit origin main ;\
+	@git pull --quiet --no-edit origin main ;\
 	git diff --quiet || (echo 'Exiting operation on dirty repo' && exit ) ;\
 	bumpversion patch && git push --quiet ;\
 	NEW_VERSION=$$(swipl -q -s pack -g 'version(V),writeln(V)' -t halt) ;\
