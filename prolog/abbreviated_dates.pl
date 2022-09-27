@@ -41,7 +41,7 @@ multiple_days([LastKnownDate|Other], [SingleDay|MultipleDays], Language, [S1|S2]
   (" - " | eos),
   multiple_days([SingleDay, LastKnownDate|Other], MultipleDays, Language, S2).
 
-% Dates hinting week day name & month name
+% DATES HINTING WEEKDAY NAME, DAY NUMBER AND MONTH NAME
 
 % phrase(abbreviated_dates:single_day([date(2020, 2, 28)], Date, Language, Syntax), `Wednesday, 1 July`).
 single_day([Context|_], date(Year,MonthNumber,Day), Language, Syntax) -->
@@ -55,7 +55,7 @@ single_day([Context|_], date(Year,MonthNumber,Day), Language, Syntax) -->
     atomic_list_concat([WeekDaySyntax, ', %d ', MonthFormat], Syntax)
   }.
 
-% Dates hinting week day names
+% DATES HINTING WEEKDAY NAMES AND ONE NUMBER
 
 % phrase(abbreviated_dates:single_day([date(2022, 2, 28)], Date, Language, Syntax), `saturday, 23`).
 single_day([Context|_], Date, Language, Syntax) -->
@@ -66,6 +66,8 @@ single_day([Context|_], Date, Language, Syntax) -->
     week_dayn(Date, WeekDayNumber),
     atomic_list_concat([WeekDaySyntax, ' %d'], Syntax)
   }.
+
+% DATES HINTING WEEKDAY NAMES AND TWO NUMBERS
 
 % phrase(abbreviated_dates:single_day([date(2022, 2, 28)], Date, Language, Syntax), `Pirm. 06-20`).
 single_day([Context|_], Date, Language, Syntax) --> % Explicit abbreviation
@@ -88,6 +90,8 @@ single_day([Context|_], Date, Language, Syntax) -->
     solve_date_numbers(Context, WeekDayCodes, First, Second, Date, Language, DayMonthSyntax, WeekDaySyntax),
     atomic_list_concat([WeekDaySyntax, DayMonthSyntax], ' ', Syntax)
   }.
+
+% DATES HINTING TWO NUMBERS AND WEEKDAY NAMES
 
 % phrase(abbreviated_dates:single_day([date(2022, 2, 28)], Date, Language, Syntax), `06-20, Pirm`).
 single_day([Context|_], Date, Language, Syntax) -->
