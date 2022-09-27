@@ -153,14 +153,14 @@ single_day([Context|_], Date, Language, Syntax) -->
   string(Month), b, month_day(Day),
   {factor_month_day(Context, Day, Month, implicit, Date, Language, MonthFormat), atom_concat(MonthFormat,' %d', Syntax)}.
 
-% Dates hinting just days
+% DATES HINTING JUST DAYS
 
 % phrase(abbreviated_dates:single_day([date(2020, 2, 28)], Date, Language, Syntax), `31`).
 single_day([Context|_], Date, Language, '%d') -->
   month_day(D),
   {future_date(Context, D, Date), language(Language)}.
 
-% Dates hinting relative days
+% DATES HINTING RELATIVE DAYS
 
 % phrase(abbreviated_dates:single_day([date(2020, 2, 29)], Date, Language, Syntax), `Tomorrow`).
 single_day([Context|_], Date, Language, Syntax) -->
