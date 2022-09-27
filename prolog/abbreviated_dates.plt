@@ -46,23 +46,41 @@ test('Capitalized full Week Day, comma, Dot Postfixed Day & Implicitly Abbreviat
 
 % DATES HINTING WEEKDAY NAMES AND TWO NUMBERS
 
-test('Capitalized week day name as explicit abbreviation'):-
+test('Capitalized explicitly abbreviated weekday name'):-
   solutions([date(2022, 9, 7)], 'Di. 13.9.', Dates, Languages, Formats),
   assertion(Dates == [date(2022,9,13),date(2026,9,13)]),
   assertion(Languages == ['Dutch','French','German']),
   assertion(Formats == ['%a %d %m']).
 
-test('Capitalized week day name as explicit abbreviation, Dash Deparated Day & Zero prefixed Month Number'):-
+test('Capitalized explicitly abbreviated weekday name, Dash Separated Day & Zero prefixed Month Number'):-
   solutions([date(2022, 2, 28)], 'Pirm. 20-06', Dates, Languages, Formats),
   assertion(Dates == [date(2022, 6, 20)]),
   assertion(Languages == ['Latvian','Lithuanian']),
   assertion(Formats == ['%a %d %m']).
 
-test('Capitalized week day name as explicit abbreviation, Dash Deparated Zero prefixed Month Number & Day'):-
+test('Capitalized explicitly abbreviated weekday name, Dash Separated Zero prefixed Month Number & Day'):-
   solutions([date(2022, 2, 28)], 'Pirm. 06-20', Dates, Languages, Formats),
   assertion(Dates == [date(2022, 6, 20)]),
   assertion(Languages == ['Lithuanian']),
   assertion(Formats == ['%a %m %d']).
+
+test('Capitalized explicitly abbreviated weekday name, comma, Dash Separated Zero prefixed Numbers'):-
+  solutions([date(2022, 2, 28)], 'Th., 06-20', Dates, Languages, Formats),
+  assertion(Dates == [date(2022,6,20),date(2023,6,20),date(2024,6,20),date(2025,6,20),date(2026,6,20),date(2028,6,20)]),
+  assertion(Languages == ['English','Vietnamese']),
+  assertion(Formats == ['%a., %m %d']).
+
+test('Capitalized explicitly abbreviated weekday name, comma, Dot suffixed Numbers'):-
+  solutions([date(2022, 2, 28)], 'Th., 16.06.', Dates, Languages, Formats),
+  assertion(Dates == [date(2022,6,16),date(2023,6,16),date(2025,6,16),date(2026,6,16),date(2027,6,16),date(2028,6,16)]),
+  assertion(Languages == ['English','Vietnamese']),
+  assertion(Formats == ['%a., %d %m']).
+
+test('Capitalized explicitly abbreviated weekday name, comma, Dot suffixed Number, Zero prefixed Number'):-
+  solutions([date(2022, 2, 28)], 'Th., 16.06', Dates, Languages, Formats),
+  assertion(Dates == [date(2022,6,16),date(2023,6,16),date(2025,6,16),date(2026,6,16),date(2027,6,16),date(2028,6,16)]),
+  assertion(Languages == ['English','Vietnamese']),
+  assertion(Formats == ['%a., %d %m']).
 
 test('Capitalized week day name as implicit single consonant abbreviation'):-
   solutions([date(2022, 9, 7)], 'T 13.9', Dates, Languages, Formats),

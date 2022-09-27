@@ -55,18 +55,6 @@ single_day([Context|_], date(Year,MonthNumber,Day), Language, Syntax) -->
     atomic_list_concat([WeekDaySyntax, ', %d ', MonthFormat], Syntax)
   }.
 
-% DATES HINTING WEEKDAY NAMES AND ONE NUMBER
-
-% phrase(abbreviated_dates:single_day([date(2022, 2, 28)], Date, Language, Syntax), `saturday, 23`).
-single_day([Context|_], Date, Language, Syntax) -->
-  string(WeekDayCodes), ",", b, month_day(Day),
-  {
-    factor_week_day(WeekDayCodes, WeekDayNumber, Language, WeekDaySyntax),
-    possible_day(Context, Day, Date),
-    week_dayn(Date, WeekDayNumber),
-    atomic_list_concat([WeekDaySyntax, ' %d'], Syntax)
-  }.
-
 % DATES HINTING WEEKDAY NAMES AND TWO NUMBERS
 
 % phrase(abbreviated_dates:single_day([date(2022, 2, 28)], Date, Language, Syntax), `Pirm. 06-20`).
@@ -89,6 +77,41 @@ single_day([Context|_], Date, Language, Syntax) -->
   {
     solve_date_numbers(Context, WeekDayCodes, First, Second, Date, Language, DayMonthSyntax, WeekDaySyntax),
     atomic_list_concat([WeekDaySyntax, DayMonthSyntax], ' ', Syntax)
+  }.
+% phrase(abbreviated_dates:single_day([date(2022, 2, 28)], Date, Language, Syntax), `Th., 06-20`).
+single_day([Context|_], Date, Language, Syntax) -->
+  string(WeekDayCodes), ".", ",", b, integer(First), "-", integer(Second),
+  {
+    solve_date_numbers(Context, WeekDayCodes, First, Second, Date, Language, DayMonthSyntax, WeekDaySyntax),
+    atomic_list_concat([WeekDaySyntax, '., ', DayMonthSyntax], Syntax)
+  }.
+
+% phrase(abbreviated_dates:single_day([date(2022, 2, 28)], Date, Language, Syntax), `Th., 16.06.`).
+single_day([Context|_], Date, Language, Syntax) -->
+  string(WeekDayCodes), ".", ",", b, integer(First), ".", integer(Second), ".",
+  {
+    solve_date_numbers(Context, WeekDayCodes, First, Second, Date, Language, DayMonthSyntax, WeekDaySyntax),
+    atomic_list_concat([WeekDaySyntax, '., ', DayMonthSyntax], Syntax)
+  }.
+
+% phrase(abbreviated_dates:single_day([date(2022, 2, 28)], Date, Language, Syntax), `Th., 16.06`).
+single_day([Context|_], Date, Language, Syntax) -->
+  string(WeekDayCodes), ".", ",", b, integer(First), ".", integer(Second),
+  {
+    solve_date_numbers(Context, WeekDayCodes, First, Second, Date, Language, DayMonthSyntax, WeekDaySyntax),
+    atomic_list_concat([WeekDaySyntax, '., ', DayMonthSyntax], Syntax)
+  }.
+
+% DATES HINTING WEEKDAY NAMES AND ONE NUMBER
+
+% phrase(abbreviated_dates:single_day([date(2022, 2, 28)], Date, Language, Syntax), `saturday, 23`).
+single_day([Context|_], Date, Language, Syntax) -->
+  string(WeekDayCodes), ",", b, month_day(Day),
+  {
+    factor_week_day(WeekDayCodes, WeekDayNumber, Language, WeekDaySyntax),
+    possible_day(Context, Day, Date),
+    week_dayn(Date, WeekDayNumber),
+    atomic_list_concat([WeekDaySyntax, ' %d'], Syntax)
   }.
 
 % DATES HINTING TWO NUMBERS AND WEEKDAY NAMES
