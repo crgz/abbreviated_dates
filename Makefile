@@ -36,7 +36,7 @@ install: dependencies
 	while : ; do \
 		REMOTE_VERSION=$$(curl --silent 'https://api.github.com/repos/crgz/$(NAME)/releases/latest' | jq -r .tag_name) ;\
 		if [ $$LOCAL_VERSION == $$REMOTE_VERSION ]; then printf '\n' && break; fi ;\
-		printf '.' && sleep 2 ;\
+		printf '.' && sleep 4 ;\
 	done ;\
 	: $${VERSION:=$$LOCAL_VERSION} ;\
 	REMOTE=https://github.com/crgz/$(NAME)/archive/$$VERSION.zip ;\
