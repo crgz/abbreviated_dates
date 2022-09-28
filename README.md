@@ -1,4 +1,4 @@
-![example workflow](https://github.com/crgz/docs/abbreviated_dates/workflows/submit.yml/badge.svg)
+[![Submit](https://github.com/crgz/abbreviated_dates/actions/workflows/submit.yml/badge.svg)](https://github.com/crgz/abbreviated_dates/actions/workflows/submit.yml)
 
 <img src=".github/flags-jakearchibald.github.io-scour.svg?raw=true" width="50%" align="right" style="border:20px solid white">
 
