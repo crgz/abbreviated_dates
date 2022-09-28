@@ -28,8 +28,9 @@ test: dependencies
 release: dependencies scm
 	git pull --quiet --no-edit origin main
 	git diff --quiet || (echo 'Exiting operation on dirty repo' && exit )
-	bumpversion patch && git push --quiet
+	bumpversion patch && git push
 	VERSION=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt') ;\
+  echo $$VERSION ;\
 	hub release create -m $$VERSION $$VERSION ;\
 	while : ; do \
 	  REMOTE_URL='https://api.github.com/repos/crgz/$(NAME)/releases/tags/'$$VERSION ;\
