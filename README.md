@@ -1,11 +1,14 @@
 <!-- PROJECT SHIELDS -->
-[![Submit][submit-shield]][submit-url]
-[![Contributors][contributors-shield]][contributors-url]
+<!--  [![Release!][release-shield]][release-url]  -->
+[![Status][submit-shield]][submit-url]
+[![Issues][issues-shield]][issues-url]
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
+[![Contributors][contributors-shield]][contributors-url]
+[![contributions welcome][contributions-shield]][contributions-url]
+[![Ask Me Anything!][ask-shield]][ask-url]
+
 
 <img src=".github/flags-jakearchibald.github.io-scour.svg?raw=true" width="50%" align="right" style="border:20px solid white">
 
@@ -107,6 +110,12 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+[contributions-shield]: https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat
+[contributions-url]: https://github.com/crgz/abbreviated_dates/issues
+[ask-shield]: https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg
+[ask-url]: https://github.com/crgz
+[release-shield]: https://crgz.github.io/abbreviated_dates/badge/release.svg
+[release-url]: https://github.com/crgz
 [submit-shield]: https://github.com/crgz/abbreviated_dates/actions/workflows/submit.yml/badge.svg
 [submit-url]: https://github.com/crgz/abbreviated_dates/actions/workflows/submit.yml
 [contributors-shield]: https://img.shields.io/github/contributors/crgz/abbreviated_dates.svg
