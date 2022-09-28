@@ -174,5 +174,5 @@ Project Link: [https://github.com/your_username/repo_name](https://github.com/yo
 [issues-url]: https://github.com/crgz/abbreviated_dates/issues
 [license-shield]: https://img.shields.io/github/license/crgz/abbreviated_dates.svg
 [license-url]: https://github.com/crgz/abbreviated_dates/blob/master/LICENSE.txt
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg&logo=linkedin&colorB=555
+[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/crgz
