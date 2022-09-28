@@ -9,7 +9,6 @@
 [![contributions welcome][contributions-shield]][contributions-url]
 [![Ask Me Anything!][ask-shield]][ask-url]
 
-
 <img src=".github/flags-jakearchibald.github.io-scour.svg?raw=true" width="50%" align="right" style="border:20px solid white">
 
 # Abbreviated Date Parser
@@ -80,7 +79,6 @@ https://eu.swi-prolog.org/pack/review?p=abbreviated_dates
 ## Roadmap
 - [x] Multi-language Support
 - [x] Add back to top links
-- [ ] 
 
 See the [open issues](https://github.com///issues) for a full list of proposed features (and known issues).
 
