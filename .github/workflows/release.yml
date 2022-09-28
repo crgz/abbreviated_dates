@@ -8,29 +8,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
-      - name: Create Archive Release
-        uses: thedoctor0/zip-release@master
-        with:
-          filename: ${{ github.event.repository.name }}
-          exclusions: '*.git* .*'
-
-      - name: Create GitHub release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: v0.1.${{ github.run_number }}
-          release_name: ${{ github.event.repository.name }} v0.1.${{ github.run_number }}
-
-      - name: Upload release asset
-        id: upload_release_asset
-        uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: .
-          asset_name: ${{ github.event.repository.name }}.zip
-          asset_content_type: application/zip
+      - name: checkout repo
+        uses: actions/checkout@v2
+      - name: build application
+        run: make release
