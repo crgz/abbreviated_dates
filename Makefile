@@ -28,7 +28,7 @@ test: dependencies
 release: dependencies scm
 	@git pull --quiet --no-edit origin main
 	@git diff --quiet || (echo 'Exiting operation on dirty repo' && exit )
-	@bumpversion patch && git push
+	@bumpversion patch && git push --quiet
 	@VERSION=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt') && hub release create -m $$VERSION $$VERSION
 
 install: dependencies wait
@@ -37,9 +37,9 @@ install: dependencies wait
 	swipl -qg "pack_remove($(NAME)),pack_install('$$REMOTE',[interactive(false)]),halt(0)" -t 'halt(1)'
 
 wait:
-  VERSION=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt') ;\
+	VERSION=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt') ;\
 	while : ; do \
-	  REMOTE_URL='https://api.github.com/repos/crgz/$(NAME)/releases/tags/'$$VERSION ;\
+		REMOTE_URL='https://api.github.com/repos/crgz/$(NAME)/releases/tags/'$$VERSION ;\
 		REMOTE_VERSION=$$(curl --silent $$REMOTE_URL | jq -r .tag_name) ;\
 		if [ $$VERSION == $$REMOTE_VERSION ]; then printf '\n' && break; fi ;\
 		printf '.' && sleep 1 ;\
