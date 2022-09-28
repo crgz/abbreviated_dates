@@ -5,7 +5,7 @@ on:
   pull_request:
     branches: [main]
 jobs:
-  release:
+  Submit:
     runs-on: ubuntu-latest
     steps:
       - name: checkout repo
