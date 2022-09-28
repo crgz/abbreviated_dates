@@ -3,7 +3,7 @@
 # having a Makefile included and seeing all the weird results when make all was run in a location where it was not
 # expected. https://rlaanemets.com/post/show/prolog-pack-development-experience
 
-.PHONY: all about deploy test release install dependencies infrastructure repositories packages requirements scm remove-all
+.PHONY: all about deploy test release wait install dependencies repositories packages requirements scm remove-all
 SHELL = /bin/bash
 .SHELLFLAGS = -o pipefail -c
 
@@ -20,7 +20,7 @@ all: about
 about:
 	@: $${VERSION:=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt')} ; echo $(NAME) $$VERSION -- $(TITLE)
 
-deploy: test release install
+deploy: test release wait install
 
 test: dependencies
 	@swipl -g 'load_test_files([]),run_tests,halt' prolog/$(NAME).pl
@@ -29,16 +29,15 @@ release: dependencies scm
 	git pull --quiet --no-edit origin main
 	git diff --quiet || (echo 'Exiting operation on dirty repo' && exit )
 	bumpversion patch && git push
-	VERSION=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt') ;\
-  echo $$VERSION ;\
-  hub -v ;\
-  hub ;\
-	hub release create -m $$VERSION $$VERSION ;\
+	VERSION=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt') && hub release create -m $$VERSION $$VERSION
+
+wait:
+  VERSION=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt') ;\
 	while : ; do \
 	  REMOTE_URL='https://api.github.com/repos/crgz/$(NAME)/releases/tags/'$$VERSION ;\
 		REMOTE_VERSION=$$(curl --silent $$REMOTE_URL | jq -r .tag_name) ;\
 		if [ $$VERSION == $$REMOTE_VERSION ]; then printf '\n' && break; fi ;\
-		printf '.' && sleep 3 ;\
+		printf '.' && sleep 1 ;\
 	done
 
 install: dependencies
@@ -46,8 +45,7 @@ install: dependencies
 	REMOTE=https://github.com/crgz/$(NAME)/archive/$$VERSION.zip ;\
 	swipl -qg "pack_remove($(NAME)),pack_install('$$REMOTE',[interactive(false)]),halt(0)" -t 'halt(1)'
 
-dependencies: infrastructure requirements
-infrastructure: repositories packages
+dependencies: repositories packages requirements
 repositories: $(REPOS)
 packages: $(PACKAGE_PATH)/swipl $(PACKAGE_PATH)/bumpversion $(PACKAGE_PATH)/hub $(PACKAGE_PATH)/git
 requirements: $(PACK_PATH)/tap  $(PACK_PATH)/date_time
