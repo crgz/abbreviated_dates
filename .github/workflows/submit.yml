@@ -1,4 +1,4 @@
-name: Release
+name: Submit
 on:
   push:
     branches: [main]
@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: checkout repo
         uses: actions/checkout@v2
-      - name: Create GitHub release
+      - name: Submit
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: make release
+        run: make submit

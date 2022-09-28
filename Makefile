@@ -3,7 +3,7 @@
 # having a Makefile included and seeing all the weird results when make all was run in a location where it was not
 # expected. https://rlaanemets.com/post/show/prolog-pack-development-experience
 
-.PHONY: all about deploy test release wait install dependencies repositories packages requirements scm remove-all
+.PHONY: all about submit test release install dependencies repositories packages requirements scm remove-all
 SHELL = /bin/bash
 .SHELLFLAGS = -o pipefail -c
 
@@ -20,7 +20,7 @@ all: about
 about:
 	@: $${VERSION:=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt')} ; echo $(NAME) $$VERSION -- $(TITLE)
 
-deploy: test release install
+submit: test release install
 
 test: dependencies
 	@swipl -g 'load_test_files([]),run_tests,halt' prolog/$(NAME).pl
@@ -41,7 +41,6 @@ install: dependencies
 	: $${VERSION:=$$LOCAL_VERSION} ;\
 	REMOTE=https://github.com/crgz/$(NAME)/archive/$$VERSION.zip ;\
 	swipl -qg "pack_remove($(NAME)),pack_install('$$REMOTE',[interactive(false)]),halt(0)" -t 'halt(1)'
-
 
 dependencies: repositories packages requirements
 repositories: $(REPOS)
