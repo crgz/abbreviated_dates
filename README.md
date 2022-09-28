@@ -108,6 +108,8 @@ Distributed under the MIT License. See `LICENSE` file for more information.
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+[release-shield]: https://github.com/crgz/abbreviated_dates/blob/main/.github/badges/release.svg
+[release-url]: https://www.swi-prolog.org/pack/list?p=abbreviated_dates
 [submit-shield]: https://github.com/crgz/abbreviated_dates/actions/workflows/submit.yml/badge.svg
 [submit-url]: https://github.com/crgz/abbreviated_dates/actions/workflows/submit.yml
 [issues-shield]: https://img.shields.io/github/issues/crgz/abbreviated_dates.svg
@@ -124,7 +126,5 @@ Distributed under the MIT License. See `LICENSE` file for more information.
 [contributions-url]: https://github.com/crgz/abbreviated_dates/issues
 [ask-shield]: https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg
 [ask-url]: https://github.com/crgz
-[release-shield]: https://github.com/crgz/abbreviated_dates/blob/main/.github/badges/release.svg
-[release-url]: https://github.com/crgz/abbreviated_dates/releases
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/crgz
