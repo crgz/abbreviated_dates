@@ -26,9 +26,9 @@ test: dependencies
 	@swipl -g 'load_test_files([]),run_tests,halt' prolog/$(NAME).pl
 
 release: dependencies scm
-	@git pull --quiet --no-edit origin main ;\
-	git diff --quiet || (echo 'Exiting operation on dirty repo' && exit ) ;\
-	bumpversion patch && git push --quiet ;\
+	git pull --quiet --no-edit origin main
+	git diff --quiet || (echo 'Exiting operation on dirty repo' && exit )
+	bumpversion patch && git push --quiet
 	VERSION=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt') ;\
 	hub release create -m $$VERSION $$VERSION ;\
 	while : ; do \
