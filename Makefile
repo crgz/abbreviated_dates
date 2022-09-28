@@ -32,7 +32,8 @@ release: dependencies scm
 	@VERSION=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt') && hub release create -m $$VERSION $$VERSION
 
 install: dependencies wait
-	@: $${VERSION:=$$(curl --silent 'https://api.github.com/repos/crgz/$(NAME)/releases/latest'|jq -r .tag_name)} ;\
+	echo $$VERSION ;\
+	: $${VERSION:=$$(curl --silent 'https://api.github.com/repos/crgz/$(NAME)/releases/latest'|jq -r .tag_name)} ;\
 	echo $$VERSION ;\
 	REMOTE=https://github.com/crgz/$(NAME)/archive/$$VERSION.zip ;\
 	swipl -qg "pack_remove($(NAME)),pack_install('$$REMOTE',[interactive(false)]),halt(0)" -t 'halt(1)'
