@@ -40,8 +40,7 @@ install: dependencies wait
 wait:
 	@VERSION=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt') ;\
 	while : ; do \
-		REMOTE_URL='https://api.github.com/repos/crgz/$(NAME)/releases/tags/'$$VERSION ;\
-		REMOTE_VERSION=$$(curl --silent $$REMOTE_URL | jq -r .tag_name) ;\
+		REMOTE_VERSION=$$(curl --silent 'https://api.github.com/repos/crgz/$(NAME)/releases/latest' | jq -r .tag_name) ;\
 		echo $$VERSION == $$REMOTE_VERSION ;\
 		if [ $$VERSION == $$REMOTE_VERSION ]; then printf '\n' && break; fi ;\
 		printf '.' && sleep 1 ;\
