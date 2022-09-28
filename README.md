@@ -1,5 +1,5 @@
 <!-- PROJECT SHIELDS -->
-<!--  [![Release!][release-shield]][release-url]  -->
+[![Release!][release-shield]][release-url]
 [![Status][submit-shield]][submit-url]
 [![Issues][issues-shield]][issues-url]
 [![Forks][forks-shield]][forks-url]
@@ -110,23 +110,23 @@ Distributed under the MIT License. See `LICENSE` file for more information.
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributions-shield]: https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat
-[contributions-url]: https://github.com/crgz/abbreviated_dates/issues
-[ask-shield]: https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg
-[ask-url]: https://github.com/crgz
-[release-shield]: https://crgz.github.io/abbreviated_dates/badge/release.svg
-[release-url]: https://github.com/crgz
 [submit-shield]: https://github.com/crgz/abbreviated_dates/actions/workflows/submit.yml/badge.svg
 [submit-url]: https://github.com/crgz/abbreviated_dates/actions/workflows/submit.yml
-[contributors-shield]: https://img.shields.io/github/contributors/crgz/abbreviated_dates.svg
-[contributors-url]: https://github.com/crgz/abbreviated_dates/graphs/contributors
+[issues-shield]: https://img.shields.io/github/issues/crgz/abbreviated_dates.svg
+[issues-url]: https://github.com/crgz/abbreviated_dates/issues
 [forks-shield]: https://img.shields.io/github/forks/crgz/abbreviated_dates.svg
 [forks-url]: https://github.com/crgz/abbreviated_dates/network/members
 [stars-shield]: https://img.shields.io/github/stars/crgz/abbreviated_dates.svg
 [stars-url]: https://github.com/crgz/abbreviated_dates/stargazers
-[issues-shield]: https://img.shields.io/github/issues/crgz/abbreviated_dates.svg
-[issues-url]: https://github.com/crgz/abbreviated_dates/issues
+[contributors-shield]: https://img.shields.io/github/contributors/crgz/abbreviated_dates.svg
+[contributors-url]: https://github.com/crgz/abbreviated_dates/graphs/contributors
 [license-shield]: https://img.shields.io/github/license/crgz/abbreviated_dates.svg
 [license-url]: https://github.com/crgz/abbreviated_dates/blob/main/LICENSE
+[contributions-shield]: https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat
+[contributions-url]: https://github.com/crgz/abbreviated_dates/issues
+[ask-shield]: https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg
+[ask-url]: https://github.com/crgz
+[release-shield]: https://github.com/crgz/abbreviated_dates/blob/main/.github/badges/release.svg
+[release-url]: https://github.com/crgz/abbreviated_dates/releases
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/crgz
