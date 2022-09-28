@@ -31,6 +31,7 @@ release: dependencies scm
 	bumpversion patch && git push
 	VERSION=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt') ;\
   echo $$VERSION ;\
+  which hub ;\
 	hub release create -m $$VERSION $$VERSION ;\
 	while : ; do \
 	  REMOTE_URL='https://api.github.com/repos/crgz/$(NAME)/releases/tags/'$$VERSION ;\
