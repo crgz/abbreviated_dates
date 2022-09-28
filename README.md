@@ -104,7 +104,7 @@ open an issue with the tag "enhancement". Don't forget to give the project a sta
 
 ## License
 
-Distributed under the MIT License. See `LICENSE.txt` for more information.
+Distributed under the MIT License. See `LICENSE` file for more information.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
