@@ -13,7 +13,7 @@ PACK_PATH = ${HOME}/.local/share/swi-prolog/pack
 PACKAGE_PATH = /usr/bin
 PPA_PATH = /etc/apt/sources.list.d
 HUB_PPA := $(shell [ $$(lsb_release -r|cut -f2) = 18.04 ] && echo $(PPA_PATH)/cpick-ubuntu-hub-bionic.list || echo "")
-REPOS = $(PPA_PATH)/cpick-ubuntu-hub-bionic.list $(PPA_PATH)/swi-prolog-ubuntu-stable-bionic.list
+REPOS = $(HUB_PPA) $(PPA_PATH)/swi-prolog-ubuntu-stable-bionic.list # Order maters for the last add repo to do the update
 
 all: about
 
@@ -62,9 +62,9 @@ remove-all:
 	@sudo apt -y autoremove
 
 $(PPA_PATH)/cpick-ubuntu-hub-bionic.list:
-	sudo add-apt-repository -y ppa:cpick/hub  # Let the last repo do the update
+	@sudo add-apt-repository -ny ppa:cpick/hub  # Let the last repo do the update
 $(PPA_PATH)/swi-prolog-ubuntu-stable-bionic.list:
-	sudo add-apt-repository -y ppa:swi-prolog/stable
+	@sudo add-apt-repository -y ppa:swi-prolog/stable
 
 $(PACKAGE_PATH)/swipl:
 	@sudo apt install -y swi-prolog
