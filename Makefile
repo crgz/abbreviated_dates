@@ -20,16 +20,21 @@ all: about
 about:
 	@: $${VERSION:=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt')} ; echo $(NAME) $$VERSION -- $(TITLE)
 
-deploy: test release wait install
+deploy: test release install
 
 test: dependencies
 	@swipl -g 'load_test_files([]),run_tests,halt' prolog/$(NAME).pl
 
 release: dependencies scm
-	git pull --quiet --no-edit origin main
-	git diff --quiet || (echo 'Exiting operation on dirty repo' && exit )
-	bumpversion patch && git push
-	VERSION=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt') && hub release create -m $$VERSION $$VERSION
+	@git pull --quiet --no-edit origin main
+	@git diff --quiet || (echo 'Exiting operation on dirty repo' && exit )
+	@bumpversion patch && git push
+	@VERSION=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt') && hub release create -m $$VERSION $$VERSION
+
+install: dependencies wait
+	@: $${VERSION:=$$(curl --silent 'https://api.github.com/repos/crgz/$(NAME)/releases/latest'|jq -r .tag_name)} ;\
+	REMOTE=https://github.com/crgz/$(NAME)/archive/$$VERSION.zip ;\
+	swipl -qg "pack_remove($(NAME)),pack_install('$$REMOTE',[interactive(false)]),halt(0)" -t 'halt(1)'
 
 wait:
   VERSION=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt') ;\
@@ -39,11 +44,6 @@ wait:
 		if [ $$VERSION == $$REMOTE_VERSION ]; then printf '\n' && break; fi ;\
 		printf '.' && sleep 1 ;\
 	done
-
-install: dependencies
-	@: $${VERSION:=$$(curl --silent 'https://api.github.com/repos/crgz/$(NAME)/releases/latest'|jq -r .tag_name)} ;\
-	REMOTE=https://github.com/crgz/$(NAME)/archive/$$VERSION.zip ;\
-	swipl -qg "pack_remove($(NAME)),pack_install('$$REMOTE',[interactive(false)]),halt(0)" -t 'halt(1)'
 
 dependencies: repositories packages requirements
 repositories: $(REPOS)
