@@ -1,6 +1,3 @@
-<!-- Improved compatibility of back to top link: See: https://github.com/crgz/abbreviated_dates/pull/73 -->
-<a name="readme-top"></a>
-
 <!-- PROJECT SHIELDS -->
 [![Submit][submit-shield]][submit-url]
 [![Contributors][contributors-shield]][contributors-url]
@@ -10,8 +7,11 @@
 [![MIT License][license-shield]][license-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
 
-
 <img src=".github/flags-jakearchibald.github.io-scour.svg?raw=true" width="50%" align="right" style="border:20px solid white">
+
+# Abbreviated Date Parser Library
+
+The Abbreviated Date Parser Library contains a predicate that parses abbreviated incomplete dates in multiple languages.
 
 <!-- TABLE OF CONTENTS -->
 <details>
@@ -38,10 +38,6 @@
     <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
-
-# Abbreviated Date Parser Library
-
-The Abbreviated Date Parser Library contains a predicate that parses abbreviated incomplete dates in multiple languages.
 
 ```prolog 
 parse(Context, Expression, Dates, Trace).
