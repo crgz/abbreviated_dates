@@ -38,7 +38,7 @@ install: dependencies
 		echo $$LOCAL_VERSION == $$REMOTE_VERSION ;\
 		if [ $$LOCAL_VERSION == $$REMOTE_VERSION ]; then printf '\n' && break; fi ;\
 		printf '.' && sleep 1 ;\
-	done
+	done ;\
 	echo $$LOCAL_VERSION ;\
 	: $${VERSION:=$$LOCAL_VERSION} ;\
 	echo $$VERSION ;\
