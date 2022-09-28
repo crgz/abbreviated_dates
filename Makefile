@@ -32,16 +32,13 @@ release: dependencies scm
 	@VERSION=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt') && hub release create -m $$VERSION $$VERSION
 
 install: dependencies
-	LOCAL_VERSION=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt') ;\
+	@LOCAL_VERSION=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt') ;\
 	while : ; do \
 		REMOTE_VERSION=$$(curl --silent 'https://api.github.com/repos/crgz/$(NAME)/releases/latest' | jq -r .tag_name) ;\
-		echo $$LOCAL_VERSION == $$REMOTE_VERSION ;\
 		if [ $$LOCAL_VERSION == $$REMOTE_VERSION ]; then printf '\n' && break; fi ;\
-		printf '.' && sleep 1 ;\
+		printf '.' && sleep 2 ;\
 	done ;\
-	echo $$LOCAL_VERSION ;\
 	: $${VERSION:=$$LOCAL_VERSION} ;\
-	echo $$VERSION ;\
 	REMOTE=https://github.com/crgz/$(NAME)/archive/$$VERSION.zip ;\
 	swipl -qg "pack_remove($(NAME)),pack_install('$$REMOTE',[interactive(false)]),halt(0)" -t 'halt(1)'
 
