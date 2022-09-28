@@ -18,12 +18,6 @@ The Abbreviated Date Parser Library contains a predicate that parses abbreviated
   <summary>Table of Contents</summary>
   <ol>
     <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
       <a href="#getting-started">Getting Started</a>
       <ul>
         <li><a href="#prerequisites">Prerequisites</a></li>
@@ -88,17 +82,6 @@ New tests should be defined in the [test](prolog/abbreviated_dates.plt) file.
 
 ## Review
 https://eu.swi-prolog.org/pack/review?p=abbreviated_dates
-
-<!-- ABOUT THE PROJECT -->
-## About The Project
-
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-### Built With
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Getting Started
 
