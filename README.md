@@ -4,8 +4,8 @@
 [![Issues][issues-shield]][issues-url]
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
-[![MIT License][license-shield]][license-url]
 [![Contributors][contributors-shield]][contributors-url]
+[![MIT License][license-shield]][license-url]
 [![contributions welcome][contributions-shield]][contributions-url]
 [![Ask Me Anything!][ask-shield]][ask-url]
 
