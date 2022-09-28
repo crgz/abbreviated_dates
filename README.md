@@ -9,7 +9,7 @@
 
 <img src=".github/flags-jakearchibald.github.io-scour.svg?raw=true" width="50%" align="right" style="border:20px solid white">
 
-# Abbreviated Date Parser Library
+# Abbreviated Date Parser
 
 The Abbreviated Date Parser Library contains a predicate that parses abbreviated incomplete dates in multiple languages.
 
@@ -33,11 +33,7 @@ The Abbreviated Date Parser Library contains a predicate that parses abbreviated
   </ol>
 </details>
 
-```prolog 
-parse(Context, Expression, Dates, Trace).
-```
-
-## Installation
+## Getting Started
 
 This pack is available from the [add-on registry of SWI-Prolog](http://www.swi-prolog.org/pack/list).
 
@@ -49,57 +45,41 @@ It can be installed with `pack_install/1`:
 
 Then, you can use it by simply calling `use_module(library(abbreviated_dates))`.
 
-## Provided Predicates
+```prolog 
+parse(Context, Expression, Dates, Trace).
+```
+
+### Prerequisites
+
+For maintenance tasks [bumpversion](https://github.com/peritus/bumpversion) and [hub](https://github.com/github/hub)
+might be required.
+
+### Installation
+
+## Usage
 
 ```prolog
 parse/4.  % parse an abbreviated incomplete date in multiple languages (today, tomorrow, etc).
 ```
-
 For further details have a look at the [implementation](prolog/abbreviated_dates.pl). In addition, the
 [new](prolog/abbreviated_dates.plt) might give an impression on how to use this library.
-
-## Requirements
-
-Only for development purposes the [`date_time` pack](http://www.swi-prolog.org/pack/list?p=date_time) is needed:
-
-```prolog
-?- pack_install(date_time).
-```
-For maintenance tasks [bumpversion](https://github.com/peritus/bumpversion) and [hub](https://github.com/github/hub)
-might be required.
-
-### Run Tests
 
 The tests can be run using the following command:
 
 ```shell
 make test
 ```
-
-### Define new Tests
+Define new Tests
 
 New tests should be defined in the [test](prolog/abbreviated_dates.plt) file.
 
-## Review
+Review: 
 https://eu.swi-prolog.org/pack/review?p=abbreviated_dates
 
-## Getting Started
-
-### Prerequisites
-
-### Installation
-
-## Usage
-
 ## Roadmap
-
-- [x] Add Changelog
+- [x] Multi-language Support
 - [x] Add back to top links
-- [ ] Add Additional Templates w/ Examples
-- [ ] Add "components" document to easily copy & paste sections of the readme
-- [ ] Multi-language Support
-    - [ ] Chinese
-    - [ ] Spanish
+- [ ] 
 
 See the [open issues](https://github.com///issues) for a full list of proposed features (and known issues).
 
@@ -107,10 +87,11 @@ See the [open issues](https://github.com///issues) for a full list of proposed f
 
 ## Contributing
 
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions
+you make are **greatly appreciated**.
 
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
-Don't forget to give the project a star! Thanks again!
+If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply
+open an issue with the tag "enhancement". Don't forget to give the project a star! Thanks again!
 
 1. Fork the Project
 2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
