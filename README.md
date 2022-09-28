@@ -127,6 +127,6 @@ Distributed under the MIT License. See `LICENSE` file for more information.
 [issues-shield]: https://img.shields.io/github/issues/crgz/abbreviated_dates.svg
 [issues-url]: https://github.com/crgz/abbreviated_dates/issues
 [license-shield]: https://img.shields.io/github/license/crgz/abbreviated_dates.svg
-[license-url]: https://github.com/crgz/abbreviated_dates/blob/master/LICENSE.txt
+[license-url]: https://github.com/crgz/abbreviated_dates/blob/main/LICENSE
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/crgz
