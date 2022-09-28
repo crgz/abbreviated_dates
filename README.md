@@ -2,6 +2,7 @@
 <a name="readme-top"></a>
 
 <!-- PROJECT SHIELDS -->
+[![Submit][submit-shield]][submit-url]
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
@@ -9,7 +10,6 @@
 [![MIT License][license-shield]][license-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
 
-[![Submit](https://github.com/crgz/abbreviated_dates/actions/workflows/submit.yml/badge.svg)](https://github.com/crgz/abbreviated_dates/actions/workflows/submit.yml)
 
 <img src=".github/flags-jakearchibald.github.io-scour.svg?raw=true" width="50%" align="right" style="border:20px solid white">
 
@@ -164,6 +164,8 @@ Project Link: [https://github.com/your_username/repo_name](https://github.com/yo
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+[submit-shield]: https://github.com/crgz/abbreviated_dates/actions/workflows/submit.yml/badge.svg
+[submit-url]: https://github.com/crgz/abbreviated_dates/actions/workflows/submit.yml
 [contributors-shield]: https://img.shields.io/github/contributors/crgz/abbreviated_dates.svg
 [contributors-url]: https://github.com/crgz/abbreviated_dates/graphs/contributors
 [forks-shield]: https://img.shields.io/github/forks/crgz/abbreviated_dates.svg
