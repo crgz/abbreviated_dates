@@ -41,6 +41,7 @@ wait:
 	while : ; do \
 		REMOTE_URL='https://api.github.com/repos/crgz/$(NAME)/releases/tags/'$$VERSION ;\
 		REMOTE_VERSION=$$(curl --silent $$REMOTE_URL | jq -r .tag_name) ;\
+		echo $$VERSION == $$REMOTE_VERSION ;\
 		if [ $$VERSION == $$REMOTE_VERSION ]; then printf '\n' && break; fi ;\
 		printf '.' && sleep 1 ;\
 	done
