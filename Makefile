@@ -37,7 +37,7 @@ install: dependencies wait
 	swipl -qg "pack_remove($(NAME)),pack_install('$$REMOTE',[interactive(false)]),halt(0)" -t 'halt(1)'
 
 wait:
-	VERSION=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt') ;\
+	@VERSION=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt') ;\
 	while : ; do \
 		REMOTE_URL='https://api.github.com/repos/crgz/$(NAME)/releases/tags/'$$VERSION ;\
 		REMOTE_VERSION=$$(curl --silent $$REMOTE_URL | jq -r .tag_name) ;\
