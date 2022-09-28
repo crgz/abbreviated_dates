@@ -1,6 +1,6 @@
 name(abbreviated_dates).
 title('Parses abbreviated and ambiguous dates in multiple languages').
-version('0.0.233').
+version('0.0.234').
 
 author('Conrado M. Rodriguez','conrado.rgz@gmail.com').
 maintainer('Conrado M. Rodriguez','conrado.rgz@gmail.com').
