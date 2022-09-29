@@ -9,29 +9,28 @@
 [![contributions welcome][contributions-shield]][contributions-url]
 [![Ask Me Anything!][ask-shield]][ask-url]
 
-<img src=".github/flags-jakearchibald.github.io-scour.svg?raw=true" width="50%" align="right" style="border:20px solid white">
+<img src=".github/flags-jakearchibald.github.io-scour.svg?raw=true" width="40%" align="right" style="border:20px solid white">
 
 # Abbreviated Date Parser
 
 The Abbreviated Date Parser Library contains a predicate that parses abbreviated incomplete dates in multiple languages.
 
-<!-- TABLE OF CONTENTS -->
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-  </ol>
-</details>
+## Getting Started
+Imagine you want to understand the date: "11-09, št". We can infer that "št" is an abbreviation of:
+
+- Šeštadienis which means in Saturday in Lithuanian
+- Štvrtok which means in Thursday in Slovak
+
+But Lithuanian is spoken not only in Lithuania but also in Latvia and Slovak is spoken not only in Slovakia but also by a minority in Czech Republic. These countries use different date representations: Czech Republic, Latvia and Slovakia have the day written first because of the "little" date endianness format used as the standard in the country. Lithuania, on the other hand, uses the "big" date endiannes format which means that the month is written first.
+
+The system factor in all this facts and is able to come with the right answers:
+
+In the case of interpreting the abbreviation as s Saturday:
+-  9 of November 2024
+- 11 of September 2027
+
+In the case of interpreting the abbreviation as a Thursday:
+- 11 of September 2025
 
 ## Getting Started
 
