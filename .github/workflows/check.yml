@@ -2,14 +2,13 @@ name: Check
 
 on:
   pull_request:
-    branches: [ "main" ]
+    branches: [ main ]
 
 jobs:
-  Check:
+  build:
+    name: Unit Test
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v3
-      
-    - name: Run check
-      run: make test
+      - uses: actions/checkout@v3
+      - name: Run check
+        run: make test
