@@ -5,15 +5,15 @@ test_abbreviated_dates :- run_tests.
 
 solutions(Context, Case, Dates, Languages, Formats):-
   atom_codes(Case, Codes),
-  setof(Date, L^F^result(Context, Codes, Date, L, F), Dates),
+  setof(Date, L^F^C^result(Context, Codes, Date, L, F, C), Dates),
   Context = [Start|_],
   findall(Date, (member(Date, Dates),date_time:date_compare(Date, <, Start)),PastDates),
   assertion(PastDates == []),
-  setof(Language, D^F^result(Context, Codes, D, Language, F), Languages),
-  setof(Format, D^L^result(Context, Codes, D, L, Format), Formats).
+  setof(Language, D^F^C^result(Context, Codes, D, Language, F, C), Languages),
+  setof(Format, D^L^C^result(Context, Codes, D, L, Format, C), Formats).
 
-result(Context, Case, Dates, Languages, Formats):-
-  phrase(abbreviated_dates:single_day(Context, Dates, Languages, Formats), Case).
+result(Context, Case, Dates, Languages, Formats, Country):-
+  phrase(abbreviated_dates:single_day(Context, Dates, Languages, Formats, Country), Case).
 
 
 :- begin_tests(abbreviated_dates).
