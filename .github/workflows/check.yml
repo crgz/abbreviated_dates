@@ -1,12 +1,9 @@
 name: Check
-
 on:
   pull_request:
     branches: [ main ]
-
 jobs:
-  build:
-    name: Unit Test
+  check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
