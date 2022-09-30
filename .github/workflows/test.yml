@@ -1,12 +1,13 @@
-name: Test
 on:
+  push:
+    branches: [main]
   pull_request:
     branches: [main]
 jobs:
-  Test:
+  check:
     runs-on: ubuntu-latest
     steps:
       - name: checkout repo
         uses: actions/checkout@v2
-      - name: Test
+      - name: check
         run: make test
