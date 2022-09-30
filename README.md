@@ -18,6 +18,21 @@ The Abbreviated Date Parser Library contains a predicate that parses abbreviated
 ## Getting Started
 Imagine you want to understand the date: "11-09, št". We can infer that "št" is an abbreviation of:
 
+```prolog
+findall([F,L,C],(parse(date(2022,09,9),'11-09, št',[D],_,L,C),format_time(string(F),"%A, %d %b %Y",D)),Y),cli_table(Y,[head(['Date','Language','Country'])]).
+```
+```
+╔═══════════════════════╤════════════╤════════════════╗
+║         Date          │  Language  │    Country     ║
+╟───────────────────────┼────────────┼────────────────╢
+║ Saturday, 09 Nov 2024 │ Lithuanian │   Lithuania    ║
+║ Saturday, 11 Sep 2027 │ Lithuanian │     Latvia     ║
+║ Thursday, 11 Sep 2025 │   Slovak   │ Czech Republic ║
+║ Thursday, 11 Sep 2025 │   Slovak   │    Slovakia    ║
+║ Thursday, 11 Sep 2025 │   Slovak   │ Czech Republic ║
+║ Thursday, 11 Sep 2025 │   Slovak   │    Slovakia    ║
+╚═══════════════════════╧════════════╧════════════════╝
+```
 - Šeštadienis which means in Saturday in Lithuanian
 - Štvrtok which means in Thursday in Slovak
 
