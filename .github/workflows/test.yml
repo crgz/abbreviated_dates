@@ -2,7 +2,8 @@ name: Check
 on:
   pull_request:
     branches: ['**', '!main']
-
+    paths:
+      - '**.pl'
 jobs:
   check:
     runs-on: ubuntu-latest
