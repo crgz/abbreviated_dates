@@ -2,8 +2,6 @@ name: Submit
 on:
   push:
     branches: [main]
-  pull_request:
-    branches: [main]
 jobs:
   Submit:
     runs-on: ubuntu-latest
