@@ -1,8 +1,13 @@
 name: Check
 on:
   pull_request:
-    branches: '**'
-
+    branches:
+      - '*'         # matches every branch that doesn't contain a '/'
+      - '*/*'       # matches every branch containing a single '/'
+      - '**'        # matches every branch
+      - '!main'     # excludes main
+    paths:
+      - '**.pl'
 jobs:
   check:
     runs-on: ubuntu-latest
