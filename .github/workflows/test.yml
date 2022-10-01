@@ -1,7 +1,8 @@
 name: Check
 on:
   pull_request:
-    branches: [main]
+    branches: '**'
+
 jobs:
   check:
     runs-on: ubuntu-latest
