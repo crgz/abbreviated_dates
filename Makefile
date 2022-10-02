@@ -25,12 +25,12 @@ submit: test release install
 test: dependencies
 	@swipl -g 'load_test_files([]),run_tests,halt' prolog/$(NAME).pl
 
-release: dependencies scm
+release: $(PACKAGE_PATH)/swipl scm
 	@git pull --quiet --no-edit origin main
-	@git diff --quiet || (echo 'Exiting operation on dirty repo' && exit )
-	@VERSION=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt') ;\
-	git checkout -b release-$$VERSION;\
+	git diff --quiet || (echo 'Exiting operation on dirty repo' && exit ) ;\
+	git checkout release ;\
 	bumpversion patch && git push --quiet ;\
+  VERSION=$$(awk -F\' '/version/{print "v"$2}' pack.pl) ;\
   hub release create -m $$VERSION $$VERSION
 
 install: dependencies
@@ -44,7 +44,8 @@ install: dependencies
 	REMOTE=https://github.com/crgz/$(NAME)/archive/$$VERSION.zip ;\
 	swipl -qg "pack_remove($(NAME)),pack_install('$$REMOTE',[interactive(false)]),halt(0)" -t 'halt(1)'
 
-dependencies: repositories packages requirements
+dependencies: infrastructure requirements
+infrastructure: repositories packages
 repositories: $(REPOS)
 packages: $(PACKAGE_PATH)/swipl $(PACKAGE_PATH)/bumpversion $(PACKAGE_PATH)/hub $(PACKAGE_PATH)/git
 requirements: $(PACK_PATH)/tap  $(PACK_PATH)/date_time
