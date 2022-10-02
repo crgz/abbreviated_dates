@@ -28,8 +28,7 @@ test: dependencies
 release: dependencies scm
 	@git pull --quiet --no-edit origin main
 	@git diff --quiet || (echo 'Exiting operation on dirty repo' && exit )
-	@VERSION=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt') ;\
-	git checkout -b release-$$VERSION;\
+	@VERSION=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt')
 	bumpversion patch && git push --quiet ;\
   hub release create -m $$VERSION $$VERSION
 
