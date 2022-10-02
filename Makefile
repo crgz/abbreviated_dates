@@ -28,7 +28,7 @@ test: dependencies
 release: dependencies scm
 	@git pull --quiet --no-edit origin main
 	@git diff --quiet || (echo 'Exiting operation on dirty repo' && exit )
-	@VERSION=$$(awk -F\' '/version/{printf "v%s", $2}' pack.pl)
+	@VERSION=$$(awk -F\' '/version/{printf "v%s",$$2}' pack.pl)
 	bumpversion patch && git push --quiet ;\
   hub release create -m $$VERSION $$VERSION
 
