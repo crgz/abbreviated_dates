@@ -25,6 +25,13 @@ submit: test release install
 test: dependencies
 	@swipl -g 'load_test_files([]),run_tests,halt' prolog/$(NAME).pl
 
+release-from-github: dependencies scm
+	@git pull --quiet --no-edit origin main
+	@git diff --quiet || (echo 'Exiting operation on dirty repo' && exit )
+	@bumpversion patch && git push --quiet
+	@VERSION=$$(awk -F\' '/version/{printf "v%s",$$2}' pack.pl) ;\
+  echo $$VERSION ;\
+
 release: dependencies scm
 	@git pull --quiet --no-edit origin main
 	@git diff --quiet || (echo 'Exiting operation on dirty repo' && exit )
