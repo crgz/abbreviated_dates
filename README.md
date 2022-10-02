@@ -21,6 +21,7 @@ Imagine you want to understand the date: "11-09, št". We can infer that "št" i
 ```prolog
 findall([F,L,C],(parse(date(2022,09,9),'11-09, št',[D],_,L,C),format_time(string(F),"%A, %d %b %Y",D)),Y),cli_table(Y,[head(['Date','Language','Country'])]).
 ```
+
 ```
 ╔═══════════════════════╤════════════╤════════════════╗
 ║         Date          │  Language  │    Country     ║
