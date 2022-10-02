@@ -31,6 +31,8 @@ release-from-github: dependencies scm
 	@bumpversion patch && git push --quiet
 	@VERSION=$$(awk -F\' '/version/{printf "v%s",$$2}' pack.pl) ;\
   echo $$VERSION ;\
+  git checkout -b release-$$VERSION ;\
+
 
 release: dependencies scm
 	@git pull --quiet --no-edit origin main
