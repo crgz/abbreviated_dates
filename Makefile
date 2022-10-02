@@ -31,7 +31,7 @@ release: $(PACKAGE_PATH)/swipl scm
 	git checkout release ;\
 	git push --set-upstream origin release ;\
 	bumpversion patch && git push --quiet ;\
-  VERSION=$$(awk -F\' '/version/{printf "v%s",$2}' pack.pl) ;\
+  VERSION=$$(awk -F\' '/version/{printf "v%s",$$2}' pack.pl) ;\
   echo $$VERSION ;\
   hub release create -m $$VERSION $$VERSION
 
