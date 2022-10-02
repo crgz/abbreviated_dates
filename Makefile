@@ -28,10 +28,8 @@ test: dependencies
 release: dependencies scm
 	@git pull --quiet --no-edit origin main
 	@git diff --quiet || (echo 'Exiting operation on dirty repo' && exit )
-	@VERSION=$$(awk -F\' '/version/{printf "v%s",$$2}' pack.pl) ;\
-  echo $$VERSION ;\
-	bumpversion patch && git push --quiet ;\
-  hub release create -m $$VERSION $$VERSION
+	@bumpversion patch && git push --quiet
+	@VERSION=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt') && hub release create -m $$VERSION $$VERSION
 
 install: dependencies
 	@LOCAL_VERSION=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt') ;\
