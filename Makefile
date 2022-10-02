@@ -29,7 +29,8 @@ release-from-github: dependencies scm
 	@git pull --quiet --no-edit origin main
 	@git diff --quiet || (echo 'Exiting operation on dirty repo' && exit )
 	git checkout -b release ;\
-  bumpversion patch && git push --quiet ;\
+	git push --set-upstream origin release ;\
+	bumpversion patch && git push --quiet ;\
 	@VERSION=$$(awk -F\' '/version/{printf "v%s",$$2}' pack.pl) ;\
 	echo $$VERSION ;\
 	hub pull-request -m "release"
