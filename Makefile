@@ -29,6 +29,7 @@ release: $(PACKAGE_PATH)/swipl scm
 	@git pull --quiet --no-edit origin main
 	git diff --quiet || (echo 'Exiting operation on dirty repo' && exit ) ;\
 	git checkout release ;\
+	git push --set-upstream origin release ;\
 	bumpversion patch && git push --quiet ;\
   VERSION=$$(awk -F\' '/version/{print "v"$2}' pack.pl) ;\
   hub release create -m $$VERSION $$VERSION
