@@ -32,6 +32,7 @@ release: $(PACKAGE_PATH)/swipl scm
 	git push --set-upstream origin release ;\
 	bumpversion patch && git push --quiet ;\
   VERSION=$$(awk -F\' '/version/{print "v"$2}' pack.pl) ;\
+  echo $$VERSION ;\
   hub release create -m $$VERSION $$VERSION
 
 install: dependencies
