@@ -29,6 +29,7 @@ release-from-github: dependencies scm
 	@git pull --quiet --no-edit origin main
 	@git diff --quiet || (echo 'Exiting operation on dirty repo' && exit )
 	git branch -r --merged | grep origin | grep -v -e main | sed s/origin\\/// |  xargs -I{} git push origin --delete {} || true
+	git branch -D release || true
 	git checkout -b release
 	git push --set-upstream origin release
 	bumpversion patch && git push --quiet
