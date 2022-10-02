@@ -15,4 +15,4 @@ jobs:
     - name: Submit
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: make submit
+      run: make release

@@ -28,8 +28,10 @@ test: dependencies
 release: dependencies scm
 	@git pull --quiet --no-edit origin main
 	@git diff --quiet || (echo 'Exiting operation on dirty repo' && exit )
-	@bumpversion patch && git push --quiet
-	@VERSION=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt') && hub release create -m $$VERSION $$VERSION
+	@VERSION=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt') ;\
+	git checkout -b release-$$VERSION;\
+	bumpversion patch && git push --quiet ;\
+  hub release create -m $$VERSION $$VERSION
 
 install: dependencies
 	@LOCAL_VERSION=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt') ;\
