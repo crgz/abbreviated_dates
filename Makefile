@@ -30,7 +30,7 @@ release-from-github: dependencies scm
 	@git diff --quiet || (echo 'Exiting operation on dirty repo' && exit )
 	git branch -r --merged | grep origin | grep -v -e main | sed s/origin\\/// |  xargs -I{} git push origin --delete {} || true
 	git branch -D release || true
-	NEW_VERSION=$$(bumpversion patch --verbose --dry-run 2>&1|awk -F\' '/New\ version/{printf "v%s",$2}') ;\
+	NEW_VERSION=$$(bumpversion patch --verbose --dry-run 2>&1|awk -F\' '/New\ version/{printf "v%s",$$2}') ;\
 	git checkout -b release-$$NEW_VERSION ;\
 	git push --set-upstream origin release-$$NEW_VERSION
 	bumpversion patch && git push --quiet
