@@ -175,7 +175,7 @@ single_day([Context|_], Date, Language, Syntax, _) -->
 month_day(Day) --> integer(Day), {between(1, 31, Day)}.
 date_number(N) --> integer(N).
 date_number(N) --> integer(N), ".".
-separator --> "-"|"."|" ".
+separator --> "-"|"."|"/"|" ".
 b --> white.
 
 %-----------------------------------------------------------
