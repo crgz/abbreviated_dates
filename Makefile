@@ -36,7 +36,7 @@ release-from-github: dependencies scm
 	bumpversion patch && git push --quiet
 	VERSION=$$(awk -F\' '/version/{printf "v%s",$$2}' pack.pl) ;\
 	echo $$VERSION ;\
-	hub pull-request -m "release"
+	hub pull-request -m $$VERSION
 
 release: dependencies scm
 	@git pull --quiet --no-edit origin main
