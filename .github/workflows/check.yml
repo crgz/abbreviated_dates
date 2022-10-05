@@ -1,12 +1,13 @@
 name: Check
 on:
-  pull_request:
+  pull_request_target:
     branches:
       - main
     paths:
       - '**.pl'
 jobs:
   check:
+    if: "! startsWith(github.head_ref, 'release')"
     runs-on: ubuntu-latest
     steps:
       - name: checkout repo
