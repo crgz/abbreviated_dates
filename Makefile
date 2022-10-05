@@ -26,7 +26,7 @@ test: dependencies
 	@swipl -g 'load_test_files([]),run_tests,halt' prolog/$(NAME).pl
 
 release-from-github: $(PACKAGE_PATH)/bumpversion scm
-	git checkout -b release
+	git checkout release
 	git push --set-upstream origin release
 	bumpversion patch
 	git push
