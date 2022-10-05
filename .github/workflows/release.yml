@@ -18,9 +18,6 @@ jobs:
         make /usr/bin/bumpversion
         git config --local user.name github-actions
         git config --local user.email github-actions@github.com
-        git branch -D release || true
-        git checkout -b release
-        git push --set-upstream origin release
         bumpversion patch
         git push
 
