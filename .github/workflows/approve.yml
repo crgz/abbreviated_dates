@@ -7,10 +7,9 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
-
+  approve:
     runs-on: ubuntu-latest
-
+    if: "startsWith(github.head_ref, 'release')"
     steps:
     - uses: actions/checkout@v3
     

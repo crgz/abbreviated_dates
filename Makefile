@@ -25,18 +25,14 @@ submit: test release install
 test: dependencies
 	@swipl -g 'load_test_files([]),run_tests,halt' prolog/$(NAME).pl
 
-release-from-github: dependencies scm
+release-from-github:
 	@git pull --quiet --no-edit origin main
 	@git diff --quiet || (echo 'Exiting operation on dirty repo' && exit )
-	git branch -r --merged | grep origin | grep -v -e main | sed s/origin\\/// |  xargs -I{} git push origin --delete {} || true
-	git branch -D release || true
-	NEW_VERSION=$$(bumpversion patch --verbose --dry-run 2>&1|awk -F\' '/New\ version/{printf "v%s",$$2}') ;\
-	git checkout -b release-$$NEW_VERSION ;\
-	git push --set-upstream origin release-$$NEW_VERSION
 	bumpversion patch && git push --quiet
 	VERSION=$$(awk -F\' '/version/{printf "v%s",$$2}' pack.pl) ;\
 	echo $$VERSION ;\
-	hub pull-request -m $$VERSION
+	hub release create -m $$VERSION $$VERSION ;\
+	git push
 
 release: dependencies scm
 	@git pull --quiet --no-edit origin main
