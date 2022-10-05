@@ -25,11 +25,26 @@ submit: test release install
 test: dependencies
 	@swipl -g 'load_test_files([]),run_tests,halt' prolog/$(NAME).pl
 
+release-from-github:
+	@git pull --quiet --no-edit origin main
+	@git diff --quiet || (echo 'Exiting operation on dirty repo' && exit )
+	git branch -r --merged | grep origin | grep -v -e main | sed s/origin\\/// |  xargs -I{} git push origin --delete {} || true
+	git branch -D release || true
+	NEW_VERSION=$$(bumpversion patch --verbose --dry-run 2>&1|awk -F\' '/New\ version/{printf "v%s",$$2}') ;\
+	git checkout -b release-$$NEW_VERSION ;\
+	git push --set-upstream origin release-$$NEW_VERSION
+	bumpversion patch && git push --quiet
+	VERSION=$$(awk -F\' '/version/{printf "v%s",$$2}' pack.pl) ;\
+	echo $$VERSION ;\
+	hub pull-request -m $$VERSION
+	curl -XPUT -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/crgz//pulls/$argv[1]/merge
+
 release: dependencies scm
 	@git pull --quiet --no-edit origin main
 	@git diff --quiet || (echo 'Exiting operation on dirty repo' && exit )
 	@bumpversion patch && git push --quiet
-	@VERSION=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt') && hub release create -m $$VERSION $$VERSION
+	@VERSION=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt') ;\
+	hub release create -m $$VERSION $$VERSION
 
 install: dependencies
 	@LOCAL_VERSION=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt') ;\
