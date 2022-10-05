@@ -25,7 +25,7 @@ submit: test release install
 test: dependencies
 	@swipl -g 'load_test_files([]),run_tests,halt' prolog/$(NAME).pl
 
-release-from-github:
+release-from-github:  dependencies scm
 	@git pull --quiet --no-edit origin main
 	@git diff --quiet || (echo 'Exiting operation on dirty repo' && exit )
 	git branch -r --merged | grep origin | grep -v -e main | sed s/origin\\/// |  xargs -I{} git push origin --delete {} || true
