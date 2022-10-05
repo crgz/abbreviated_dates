@@ -30,7 +30,6 @@ release-from-github:
 	@git diff --quiet || (echo 'Exiting operation on dirty repo' && exit )
 	bumpversion patch && git push --quiet
 	VERSION=$$(awk -F\' '/version/{printf "v%s",$$2}' pack.pl) ;\
-	echo $$VERSION ;\
 	hub release create -m $$VERSION $$VERSION ;\
 	git push
 
