@@ -6,7 +6,6 @@ on:
 
 jobs:
   check:
-    if: "! startsWith(github.head_ref, 'release')"
     runs-on: ubuntu-latest
     steps:
       - name: checkout repo
