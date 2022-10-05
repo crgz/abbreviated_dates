@@ -2,13 +2,17 @@ name: Submit
 on:
   push:
     branches: [main]
+
 jobs:
-  Submit:
+  if_merged:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
-      - name: checkout repo
-        uses: actions/checkout@v2
-      - name: Submit
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: make submit
+    - run: |
+        echo The PR was merged
+    - name: checkout repo
+      uses: actions/checkout@v2
+    - name: Submit
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: make release

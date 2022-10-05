@@ -70,6 +70,12 @@ test('Capitalized explicitly abbreviated weekday name, comma, Dash Separated Zer
   assertion(Languages == ['English','Vietnamese']),
   assertion(Formats == ['%a., %m %d']).
 
+test('Capitalized implicitly abbreviated weekday name, comma, Slash Separated Zero prefixed Numbers'):-
+  solutions([date(2022, 2, 28)], 'Thu, 06/10', Dates, Languages, Formats),
+  assertion(Dates == [date(2022,10,6),date(2027,6,10)]),
+  assertion(Languages == ['English']),
+  assertion(Formats == ['%a %d %m', '%a %m %d']).
+
 test('Capitalized explicitly abbreviated weekday name, comma, Dot suffixed Numbers'):-
   solutions([date(2022, 2, 28)], 'Th., 16.06.', Dates, Languages, Formats),
   assertion(Dates == [date(2022,6,16),date(2023,6,16),date(2025,6,16),date(2026,6,16),date(2027,6,16),date(2028,6,16)]),

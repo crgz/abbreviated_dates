@@ -39,11 +39,11 @@ parse(Context, Expression, Dates, Syntax, Language, Country) :-
 %-----------------------------------------------------------
 % Grammar
 %
-multiple_days(_, [], _, []) --> [].
+multiple_days(_, [], _, [], _) --> [].
 multiple_days([LastKnownDate|Other], [SingleDay|MultipleDays], Language, [S1|S2], Country) -->
   single_day([LastKnownDate|Other], SingleDay, Language, S1, Country),
   (" - " | eos),
-  multiple_days([SingleDay, LastKnownDate|Other], MultipleDays, Language, S2).
+  multiple_days([SingleDay, LastKnownDate|Other], MultipleDays, Language, S2, Country).
 
 % DATES HINTING WEEKDAY NAME, DAY NUMBER AND MONTH NAME
 
@@ -175,7 +175,7 @@ single_day([Context|_], Date, Language, Syntax, _) -->
 month_day(Day) --> integer(Day), {between(1, 31, Day)}.
 date_number(N) --> integer(N).
 date_number(N) --> integer(N), ".".
-separator --> "-"|"."|" ".
+separator --> "-"|"."|"/"|" ".
 b --> white.
 
 %-----------------------------------------------------------
