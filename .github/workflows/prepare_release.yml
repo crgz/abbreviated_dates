@@ -1,11 +1,12 @@
-name: Release
+name: Prepare New Release Pull Request
 
 on:
   pull_request:
     types: [ closed ]
 
 jobs:
-  Release:
+  bump_version:
+    name: Prepare New Release Pull Request
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
