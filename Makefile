@@ -3,7 +3,7 @@
 # having a Makefile included and seeing all the weird results when make all was run in a location where it was not
 # expected. https://rlaanemets.com/post/show/prolog-pack-development-experience
 
-.PHONY: all about submit test release install dependencies repositories packages requirements scm remove-all
+.PHONY: all about submit test release install dependencies repositories packages requirements committer remove-all
 SHELL = /bin/bash
 .SHELLFLAGS = -o pipefail -c
 
@@ -25,7 +25,7 @@ submit: test release install
 test: dependencies
 	@swipl -g 'load_test_files([]),run_tests,halt' prolog/$(NAME).pl
 
-release-from-github: $(PACKAGE_PATH)/bumpversion scm
+release-from-github: $(PACKAGE_PATH)/bumpversion committer
 	git checkout release
 	git push --set-upstream origin release
 	bumpversion patch
@@ -33,7 +33,7 @@ release-from-github: $(PACKAGE_PATH)/bumpversion scm
 	hub pull-request -m "Release"
 	curl -XPUT -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/crgz/abbreviated_dates/pulls/22/merge
 
-release: dependencies scm
+release: dependencies committer
 	@git pull --quiet --no-edit origin main
 	@git diff --quiet || (echo 'Exiting operation on dirty repo' && exit )
 	@bumpversion patch && git push --quiet
@@ -56,7 +56,7 @@ repositories: $(REPOS)
 packages: $(PACKAGE_PATH)/swipl $(PACKAGE_PATH)/bumpversion $(PACKAGE_PATH)/hub $(PACKAGE_PATH)/git
 requirements: $(PACK_PATH)/tap  $(PACK_PATH)/date_time
 
-scm:
+committer:
 	@git config --global user.email "conrado.rgz@gmail.com" && git config --global user.name "Conrado Rodriguez"
 
 remove-all:
