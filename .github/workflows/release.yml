@@ -9,10 +9,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: bumpversion
+      - name: bump version
         run: |
-          make /usr/bin/bumpversion committer
-          bumpversion --allow-dirty --no-commit --no-tag --list patch
+          make bump
       - name: Create Pull Request
         id: cpr
         uses: peter-evans/create-pull-request@v4
@@ -34,3 +33,4 @@ jobs:
           git checkout main
           git merge release
           git push -u origin main
+          make release-from-github

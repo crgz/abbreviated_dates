@@ -25,13 +25,12 @@ submit: test release install
 test: dependencies
 	@swipl -g 'load_test_files([]),run_tests,halt' prolog/$(NAME).pl
 
-release-from-github: $(PACKAGE_PATH)/bumpversion committer
-	git checkout release
-	git push --set-upstream origin release
-	bumpversion patch
-	git push
-	hub pull-request -m "Release"
-	curl -XPUT -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/crgz/abbreviated_dates/pulls/22/merge
+bump: $(PACKAGE_PATH)/bumpversion
+	bumpversion --allow-dirty --no-commit --no-tag --list patch
+
+release-from-github: $(PACKAGE_PATH)/bumpversion $(PACKAGE_PATH)/hub committer
+	VERSION=$$(bumpversion --dry-run --list patch 2>&1|awk -F= '/new_version/{printf "v%s",$2}') ;\
+	hub release create -m $$VERSION $$VERSION
 
 release: dependencies committer
 	@git pull --quiet --no-edit origin main
