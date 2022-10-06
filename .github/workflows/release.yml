@@ -19,6 +19,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: release
           delete-branch: true
+          title: release
       - name: Check outputs
         if: ${{ steps.cpr.outputs.pull-request-number }}
         run: |
