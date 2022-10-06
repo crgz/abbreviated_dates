@@ -10,8 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: bump version
-        run: |
-          make bump
+        run: make bump
       - name: Create Pull Request
         id: cpr
         uses: peter-evans/create-pull-request@v4
@@ -26,11 +25,10 @@ jobs:
           echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
       - name: Merge
         run: |
-          echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
-          echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
-          git branch
-          git status
           git checkout main
           git merge release
           git push -u origin main
-          make release-from-github
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          run: make release-from-github
