@@ -7,7 +7,7 @@ on:
 jobs:
   bump_version:
     name: Prepare New Release Pull Request
-    if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true and ! startsWith(github.head_ref, 'release')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
