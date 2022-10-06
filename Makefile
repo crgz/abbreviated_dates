@@ -40,7 +40,7 @@ release: dependencies committer
 	@VERSION=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt') ;\
 	hub release create -m $$VERSION $$VERSION
 
-install: dependencies
+install: $(PPA_PATH)/swi-prolog-ubuntu-stable-bionic.list $(PACKAGE_PATH)/swipl $(PACKAGE_PATH)/git requirements
 	LOCAL_VERSION=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt') ;\
 	while : ; do \
 		REMOTE_VERSION=$$(curl --silent 'https://api.github.com/repos/crgz/$(NAME)/releases/latest' | jq -r .tag_name) ;\
