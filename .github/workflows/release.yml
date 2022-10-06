@@ -20,6 +20,7 @@ jobs:
           branch: release
           delete-branch: true
           title: release
+          body: Update changelog to reflect release changes
       - name: Check outputs
         if: ${{ steps.cpr.outputs.pull-request-number }}
         run: |
