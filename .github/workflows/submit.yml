@@ -1,7 +1,8 @@
 name: Submit
 on:
-  release:
-    types: [created, published, released]
+  push:
+    tags:
+      - 'v*'
 jobs:
   if_merged:
     runs-on: ubuntu-latest
