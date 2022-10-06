@@ -10,7 +10,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: bump version
-        run: make bump
+        run: |
+          make bump
       - name: Create Pull Request
         id: cpr
         uses: peter-evans/create-pull-request@v4
@@ -31,4 +32,4 @@ jobs:
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          run: make release-from-github
+        run: make release-from-github
