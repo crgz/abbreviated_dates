@@ -22,7 +22,7 @@ about:
 
 submit: test release install
 
-test: dependencies
+test: prolog
 	@swipl -g 'load_test_files([]),run_tests,halt' prolog/$(NAME).pl
 
 bump: $(PACKAGE_PATH)/bumpversion
@@ -40,7 +40,7 @@ release: dependencies committer
 	@VERSION=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt') ;\
 	hub release create -m $$VERSION $$VERSION
 
-install: dependencies
+install: prolog
 	LOCAL_VERSION=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt') ;\
 	while : ; do \
 		REMOTE_VERSION=$$(curl --silent 'https://api.github.com/repos/crgz/$(NAME)/releases/latest' | jq -r .tag_name) ;\
@@ -52,6 +52,7 @@ install: dependencies
 	REMOTE=https://github.com/crgz/$(NAME)/archive/$$VERSION.zip ;\
 	swipl -qg "pack_remove($(NAME)),pack_install('$$REMOTE',[interactive(false)]),halt(0)" -t 'halt(1)'
 
+prolog: $(PPA_PATH)/swi-prolog-ubuntu-stable-bionic.list $(PACKAGE_PATH)/swipl $(PACKAGE_PATH)/git requirements
 dependencies: repositories packages requirements
 repositories: $(REPOS)
 packages: $(PACKAGE_PATH)/swipl $(PACKAGE_PATH)/bumpversion $(PACKAGE_PATH)/hub $(PACKAGE_PATH)/git
