@@ -28,7 +28,7 @@ test: prolog
 bump: $(PACKAGE_PATH)/bumpversion
 	bumpversion --allow-dirty --no-commit --no-tag --list patch
 
-release-from-github: $(PACKAGE_PATH)/bumpversion $(PACKAGE_PATH)/hub
+release-from-github: $(PACKAGE_PATH)/hub
 	VERSION=$$(awk -F=' ' '/current_version/{printf "v%s",$$2}' .bumpversion.cfg) ;\
 	echo $$VERSION ;\
 	hub release create -m $$VERSION $$VERSION
