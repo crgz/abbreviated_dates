@@ -4,7 +4,8 @@ on:
     tags:
       - 'v*'
 jobs:
-  if_merged:
+  submit:
+    name: Submit package to Supply Chain
     runs-on: ubuntu-latest
     steps:
     - name: checkout repo
