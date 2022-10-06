@@ -28,8 +28,9 @@ test: dependencies
 bump: $(PACKAGE_PATH)/bumpversion
 	bumpversion --allow-dirty --no-commit --no-tag --list patch
 
-release-from-github: $(PACKAGE_PATH)/bumpversion $(PACKAGE_PATH)/hub committer
-	VERSION=$$(bumpversion --dry-run --list patch 2>&1|awk -F= '/new_version/{printf "v%s",$2}') ;\
+release-from-github: $(PACKAGE_PATH)/bumpversion $(PACKAGE_PATH)/hub
+	VERSION=$$(bumpversion --dry-run --list patch 2>&1|awk -F= '/new_version/{printf "v%s",$$2}') ;\
+	echo $$VERSION ;\
 	hub release create -m $$VERSION $$VERSION
 
 release: dependencies committer
