@@ -25,12 +25,3 @@ jobs:
         run: |
           echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
           echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
-      - name: Merge
-        run: |
-          git checkout main
-          git merge release
-          git push -u origin main
-      - name: Release
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT }}
-        run: make release-from-github
