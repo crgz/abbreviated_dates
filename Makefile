@@ -42,9 +42,8 @@ release: dependencies committer
 
 install: prolog
 	LOCAL_VERSION=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt') ;\
-	while : ; do \
+	@while : ; do \
 		REMOTE_VERSION=$$(curl --silent 'https://api.github.com/repos/crgz/$(NAME)/releases/latest' | jq -r .tag_name) ;\
-		echo $$LOCAL_VERSION == $$REMOTE_VERSION ;\
 		if [ $$LOCAL_VERSION == $$REMOTE_VERSION ]; then printf '\n' && break; fi ;\
 		printf '.' && sleep 4 ;\
 	done ;\
