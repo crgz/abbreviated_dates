@@ -1,7 +1,7 @@
 name: Submit
 on:
   release:
-    types: [published]
+    types: [created, published, released]
 jobs:
   if_merged:
     runs-on: ubuntu-latest
