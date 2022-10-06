@@ -29,7 +29,7 @@ bump: $(PACKAGE_PATH)/bumpversion
 	bumpversion --allow-dirty --no-commit --no-tag --list patch
 
 release-from-github: $(PACKAGE_PATH)/bumpversion $(PACKAGE_PATH)/hub
-	VERSION=$$(bumpversion --dry-run --list patch 2>&1|awk -F= '/new_version/{printf "v%s",$$2}') ;\
+	VERSION=$$(awk -F=' ' '/current_version/{printf "v%s",$$2}' .bumpversion.cfg) ;\
 	echo $$VERSION ;\
 	hub release create -m $$VERSION $$VERSION
 
@@ -41,9 +41,10 @@ release: dependencies committer
 	hub release create -m $$VERSION $$VERSION
 
 install: dependencies
-	@LOCAL_VERSION=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt') ;\
+	LOCAL_VERSION=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt') ;\
 	while : ; do \
 		REMOTE_VERSION=$$(curl --silent 'https://api.github.com/repos/crgz/$(NAME)/releases/latest' | jq -r .tag_name) ;\
+		echo $$LOCAL_VERSION == $$REMOTE_VERSION ;\
 		if [ $$LOCAL_VERSION == $$REMOTE_VERSION ]; then printf '\n' && break; fi ;\
 		printf '.' && sleep 4 ;\
 	done ;\
