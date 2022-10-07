@@ -1,4 +1,4 @@
-name: Test
+name: Run Unit Tests against source files included in a Pull Request targeting the main branch
 on:
   pull_request:
     branches:
