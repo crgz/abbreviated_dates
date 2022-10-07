@@ -1,12 +1,13 @@
-name: Submit
+name: Create the release and ship the package to the Library Supply Chain Infrastructure
 on:
   pull_request:
     types: [ closed ]
+    branches:
+      - release
 jobs:
   submit:
     name: Submit package to Supply Chain
     runs-on: ubuntu-latest
-    if: "startsWith(github.head_ref, 'release')"
     steps:
     - name: checkout repo
       uses: actions/checkout@v3
