@@ -1,4 +1,4 @@
-name: Prepare Pull Request with bumped version targeting the release branch
+name: Prepare a Pull Request with a new version targeting the release branch
 
 on:
   pull_request:
@@ -7,21 +7,16 @@ on:
       - main
 jobs:
   bump_version:
-    name: Prepare New Release Pull Request
+    name: Prepare a Pull Request with a new version targeting the release branch
     if: github.event.pull_request.merged == true && ! startsWith(github.head_ref, 'release')
     runs-on: ubuntu-latest
     steps:
-      - name : Print Title of PR
-        run: echo The Title of your PR is ${{ github.event.pull_request.title }}
       - uses: actions/checkout@v3
-      - name: bump version
-        run: |
-          make bump
-      - name: Set env
+      - name: Increase version counter and update version dependent files
+        run: make bump
+      - name: Set the VERSION variable int he GitHub Environment
         run: echo "VERSION=$(awk -F=' ' '/current_version/{printf "v%s",$2}' .bumpversion.cfg)" >> $GITHUB_ENV
-      - name: Test
-        run: echo $VERSION
-      - name: Create Pull Request
+      - name: Create a Pull Request to merge the version version dependent files into the main branch from the release branch
         id: cpr
         uses: peter-evans/create-pull-request@v4
         with:
