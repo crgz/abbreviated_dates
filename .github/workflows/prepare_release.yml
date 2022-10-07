@@ -23,6 +23,7 @@ jobs:
         with:
           token: ${{ secrets.PAT }}
           branch: release
+          title: ${{ github.event.pull_request.title }}
           delete-branch: true
       - name: Check outputs
         if: ${{ steps.cpr.outputs.pull-request-number }}
