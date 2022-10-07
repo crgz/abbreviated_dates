@@ -7,7 +7,7 @@ on:
       - '**.pl'
 jobs:
   test:
-    runs-on: swipl
+    runs-on: ubuntu-latest
     if: "! startsWith(github.head_ref, 'release')"
     steps:
       - name: checkout repo
