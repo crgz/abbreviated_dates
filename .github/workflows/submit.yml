@@ -3,10 +3,11 @@ on:
   pull_request:
     types: [ closed ]
     branches:
-      - release
+      - main
 jobs:
   submit:
     name: Submit package to Supply Chain
+    if: github.event.pull_request.merged == true && startsWith(github.head_ref, 'release')
     runs-on: ubuntu-latest
     steps:
     - name: checkout repo
