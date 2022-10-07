@@ -31,10 +31,6 @@ test: prolog
 bump: $(PACKAGE_PATH)/bumpversion
 	bumpversion --allow-dirty --no-commit --no-tag --list patch
 
-release-from-github: $(PACKAGE_PATH)/hub
-	@VERSION=$$(awk -F=' ' '/current_version/{printf "v%s",$$2}' .bumpversion.cfg) ;\
-	hub release create -m $$VERSION $$VERSION
-
 release: dependencies committer
 	@git pull --quiet --no-edit origin main
 	@git diff --quiet || (echo 'Exiting operation on dirty repo' && exit )
