@@ -11,6 +11,8 @@ jobs:
     if: github.event.pull_request.merged == true && ! startsWith(github.head_ref, 'release')
     runs-on: ubuntu-latest
     steps:
+      - name : Print Title of PR
+        run: echo The Title of your PR is ${{ github.event.pull_request.title }}
       - uses: actions/checkout@v3
       - name: bump version
         run: |
