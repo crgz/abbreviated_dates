@@ -12,7 +12,11 @@ jobs:
     steps:
     - name: Checkout Library Repository
       uses: actions/checkout@v3
+    - name: Install GitHub Command Line Interface
+      run: make /usr/bin/hub
+    - name: Set the VERSION variable int he GitHub Environment
+      run: echo "VERSION=$(awk -F=' ' '/current_version/{printf "v%s",$2}' .bumpversion.cfg)" >> $GITHUB_ENV
     - name: Create a new release based on current version
       env:
         GITHUB_TOKEN: ${{ secrets.PAT }}
-      run: make release-from-github
+      run: hub release create -m ${{ env.VERSION }} ${{ env.VERSION }}
