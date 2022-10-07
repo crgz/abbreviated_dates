@@ -126,7 +126,7 @@ Distributed under the MIT License. See `LICENSE` file for more information.
 [release-shield]: https://github.com/crgz/abbreviated_dates/blob/main/.github/badges/release.svg
 [release-url]: https://www.swi-prolog.org/pack/list?p=abbreviated_dates
 [submit-shield]: https://github.com/crgz/abbreviated_dates/actions/workflows/04-ship.yml/badge.svg
-[submit-url]: https://github.com/crgz/abbreviated_dates/actions/workflows/04-ship.yml
+[submit-url]: https://github.com/crgz/abbreviated_dates/actions?query=is%3Asuccess
 [issues-shield]: https://img.shields.io/github/issues/crgz/abbreviated_dates.svg
 [issues-url]: https://github.com/crgz/abbreviated_dates/issues
 [forks-shield]: https://img.shields.io/github/forks/crgz/abbreviated_dates.svg
