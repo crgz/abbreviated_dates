@@ -1,4 +1,4 @@
-name: Prepare New Release Pull Request
+name: Prepare Pull Request with bumped version targeting the release branch
 
 on:
   pull_request:
