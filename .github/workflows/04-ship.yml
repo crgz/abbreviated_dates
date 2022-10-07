@@ -1,4 +1,4 @@
-name: Ship the new released package into the Library Supply Chain Infrastructure
+name: Status
 on:
   push:
     tags:
