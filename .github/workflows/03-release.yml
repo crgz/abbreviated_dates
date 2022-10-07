@@ -1,20 +1,18 @@
-name: Create the release and ship the package to the Library Supply Chain Infrastructure
+name: Create a new release based on current version
 on:
   pull_request:
     types: [ closed ]
     branches:
       - main
 jobs:
-  submit:
-    name: Submit package to Supply Chain
+  release:
+    name: Create a new release based on current version
     if: github.event.pull_request.merged == true && startsWith(github.head_ref, 'release')
     runs-on: ubuntu-latest
     steps:
-    - name: checkout repo
+    - name: Checkout Library Repository
       uses: actions/checkout@v3
-    - name: Release
+    - name: Create a new release based on current version
       env:
         GITHUB_TOKEN: ${{ secrets.PAT }}
       run: make release-from-github
-    - name: Submit
-      run: make install

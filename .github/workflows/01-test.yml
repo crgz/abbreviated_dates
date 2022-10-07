@@ -10,9 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     if: "! startsWith(github.head_ref, 'release')"
     steps:
-      - name: checkout repo
-        uses: actions/checkout@v2
-      - name: test
+      - name: Checkout Library Repository
+        uses: actions/checkout@v3
+      - name: Run Library Unit Tests
         run: make test
       - name: Staging Tests ✅
         if: ${{ success() }}
