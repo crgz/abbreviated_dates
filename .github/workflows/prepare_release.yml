@@ -3,11 +3,11 @@ name: Prepare New Release Pull Request
 on:
   pull_request:
     types: [ closed ]
-
+    branches:
+      - main
 jobs:
   bump_version:
     name: Prepare New Release Pull Request
-    if: github.event.pull_request.merged == true and ! startsWith(github.head_ref, 'release')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
