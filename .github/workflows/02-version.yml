@@ -11,7 +11,8 @@ jobs:
     if: github.event.pull_request.merged == true && ! startsWith(github.head_ref, 'release')
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout Library Repository
+        uses: actions/checkout@v3
       - name: Increase version counter and update version dependent files
         run: make bump
       - name: Set the VERSION variable int he GitHub Environment

@@ -20,6 +20,9 @@ all: about
 about:
 	@: $${VERSION:=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt')} ; echo $(NAME) $$VERSION -- $(TITLE)
 
+update:
+	@git checkout main && git pull && git branch --merged | egrep -v "(^\*|master|main|dev)" | xargs git branch -d
+
 submit: test release install
 
 test: prolog
