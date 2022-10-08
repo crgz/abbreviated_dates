@@ -10,7 +10,16 @@ jobs:
     steps:
       - name: Checkout Library Repository
         uses: actions/checkout@v3
-      - name: Run Library Unit Tests
+      - uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            prolog:
+              - 'prolog/**'
+              - 'prolog/**/*'
+        # run only if some file in 'src' folder was changed
+      - if: steps.changes.outputs.src == 'true'
+        name: Run Library Unit Tests
         run: make test
       - name: Staging Tests ✅
         if: ${{ success() }}
