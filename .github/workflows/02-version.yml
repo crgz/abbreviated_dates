@@ -23,7 +23,7 @@ jobs:
           git commit -a -m "Release: ${{ env.VERSION }} - ${{ github.event.pull_request.title }}"
           git push
 
-#      - name: Create a Pull Request to merge the version version dependent files into the main branch from the release branch
+#      - name: Create a Pull Request to merge the version dependent files into the main branch from the release branch
 #        id: cpr
 #        uses: peter-evans/create-pull-request@v4
 #        with:
