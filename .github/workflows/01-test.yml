@@ -14,7 +14,7 @@ jobs:
         id: changes
         with:
           filters: |
-            prolog:
+            src:
               - 'prolog/**'
               - 'prolog/**/*'
         # run only if some file in 'src' folder was changed
