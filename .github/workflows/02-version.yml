@@ -2,13 +2,13 @@ name: Prepare a Pull Request with a new version targeting the release branch
 
 on:
   pull_request:
-    types: [ closed ]
+    types: [ labeled ]
     branches:
       - main
 jobs:
   bump_version:
     name: Prepare a Pull Request with a new version targeting the release branch
-    if: github.event.pull_request.merged == true && ! startsWith(github.head_ref, 'release')
+    if: ${{ github.event.label.name == 'release' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Library Repository
@@ -17,16 +17,22 @@ jobs:
         run: make bump
       - name: Set the VERSION variable int he GitHub Environment
         run: echo "VERSION=$(awk -F=' ' '/current_version/{printf "v%s",$2}' .bumpversion.cfg)" >> $GITHUB_ENV
-      - name: Create a Pull Request to merge the version version dependent files into the main branch from the release branch
-        id: cpr
-        uses: peter-evans/create-pull-request@v4
-        with:
-          token: ${{ secrets.PAT }}
-          branch: release
-          title: "Release: ${{ env.VERSION }} - ${{ github.event.pull_request.title }}"
-          delete-branch: true
-      - name: Check outputs
-        if: ${{ steps.cpr.outputs.pull-request-number }}
+      - name: Set the VERSION variable int he GitHub Environment
         run: |
-          echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
-          echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
+          git add .
+          git commit -a -m "Release: ${{ env.VERSION }} - ${{ github.event.pull_request.title }}"
+          git push
+
+#      - name: Create a Pull Request to merge the version version dependent files into the main branch from the release branch
+#        id: cpr
+#        uses: peter-evans/create-pull-request@v4
+#        with:
+#          token: ${{ secrets.PAT }}
+#          branch: release
+#          title: "Release: ${{ env.VERSION }} - ${{ github.event.pull_request.title }}"
+#          delete-branch: true
+#      - name: Check outputs
+#        if: ${{ steps.cpr.outputs.pull-request-number }}
+#        run: |
+#          echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
+#          echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
