@@ -9,4 +9,3 @@ print_dates(Date):-
   cli_table(Y,[head(['Date','Language','Country'])]).
 
 print_dates('11-09, št').
-
