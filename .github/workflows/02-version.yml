@@ -1,5 +1,4 @@
 name: Prepare a Pull Request with a new version targeting the release branch
-
 on:
   pull_request:
     types: [ labeled ]
@@ -20,17 +19,3 @@ jobs:
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: "Release: ${{ env.VERSION }} - ${{ github.event.pull_request.title }}"
-
-#      - name: Create a Pull Request to merge the version dependent files into the main branch from the release branch
-#        id: cpr
-#        uses: peter-evans/create-pull-request@v4
-#        with:
-#          token: ${{ secrets.PAT }}
-#          branch: release
-#          title: "Release: ${{ env.VERSION }} - ${{ github.event.pull_request.title }}"
-#          delete-branch: true
-#      - name: Check outputs
-#        if: ${{ steps.cpr.outputs.pull-request-number }}
-#        run: |
-#          echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
-#          echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
