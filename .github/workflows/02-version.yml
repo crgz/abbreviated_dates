@@ -1,4 +1,4 @@
-name: Prepare a Pull Request with a new version targeting the release branch
+name: Bump release and Update corresponding files
 on:
   pull_request:
     types: [ labeled ]
@@ -6,7 +6,7 @@ on:
       - main
 jobs:
   bump_version:
-    name: Prepare a Pull Request with a new version targeting the release branch
+    name: Bump release and Update corresponding files
     if: ${{ github.event.label.name == 'release' }}
     runs-on: ubuntu-latest
     steps:
@@ -19,3 +19,19 @@ jobs:
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: "Release: ${{ env.VERSION }} - ${{ github.event.pull_request.title }}"
+      - name: Send success status ✅
+        if: ${{ success() }}
+        # set the merge commit status check
+        # using GitHub REST API
+        # see https://docs.github.com/en/rest/reference/repos#create-a-commit-status
+        run: |
+          curl --request POST \
+          --url https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }} \
+          --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+          --header 'content-type: application/json' \
+          --data '{
+            "context": "Staging Tests",
+            "state": "success",
+            "description": "Staging tests passed",
+            "target_url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          }'
