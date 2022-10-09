@@ -31,6 +31,12 @@ test: prolog
 bump: $(PACKAGE_PATH)/bumpversion
 	bumpversion --allow-dirty --no-commit --no-tag --list patch
 
+release-if-new-version: $(PACKAGE_PATH)/hub
+	LOCAL_VERSION=$$(awk -F=' ' '/current_version/{printf "v%s",$$2}' .bumpversion.cfg) ;\
+	REMOTE_VERSION=$$(curl --silent 'https://api.github.com/repos/crgz/$(NAME)/releases/latest' | jq -r .tag_name) ;\
+	if [ $$LOCAL_VERSION == $$REMOTE_VERSION ]; then exit; fi ;\
+	hub release create -m $$LOCAL_VERSION $$LOCAL_VERSION
+
 release: dependencies committer
 	@git pull --quiet --no-edit origin main
 	@git diff --quiet || (echo 'Exiting operation on dirty repo' && exit )

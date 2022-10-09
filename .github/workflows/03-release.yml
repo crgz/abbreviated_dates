@@ -7,16 +7,12 @@ on:
 jobs:
   release:
     name: Create a new release based on current version
-    if: github.event.pull_request.merged == true && startsWith(github.head_ref, 'release')
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Library Repository
       uses: actions/checkout@v3
-    - name: Install GitHub Command Line Interface
-      run: make /usr/bin/hub
-    - name: Set the VERSION variable int he GitHub Environment
-      run: echo "VERSION=$(awk -F=' ' '/current_version/{printf "v%s",$2}' .bumpversion.cfg)" >> $GITHUB_ENV
     - name: Create a new release based on current version
       env:
         GITHUB_TOKEN: ${{ secrets.PAT }}
-      run: hub release create -m ${{ env.VERSION }} ${{ env.VERSION }}
+      run: make release-if-new-version
