@@ -7,7 +7,7 @@ on:
       - main
 jobs:
   bump_version:
-    name: Prepare New Release Pull Request
+    name: Prepare Pull Request with bumped version targeting the release branch
     if: github.event.pull_request.merged == true && ! startsWith(github.head_ref, 'release') && ${{ github.event.label.name == 'release' }}
     runs-on: ubuntu-latest
     steps:
