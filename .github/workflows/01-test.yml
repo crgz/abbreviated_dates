@@ -10,22 +10,20 @@ jobs:
     steps:
       - name: Checkout Library Repository
         uses: actions/checkout@v3
-      - uses: dorny/paths-filter@v2
+      - name: Identify changes in source files
+        uses: dorny/paths-filter@v2
         id: changes
         with:
           filters: |
             src:
               - 'prolog/**'
               - 'prolog/**/*'
-        # run only if some file in 'src' folder was changed
-      - if: steps.changes.outputs.src == 'true'
-        name: Run Library Unit Tests
+      - name: Run Unit Tests if change in source files is detected
+        if: steps.changes.outputs.src == 'true'
         run: make test
-      - name: Staging Tests ✅
-        if: ${{ success() }}
-        # set the merge commit status check
-        # using GitHub REST API
+      - name: ✅ Set the merge commit status check using GitHub REST API
         # see https://docs.github.com/en/rest/reference/repos#create-a-commit-status
+        if: ${{ success() }}
         run: |
           curl --request POST \
           --url https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }} \
