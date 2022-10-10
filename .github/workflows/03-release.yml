@@ -7,7 +7,7 @@ on:
 jobs:
   release:
     name: Create a new release based on current version
-    if: ${{ (github.event.pull_request.merged == true) && (contains(github.event.pull_request.labels.*.name, 'release')) && startsWith(github.head_ref, 'release') }}
+    if: github.event.pull_request.merged == true && startsWith(github.head_ref, 'release')
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Library Repository
