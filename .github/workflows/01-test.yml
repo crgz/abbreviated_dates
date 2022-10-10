@@ -6,7 +6,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    if: ${{ github.event.label.name != 'release' }}
+    if: ! startsWith(github.head_ref, 'release')
     steps:
       - name: Checkout Library Repository
         uses: actions/checkout@v3
