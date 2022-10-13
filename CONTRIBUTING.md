@@ -30,32 +30,64 @@ gitGraph
 	commit id:"End"
 ```
 
-## Typical Pull Request Workflow -
+## Typical Contribution Workflow
 
-**1. New PR** - As a contributor, you submit a New PR on GitHub. At this stage we check if the PR is valid and meets certain
-quality requirements. Please check if the PR has sufficient description, if applicable unit tests are added, if it is a
-reasonable contribution meaning it is not a single liner cosmetic PR.
+### Fetch the latest changes
 
-**2. Test** - We can't move forward if the tests fail. - If the PR didn't meet the validation criteria, we request for
-additional changes to be made to PR to pass quality checks and send it back or on rare occasions we may reject it.
+Please feel free to use your favourite environment. For command line users there is a GNU Make shortcut recipe to switch back
+to the main branch, fetch changes and delete previously merged branches:
 
-**3. Review** - If the PR passes all the quality checks then we go ahead and assign a reviewer.  - For Valid PR, the reviewer
-(person familiar with the code/functionality) checks if the PR looks good or needs additional changes. - If all looks good,
-the reviewer would approve the PR. - If a change is needed, the contributor is requested to make a suggested change. - You
-make the change and submit for the review again. - This cycle repeats itself till the PR gets approved.
+```commandline
+make reset
+```
 
-**4. Approved** - Once the PR is approved, it gets `release` label applied, and it initiates the automated release.  - In
-such situations, we may request you to make further changes to your PR for the tests to pass. - Once the tests pass, we now
-bring all the code in the internal code base.
+### Create a Pull Request
 
-**5. Submit** - Once the PR is merged in the main branch an automated process submit the release to the SwiProlog Pack
-Repository
+Aas usual:
+1. Create your new feature branch
+2. Push it to GitHub
+3. Create your Pull Request
+
+Please ensure that the Pull Request has:
+- A good description
+- Unit Tests covering the new source code
+- The source code conform to [Coding guidelines for
+  Prolog](chrome-extension://hmigninkgibhdckiaphhmbgcghochdjc/pdfjs/web/viewer.html?file=https%3A%2F%2Fwww.covingtoninnovations.com%2Fmc%2Fplcoding.pdf)
+
+### Wait for the Test to Finish
+
+The Test GitHub Action Workflow will be triggered once the Pull Request is Created and after each new commit is pushed to the
+Pull Request. We might request for additional changes to ensure it pass our quality checks and send it back to you with
+further comments if the tests fail or if the Pull Request does not meet the validation criteria.
+
+### Optionally label the Pull Request as `release` ready
+
+If the Pull Request is implementing a feature intended to be used by our final users it should be labeled with the `release`
+label. If the Pull Request is implementing improvements to the operational aspects of our work it can be merged without
+delivering a new release. This is to ensure that we only release new packages implementing end user features into the
+Library Supply Chain Infrastructure.
+
+### Review
+
+- For Valid Pull Request, the reviewer (person familiar with the code/functionality) checks if the Pull Request looks good or
+  needs additional changes.
+- If all looks good, the reviewer would approve the Pull Request.
+- If a change is needed, the contributor is requested to make a suggested change.
+- You make the change and submit for the review again.
+- This cycle repeats itself till the Pull Request gets approved.
+- We might request you to make further changes to your Pull Request for the tests to pass. 
+- All the code will be merged in the code base as soon as the review is approved.
+
+### Delivery
+
+A set of GitHub Action Workflows intended to deliver the new release will be triggered if it has the `release` label as soon
+as the Pull Request is closed.
 
 ## General guidelines and philosophy for contribution
 
-*   Include unit tests when you contribute new features, as they help to a) prove that your code works correctly, and b)
-    guard against future breaking changes to lower the maintenance cost.
-*   Bug fixes also generally require unit tests, because the presence of bugs usually indicates insufficient test coverage.
+*  Include unit tests when you contribute new features, as they help to a) prove that your code works correctly, and b) guard
+   against future breaking changes to lower the maintenance cost.
+*  Bug fixes also generally require unit tests, because the presence of bugs usually indicates insufficient test coverage.
 *  Tests should follow the [testing best practices](https://www.swi-prolog.org/pldoc/man?section=unitbox) guide.
 
 ## Coding style
@@ -65,7 +97,7 @@ Prolog](chrome-extension://hmigninkgibhdckiaphhmbgcghochdjc/pdfjs/web/viewer.htm
 
 ## Running unit tests
 
-There are two ways to run TensorFlow unit tests.
+There are two ways to run unit tests.
 
 1.  Using tools and libraries installed directly on your system with:
 
