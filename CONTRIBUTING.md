@@ -1,4 +1,5 @@
-# Contributing Guidelines for Repositories Driven by GitHub Actions
+# Contributing Guidelines
+> for Repositories Driven by GitHub Actions
 
 First off, thanks for taking the time to contribute! ❤️
 
@@ -191,7 +192,9 @@ Please feel free to use your favorite environment. For command line
 users there is a GNU Make shortcut recipe to switch back to the main
 branch, fetch changes and delete previously merged branches:
 
+```commandline
 make reset
+```
 
 ### Create a Pull Request
 
@@ -271,4 +274,7 @@ There are two ways to run unit tests.
 2.  Using GitHub Actions test Workflow. This happens automatically as
     part of the test GitHub Action Workflow.
 
-Join The Project Team
+## Join The Project
+
+Team We are happy to have you in our team as soon as we know you want to be part of it. You will receive an email inviting
+you to the organization. You will need to accept the invitation before becoming a member of our team.
