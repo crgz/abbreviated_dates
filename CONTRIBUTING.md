@@ -22,28 +22,6 @@ your appreciation, which we would also be very happy about:
 -   Mention the project at local meetups and tell your
     friends/colleagues
 
-```mermaid
-gitGraph
-	commit id:"Start"
-	commit id:"New Feature branch"
-	branch feature
-	commit id:"Add new Feature"
-	commit id:"Automatic Test"
-	commit id:"Optional Release Labeling"
-	checkout main
-	merge feature
-	commit id:"New release"
-	branch release
-	checkout release
-	checkout main
-	checkout release
-	commit id:"Append release files"
-	checkout main
-	merge release
-	commit id:"Automatic Submit"
-	commit id:"End"
-```
-
 I Have a Question
 -----------------
 
@@ -185,7 +163,27 @@ issues](https://github.com/crgz/abbreviated_dates/issues).
 
 Typical Contribution Workflow
 -----------------------------
-
+```mermaid
+gitGraph
+	commit id:"Start"
+	commit id:"New Feature branch"
+	branch feature
+	commit id:"Add new Feature"
+	commit id:"Automatic Test"
+	commit id:"Optional Release Labeling"
+	checkout main
+	merge feature
+	commit id:"New release"
+	branch release
+	checkout release
+	checkout main
+	checkout release
+	commit id:"Append release files"
+	checkout main
+	merge release
+	commit id:"Automatic Submit"
+	commit id:"End"
+```
 ### Fetch the latest changes
 
 Please feel free to use your favorite environment. For command line
