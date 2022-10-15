@@ -64,6 +64,33 @@ requirements: $(PACK_PATH)/tap  $(PACK_PATH)/date_time
 committer:
 	@git config --global user.email "conrado.rgz@gmail.com" && git config --global user.name "Conrado Rodriguez"
 
+GIT_REPO_URL := $(shell git config --get remote.origin.url)
+
+publish: diagrams ## Publish diagrams
+	echo $(GIT_REPO_URL) \
+	&& cd target/publish \
+	&& git init . \
+	&& git remote add github ${GIT_REPO_URL} \
+	&& git checkout -b gh-pages \
+	&& git add . \
+	&& git commit -am "Static site deploy" \
+	&& git push github gh-pages --force \
+	&& cd ../.. || exit
+
+diagrams: workflow
+
+#
+#  workflow
+#
+workflow: target/publish/workflow.svg  ## Creates the C4 Diagrams
+target/publish/workflow.svg:
+	@printf '\e[1;34m%-6s\e[m\n' "Start generation of scalable C4 Diagrams"
+	@mvn exec:java@generate-diagrams -f .github/plantuml/
+	@printf '\n\e[1;34m%-6s\e[m\n' "Start generation of portable C4 Diagrams"
+	@mvn exec:java@generate-diagrams -DoutputType=png -Dlinks=0  -f .github/plantuml/
+	@printf '\n\e[1;34m%-6s\e[m\n' "The diagrams has been generated"
+
+
 remove-all:
 	@swipl -g "(member(P,[abbreviated_dates,date_time,tap]),pack_property(P,library(P)),pack_remove(P),fail);true,halt"
 	@sudo dpkg --purge swi-prolog bumpversion hub
