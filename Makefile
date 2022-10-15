@@ -90,6 +90,8 @@ target/publish/workflow.svg:
 	@mvn exec:java@generate-diagrams -DoutputType=png -Dlinks=0  -f .github/plantuml/
 	@printf '\n\e[1;34m%-6s\e[m\n' "The diagrams has been generated"
 
+clean:
+	rm -rfd target
 
 remove-all:
 	@swipl -g "(member(P,[abbreviated_dates,date_time,tap]),pack_property(P,library(P)),pack_remove(P),fail);true,halt"
