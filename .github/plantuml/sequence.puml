@@ -50,8 +50,10 @@ activate branch #00CCCC
 
 branch -> pr++ #00CCCC: Create/Update\nPull Request
 
-pr -> test++ #009999: Test
-return Test Pass/Fail
+loop Until test pass
+    pr -> test++ #009999: Test
+    return Test Pass/Fail
+end
 
 user -> pr++ #00FF00: Label for Release
 deactivate pr
