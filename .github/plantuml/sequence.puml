@@ -22,27 +22,27 @@ end title
 
 actor User as user
 
-box Local\nEnvironment
+box Local Dev
     participant "$CodeCommitIMG()\nBranch" as branch
 endbox
 
 box GitHub
-    participant "$rePostIMG()\nPull Request" as pr
+    participant "$rePostIMG()\n[[https://github.com/crgz/abbreviated_dates/pulls {Pull Requests} Pull Requests]]" as pr
 endbox
 
-box GitHub Actions
-    participant "$DeepLearningAMIsIMG()\ntest" as test
-    participant "$DeepLearningAMIsIMG()\nVersion" as version
-    participant "$DeepLearningAMIsIMG()\nRelease" as release
-    participant "$DeepLearningAMIsIMG()\nSubmit" as submit
+box [[https://github.com/crgz/abbreviated_dates/actions {GitHub Actions} GitHub Actions]]
+    participant "$DeepLearningAMIsIMG()\n[[https://github.com/crgz/abbreviated_dates/actions/workflows/01-test.yml {Tests Workflow} Tests]]" as test
+    participant "$DeepLearningAMIsIMG()\n[[https://github.com/crgz/abbreviated_dates/actions/workflows/02-version.yml {Version Workflow} Version]]" as version
+    participant "$DeepLearningAMIsIMG()\n[[https://github.com/crgz/abbreviated_dates/actions/workflows/03-release.yml {Release Workflow} Release]]" as release
+    participant "$DeepLearningAMIsIMG()\n[[https://github.com/crgz/abbreviated_dates/actions/workflows/04-submit.yml {Submit Workflow} Submit]]" as submit
 endbox
 
 box GitHub
-    participant "$TransferFamilyIMG()\nRelease\nStore" as store
+    participant "$TransferFamilyIMG()\n[[https://www.swi-prolog.org/pack/list {GitHub Releases} Releases]]" as store
 endbox
 
-box Distribution\nServer
-    participant "$CodeDeployIMG()\nDeploy" as deploy
+box Distribution
+    participant "$CodeDeployIMG()\n[[https://www.swi-prolog.org/pack/list {SWI-Prolog Packages} Packs]]" as deploy
 endbox
 
 user -> branch: Create/Update\nfeature branch
