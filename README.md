@@ -17,7 +17,6 @@ This library leverages on [Good Ol' Fashioned AI](https://www.cambridge.org/core
 
 ## Getting Started
 This example shows a basic usage of the library to parse the date: **"11-09, št"**. Querying for: `Querying for: `solutions('11-09, št').` generates a table with all possible interpretations:
-` generates a table with all possible interpretations: 
 
 ```prolog
 :- use_module(library(abbreviated_dates)).
