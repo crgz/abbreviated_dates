@@ -16,7 +16,7 @@ Have you ever tried to understand a date like **`11-09, št`**? Is the **`št`**
 This library leverages on [Good Ol' Fashioned AI](https://www.cambridge.org/core/books/abs/cambridge-handbook-of-artificial-intelligence/gofai/FCF7D6DD921658FE8AE9F2A2B0FECBDD) to parse  abbreviated incomplete dates in multiple languages.
 
 ## Getting Started
-This example shows a basic usage of the library to parse the date: **"11-09, št"**. Querying for: `Querying for: `solutions('11-09, št').` generates a table with all possible interpretations:
+This example shows a basic usage of the library to parse the date: **"11-09, št"**. We get a table with all possible interpretations querying for: `solutions('11-09, št').`:
 
 ```prolog
 :- use_module(library(abbreviated_dates)).
