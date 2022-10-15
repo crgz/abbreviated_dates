@@ -12,24 +12,24 @@
 <img src=".github/flags-jakearchibald.github.io-scour.svg?raw=true" width="25%" align="right" style="border:20px solid white">
 
 # Abbreviated Date Parser
-Have you ever tried to understand a date like `11-09, št`? Is the `št` a month or a weekday? What are those numbers actually meaning? 
+Have you ever tried to understand a date like **`11-09, št`**? Is the **`št`** a month or a weekday? What are those numbers actually meaning? 
 This library leverages on [Good Ol' Fashioned AI](https://www.cambridge.org/core/books/abs/cambridge-handbook-of-artificial-intelligence/gofai/FCF7D6DD921658FE8AE9F2A2B0FECBDD) to parse  abbreviated incomplete dates in multiple languages.
 
-## Eager to Contribute?
-Please click on the Sequence Diagram and read the [CONTRIBUTING.md](./CONTRIBUTING.md) for further details regarding our GitHub Actions powered workflow:
-
-[<img alt="Sequence Diagram" width="40%" align="left"
-src="https://crgz.github.io/abbreviated_dates/uml/png/sequence.png"/>](https://crgz.github.io/abbreviated_dates/uml/svg/sequence.svg)
-
-
 ## Getting Started
-Imagine you want to understand the date: "11-09, št". We can infer that "št" is an abbreviation of:
+This example shows a basic usage of the library to parse the date: **"11-09, št"**. Querying for: `Querying for: `solutions('11-09, št').` generates a table with all possible interpretations:
+` generates a table with all possible interpretations: 
 
 ```prolog
-findall([F,L,C],(parse(date(2022,09,9),'11-09, št',[D],_,L,C),format_time(string(F),"%A, %d %b %Y",D)),Y),cli_table(Y,[head(['Date','Language','Country'])]).
-```
+:- use_module(library(abbreviated_dates)).
+:- use_module(library(cli_table)).
 
-```
+solutions(Date):-
+  findall([F,L,C],(abbreviated_dates:parse(date(2022,09,9),Date,[D],_,L,C),
+  format_time(string(F),"%A, %d %b %Y",D)),Y),
+  cli_table(Y,[head(['Date','Language','Country'])]).
+
+solutions('11-09, št').
+
 ╔═══════════════════════╤════════════╤════════════════╗
 ║         Date          │  Language  │    Country     ║
 ╟───────────────────────┼────────────┼────────────────╢
@@ -41,6 +41,17 @@ findall([F,L,C],(parse(date(2022,09,9),'11-09, št',[D],_,L,C),format_time(strin
 ║ Thursday, 11 Sep 2025 │   Slovak   │    Slovakia    ║
 ╚═══════════════════════╧════════════╧════════════════╝
 ```
+Note: To install required packages run `make install` in your OS shell and `pack_install(cli_table).` in your SWI-Prolog shell
+
+[<img alt="Sequence Diagram" width="30%" align="right"
+src="https://crgz.github.io/abbreviated_dates/uml/png/sequence.png"/>](https://crgz.github.io/abbreviated_dates/uml/svg/sequence.svg)
+
+## Eager to Contribute?
+
+Please click on the Sequence Diagram and read the [CONTRIBUTING.md](./CONTRIBUTING.md) for further details regarding our GitHub Actions powered workflow:
+
+## How it works
+
 - Šeštadienis which means in Saturday in Lithuanian
 - Štvrtok which means in Thursday in Slovak
 
@@ -55,48 +66,12 @@ In the case of interpreting the abbreviation as s Saturday:
 In the case of interpreting the abbreviation as a Thursday:
 - 11 of September 2025
 
-## Getting Started
-
-This pack is available from the [add-on registry of SWI-Prolog](http://www.swi-prolog.org/pack/list).
-
-It can be installed with `pack_install/1`:
-
-```prolog
-?- pack_install(abbreviated_dates).
-```
-
-Then, you can use it by simply calling `use_module(library(abbreviated_dates))`.
-
-```prolog 
-parse(Context, Expression, Dates, Trace).
-```
-
-### Prerequisites
-
-For maintenance tasks [bumpversion](https://github.com/peritus/bumpversion) and [hub](https://github.com/github/hub)
-might be required.
-
-### Installation
-
-## Usage
-
-```prolog
-parse/4.  % parse an abbreviated incomplete date in multiple languages (today, tomorrow, etc).
-```
 For further details have a look at the [implementation](prolog/abbreviated_dates.pl). In addition, the
 [new](prolog/abbreviated_dates.plt) might give an impression on how to use this library.
 
-The tests can be run using the following command:
+## Review
 
-```shell
-make test
-```
-Define new Tests
-
-New tests should be defined in the [test](prolog/abbreviated_dates.plt) file.
-
-Review: 
-https://eu.swi-prolog.org/pack/review?p=abbreviated_dates
+The package can be reviewed in the [Distribution Server](https://eu.swi-prolog.org/pack/review?p=abbreviated_dates)
 
 ## Roadmap
 - [x] Multi-language Support
@@ -104,21 +79,15 @@ https://eu.swi-prolog.org/pack/review?p=abbreviated_dates
 
 See the [open issues](https://github.com///issues) for a full list of proposed features (and known issues).
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 ## Contributing! ❤️
 
 Contributions are essential to keep our projects alive. I would like to keep it as easy as possible to contribute changes.
 There are a few guidelines that I need contributors to follow so that all of us can benefit from quality control and quality
 documentation. Please read the [CONTRIBUTING.md](./CONTRIBUTING.md) for further details
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 ## License
 
 Distributed under the MIT License. See `LICENSE` file for more information.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
