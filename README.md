@@ -9,11 +9,18 @@
 [![contributions welcome][contributions-shield]][contributions-url]
 [![Ask Me Anything!][ask-shield]][ask-url]
 
-<img src=".github/flags-jakearchibald.github.io-scour.svg?raw=true" width="40%" align="right" style="border:20px solid white">
+<img src=".github/flags-jakearchibald.github.io-scour.svg?raw=true" width="25%" align="right" style="border:20px solid white">
 
 # Abbreviated Date Parser
 
 The Abbreviated Date Parser Library contains a predicate that parses abbreviated incomplete dates in multiple languages.
+
+## Willing to Contribute?
+Please click on the Sequence Diagram and read the [CONTRIBUTING.md](./CONTRIBUTING.md) for further details regarding our GitHub Actions powered workflow:
+
+[<img alt="Sequence Diagram" width="50%" align="left"
+src="https://crgz.github.io/abbreviated_dates/uml/png/sequence.png"/>](https://crgz.github.io/abbreviated_dates/uml/svg/sequence.svg)
+
 
 ## Getting Started
 Imagine you want to understand the date: "11-09, št". We can infer that "št" is an abbreviation of:
