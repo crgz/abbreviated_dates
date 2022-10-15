@@ -12,8 +12,8 @@
 <img src=".github/flags-jakearchibald.github.io-scour.svg?raw=true" width="25%" align="right" style="border:20px solid white">
 
 # Abbreviated Date Parser
-
-The Abbreviated Date Parser Library contains a predicate that parses abbreviated incomplete dates in multiple languages.
+Have you ever tried to understand a date like `11-09, št`? Is the `št` a month or a weekday? What are those numbers actually meaning? 
+This library leverages on [Good Ol' Fashioned AI](https://www.cambridge.org/core/books/abs/cambridge-handbook-of-artificial-intelligence/gofai/FCF7D6DD921658FE8AE9F2A2B0FECBDD) to parse  abbreviated incomplete dates in multiple languages.
 
 ## Eager to Contribute?
 Please click on the Sequence Diagram and read the [CONTRIBUTING.md](./CONTRIBUTING.md) for further details regarding our GitHub Actions powered workflow:
