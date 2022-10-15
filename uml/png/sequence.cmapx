@@ -1,0 +1,10 @@
+<map id="sequence_map" name="sequence_map">
+<area shape="rect" id="id1" href="https://github.com/crgz/abbreviated_dates/actions/workflows/01-test.yml" title="Tests Workflow" alt="" coords="361,129,400,145"/>
+<area shape="rect" id="id2" href="https://www.swi-prolog.org/pack/list" title="SWI-Prolog Packages" alt="" coords="869,129,910,145"/>
+<area shape="rect" id="id3" href="https://github.com/crgz/abbreviated_dates/actions/workflows/04-submit.yml" title="Submit Workflow" alt="" coords="633,129,681,145"/>
+<area shape="rect" id="id4" href="https://github.com/crgz/abbreviated_dates/actions/workflows/02-version.yml" title="Version Workflow" alt="" coords="447,129,499,145"/>
+<area shape="rect" id="id5" href="https://github.com/crgz/abbreviated_dates/actions/workflows/03-release.yml" title="Release Workflow" alt="" coords="537,129,593,145"/>
+<area shape="rect" id="id6" href="https://www.swi-prolog.org/pack/list" title="GitHub Releases" alt="" coords="717,129,781,145"/>
+<area shape="rect" id="id7" href="https://github.com/crgz/abbreviated_dates/pulls" title="Pull Requests" alt="" coords="213,129,308,145"/>
+<area shape="rect" id="id8" href="https://github.com/crgz/abbreviated_dates/actions" title="GitHub Actions" alt="" coords="466,39,576,54"/>
+</map>
