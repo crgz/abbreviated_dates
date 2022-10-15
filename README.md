@@ -15,6 +15,9 @@
 
 The Abbreviated Date Parser Library contains a predicate that parses abbreviated incomplete dates in multiple languages.
 
+[<img alt="ARCTIC Context" width="40%" align="left"
+src="https://crgz.github.io/abbreviated_dates/uml/png/sequence.png"/>](https://crgz.github.io/abbreviated_dates/uml/svg/sequence.svg)
+
 ## Getting Started
 Imagine you want to understand the date: "11-09, št". We can infer that "št" is an abbreviation of:
 
