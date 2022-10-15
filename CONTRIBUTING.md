@@ -1,3 +1,5 @@
+<img src="https://avatars.githubusercontent.com/u/44036562?s=200" align="right" style="border:20px solid white">
+
 # Contributing Guidelines
 > for Repositories Driven by GitHub Actions
 
