@@ -15,7 +15,7 @@
 
 The Abbreviated Date Parser Library contains a predicate that parses abbreviated incomplete dates in multiple languages.
 
-## Willing to Contribute?
+## Eager to Contribute?
 Please click on the Sequence Diagram and read the [CONTRIBUTING.md](./CONTRIBUTING.md) for further details regarding our GitHub Actions powered workflow:
 
 [<img alt="Sequence Diagram" width="50%" align="left"
