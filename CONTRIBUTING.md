@@ -1,3 +1,6 @@
+[<img alt="ARCTIC Context" width="40%" align="right"
+src="https://crgz.github.io/abbreviated_dates/uml/png/sequence.png"/>](https://crgz.github.io/abbreviated_dates/uml/svg/sequence.svg)
+
 # Contributing Guidelines
 > for Repositories Driven by GitHub Actions
 

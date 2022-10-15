@@ -1,0 +1,100 @@
+@startuml
+!define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v14.0/dist
+!include AWSPuml/AWSCommon.puml
+!include AWSPuml/CustomerEnablement/rePost.puml
+!include AWSPuml/DeveloperTools/CodeCommit.puml
+!include AWSPuml/DeveloperTools/CodeDeploy.puml
+!include AWSPuml/MachineLearning/DeepLearningAMIs.puml
+!include AWSPuml/MigrationTransfer/TransferFamily.puml
+
+hide footbox
+skinparam roundcorner 20
+skinparam sequenceMessageAlign left
+skinparam sequenceLifeLineBorderColor AWS_COLOR
+skinparam participantBackgroundColor AWS_BG_COLOR
+skinparam actorBackgroundColor AWS_BORDER_COLOR
+skinparam MaxMessageSize 400
+skinparam responseMessageBelowArrow true
+
+title
+ Sequence Diagram of the Contribution Workflow
+end title
+
+actor User as user
+
+box Local\nEnvironment
+    participant "$CodeCommitIMG()\nBranch" as branch
+endbox
+
+box GitHub
+    participant "$rePostIMG()\nPull Request" as pr
+endbox
+
+box GitHub Actions
+    participant "$DeepLearningAMIsIMG()\ntest" as test
+    participant "$DeepLearningAMIsIMG()\nVersion" as version
+    participant "$DeepLearningAMIsIMG()\nRelease" as release
+    participant "$DeepLearningAMIsIMG()\nSubmit" as submit
+endbox
+
+box GitHub
+    participant "$TransferFamilyIMG()\nRelease\nStore" as store
+endbox
+
+box Distribution\nServer
+    participant "$CodeDeployIMG()\nDeploy" as deploy
+endbox
+
+user -> branch: Create/Update\nfeature branch
+activate branch #00CCCC
+
+branch -> pr++ #00CCCC: Create/Update\nPull Request
+
+pr -> test++ #009999: Test
+return Test Pass/Fail
+
+user -> pr++ #00FF00: Label for Release
+deactivate pr
+
+user -> pr++ #Violet: Close
+pr -> pr #00CCCC: Merge
+pr -> version #00CCCC: Create Pull Request release
+destroy pr
+activate version #00CCCC
+deactivate pr
+
+alt label for release
+    version -> version #00CCCC: Increment\nVersion
+    version -> pr: Merge
+
+    version -> release #00CCCC: Release
+    destroy version
+
+    activate release #00CCCC
+    release -> store: store
+    activate store  #DarkViolet
+    release -> submit: Submit
+    deactivate release
+
+    activate submit #00CCCC
+    submit -> deploy: Deploy
+    deactivate submit
+
+    activate deploy #DarkViolet
+    deactivate deploy
+else not label for release
+
+end
+
+user -> branch: Reset
+branch -> pr: fetch
+pr --> branch: Merge
+branch -> branch: Delete
+destroy branch
+
+user -> deploy: Request Package
+deploy -> store: Request Release
+store -> deploy: Deliver Release
+deploy -> user: Deliver Package
+
+@enduml
