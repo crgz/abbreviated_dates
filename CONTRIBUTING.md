@@ -21,8 +21,101 @@ your appreciation, which we would also be very happy about:
 -   Star the project
 -   Tweet about it
 -   Refer this project in your project’s readme
--   Mention the project at local meetups and tell your
-    friends/colleagues
+-   Mention the project at local meetups and tell your friends/colleagues
+
+Typical Contribution Workflow
+-----------------------------
+
+[<img alt="ARCTIC Context" width="100%" align="right"
+src="https://crgz.github.io/abbreviated_dates/uml/png/sequence.png"/>](https://crgz.github.io/abbreviated_dates/uml/svg/sequence.svg)
+
+### Create a Pull Request
+
+As usual:
+
+1.  Create your new feature branch
+2.  Push it to GitHub
+3.  Create your Pull Request
+
+Please ensure that the Pull Request has:
+
+-   A good description
+-   Unit Tests covering the new source code
+-   The source code conform to Coding guidelines for Prolog
+
+### Wait for the Test to Finish
+
+The Test GitHub Action Workflow will be triggered once the Pull Request
+is Created and after each new commit is pushed to the Pull Request. We
+might request for additional changes to ensure it pass our quality
+checks and send it back to you with further comments if the tests fail
+or if the Pull Request does not meet the validation criteria.
+
+### Optionally label the Pull Request as release ready
+
+If the Pull Request is implementing a feature intended to be used by our
+final users it should be labeled with the release label. If the Pull
+Request is implementing improvements to the operational aspects of our
+work it can be merged without delivering a new release. This is to
+ensure that we only release new packages implementing end user features
+into the Library Supply Chain Infrastructure.
+
+### Review
+
+-   For Valid Pull Request, the reviewer (person familiar with the
+    code/functionality) checks if the Pull Request looks good or needs
+    additional changes.
+-   If all looks good, the reviewer would approve the Pull Request.
+-   If a change is needed, the contributor is requested to make a
+    suggested change.
+-   You make the change and submit for the review again.
+-   This cycle repeats itself till the Pull Request gets approved.
+-   We might request you to make further changes to your Pull Request
+    for the tests to pass.
+-   All the code will be merged in the code base as soon as the review
+    is approved.
+
+### Fetch the latest changes
+
+Please feel free to use your favorite environment. For command line
+users there is a GNU Make shortcut recipe to switch back to the main
+branch, fetch changes and delete previously merged branches:
+
+```commandline
+make reset
+```
+
+### Delivery
+
+A set of GitHub Action Workflows intended to deliver the new release
+will be triggered if it has the release label as soon as the Pull
+Request is closed.
+
+## General guidelines and philosophy for contribution
+
+-   Please include unit tests when you contribute new features, as they
+    help to a) prove that your code works correctly, and b) guard
+    against future breaking changes to lower the maintenance cost.
+-   Bug fixes also generally require unit tests, because the presence of
+    bugs usually indicates insufficient test coverage.
+-   Tests should follow the testing best practices guide.
+
+## Coding style
+
+Changes to the project Prolog code should conform to Coding guidelines
+for Prolog
+
+## Running unit tests
+
+There are two ways to run unit tests.
+
+1.  Using tools and libraries installed directly on your system with:
+
+    The system should install the required packages to enable this
+    operation
+
+2.  Using GitHub Actions test Workflow. This happens automatically as
+    part of the test GitHub Action Workflow.
 
 I Have a Question
 -----------------
@@ -46,9 +139,6 @@ clarification, we recommend the following:
     relevant.
 
 We will then take care of the issue as soon as possible.
-
-I Want To Contribute
---------------------
 
 ### Reporting Bugs
 
@@ -162,100 +252,6 @@ issues](https://github.com/crgz/abbreviated_dates/issues).
 -   **Explain why this enhancement would be useful** to most Abbreviated
     Date Parser users. You may also want to point out the other projects
     that solved it better and which could serve as inspiration.
-
-Typical Contribution Workflow
------------------------------
-
-[<img alt="ARCTIC Context" width="100%" align="right"
-src="https://crgz.github.io/abbreviated_dates/uml/png/sequence.png"/>](https://crgz.github.io/abbreviated_dates/uml/svg/sequence.svg)
-
-### Fetch the latest changes
-
-Please feel free to use your favorite environment. For command line
-users there is a GNU Make shortcut recipe to switch back to the main
-branch, fetch changes and delete previously merged branches:
-
-```commandline
-make reset
-```
-
-### Create a Pull Request
-
-As usual:
-
-1.  Create your new feature branch
-2.  Push it to GitHub
-3.  Create your Pull Request
-
-Please ensure that the Pull Request has:
-
--   A good description
--   Unit Tests covering the new source code
--   The source code conform to Coding guidelines for Prolog
-
-### Wait for the Test to Finish
-
-The Test GitHub Action Workflow will be triggered once the Pull Request
-is Created and after each new commit is pushed to the Pull Request. We
-might request for additional changes to ensure it pass our quality
-checks and send it back to you with further comments if the tests fail
-or if the Pull Request does not meet the validation criteria.
-
-Optionally label the Pull Request as release ready
-
-If the Pull Request is implementing a feature intended to be used by our
-final users it should be labeled with the release label. If the Pull
-Request is implementing improvements to the operational aspects of our
-work it can be merged without delivering a new release. This is to
-ensure that we only release new packages implementing end user features
-into the Library Supply Chain Infrastructure.
-
-Review
-
--   For Valid Pull Request, the reviewer (person familiar with the
-    code/functionality) checks if the Pull Request looks good or needs
-    additional changes.
--   If all looks good, the reviewer would approve the Pull Request.
--   If a change is needed, the contributor is requested to make a
-    suggested change.
--   You make the change and submit for the review again.
--   This cycle repeats itself till the Pull Request gets approved.
--   We might request you to make further changes to your Pull Request
-    for the tests to pass.
--   All the code will be merged in the code base as soon as the review
-    is approved.
-
-Delivery
-
-A set of GitHub Action Workflows intended to deliver the new release
-will be triggered if it has the release label as soon as the Pull
-Request is closed.
-
-General guidelines and philosophy for contribution
-
--   Please include unit tests when you contribute new features, as they
-    help to a) prove that your code works correctly, and b) guard
-    against future breaking changes to lower the maintenance cost.
--   Bug fixes also generally require unit tests, because the presence of
-    bugs usually indicates insufficient test coverage.
--   Tests should follow the testing best practices guide.
-
-Coding style
-
-Changes to the project Prolog code should conform to Coding guidelines
-for Prolog
-
-Running unit tests
-
-There are two ways to run unit tests.
-
-1.  Using tools and libraries installed directly on your system with:
-
-    The system should install the required packages to enable this
-    operation
-
-2.  Using GitHub Actions test Workflow. This happens automatically as
-    part of the test GitHub Action Workflow.
 
 ## Join The Project
 
