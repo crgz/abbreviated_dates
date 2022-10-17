@@ -7,27 +7,44 @@
 [![Contributors][contributors-shield]][contributors-url]
 [![MIT License][license-shield]][license-url]
 [![contributions welcome][contributions-shield]][contributions-url]
-[![Ask Me Anything!][ask-shield]][ask-url]
 
 <img src=".github/flags-jakearchibald.github.io-scour.svg?raw=true" width="25%" align="right" style="border:20px solid white">
 
-# Abbreviated Date Parser
-Have you ever tried to understand a date like **`11-09, št`**? Is the **`št`** a month or a weekday? What are those numbers actually meaning? 
-This library leverages on [Good Ol' Fashioned AI](https://www.cambridge.org/core/books/abs/cambridge-handbook-of-artificial-intelligence/gofai/FCF7D6DD921658FE8AE9F2A2B0FECBDD) to parse  abbreviated incomplete dates in multiple languages.
+# Parser for abbreviated, ambiguous, incomplete dates in multiple languages
 
-## Getting Started
-This example shows a basic usage of the library to parse the date: **"11-09, št"**. We get a table with all possible interpretations querying for: `solutions('11-09, št').`:
+Have you ever tried to understand a date like **`11-09, št`**? Is the **`št`** a month or a weekday? What are those numbers
+actually meaning? This library leverages on [Good Ol' Fashioned
+AI](https://www.cambridge.org/core/books/abs/cambridge-handbook-of-artificial-intelligence/gofai/FCF7D6DD921658FE8AE9F2A2B0FECBDD)
+to parse  abbreviated incomplete dates in multiple languages.
+
+## Key Features
+
+* Python support through a [Python Bridge](https://github.com/crgz/fuzzy_dates)
+* Language auto-detection
+* Easily expandable into new languages (30 languages are currently supported)
+* Support for multiple date formats
+* Support for abbreviated weekdays
+* Support for abbreviated months
+* Support for ambiguous month/day numbers
+
+## How To Use
+
+The most straightforward way to parse dates is to use the abbreviated_dates:parse() predicate, that wraps around most of the
+functionality of the module. This example shows a basic usage of the library to parse the date: **"11-09, št"**. We get a
+table with all possible interpretations querying for: `solutions('11-09, št').`:
 
 ```prolog
 :- use_module(library(abbreviated_dates)).
 :- use_module(library(cli_table)).
 
-solutions(Date):-
-  findall([F,L,C],(abbreviated_dates:parse(date(2022,09,9),Date,[D],_,L,C),
-  format_time(string(F),"%A, %d %b %Y",D)),Y),
-  cli_table(Y,[head(['Date','Language','Country'])]).
+solutions(Text):- % E.g. solutions('11-09, št').
+  Starting = date(2022,09,9),
+  findall([Date,Language,Country],format(Starting,Text,Date,Language,Country),Row),
+  cli_table(Row,[head(['Date','Language','Country'])]).
 
-solutions('11-09, št').
+format(Starting, Text, DateText, Language, Country):-
+  parse(Starting, Text, [Date], _, Language, Country),
+  format_time(string(DateText), "%A, %d %b %Y", Date).
 
 ╔═══════════════════════╤════════════╤════════════════╗
 ║         Date          │  Language  │    Country     ║
@@ -105,7 +122,7 @@ Distributed under the MIT License. See `LICENSE` file for more information.
 [license-shield]: https://img.shields.io/github/license/crgz/abbreviated_dates.svg
 [license-url]: https://github.com/crgz/abbreviated_dates/blob/main/LICENSE
 [contributions-shield]: https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat
-[contributions-url]: https://github.com/crgz/abbreviated_dates/issues
+[contributions-url]: ./CONTRIBUTING.md
 [ask-shield]: https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg
 [ask-url]: https://github.com/crgz
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?logo=linkedin&colorB=555
