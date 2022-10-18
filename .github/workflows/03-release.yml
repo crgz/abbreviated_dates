@@ -15,4 +15,4 @@ jobs:
     - name: Create a new release based on current version
       env:
         GITHUB_TOKEN: ${{ secrets.PAT }}
-      run: make release-if-new-version
+      run: make release
