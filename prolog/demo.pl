@@ -9,4 +9,3 @@ solutions(Text):- % E.g. solutions('11-09, št').
 format(Starting, Text, DateText, Language, Country):-
   parse(Starting, Text, [Date], _, Language, Country),
   format_time(string(DateText), "%A, %d %b %Y", Date).
-
