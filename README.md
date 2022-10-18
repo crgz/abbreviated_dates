@@ -30,8 +30,7 @@ to parse abbreviated, ambiguous, and incomplete dates in multiple languages.
 ## How To Use
 
 The most straightforward way to parse dates is to use the abbreviated_dates:parse() predicate, that wraps around most of the
-functionality of the module.  Querying for: **"['./prolog/demo.pl'], solutions('11-09, št')."** generates a table with all
-possible interpretations for the given date:
+functionality of the module.  This example shows a basic usage of the library to parse the date: *"11-09, št"*:
 
 ```prolog
 ?- ['./prolog/demo.pl'], solutions('11-09, št').
@@ -65,9 +64,6 @@ format(Starting, Text, DateText, Language, Country):-
 ```
 </details>
 
-This example shows a basic usage of the library to parse the date: *"11-09, št"*.
-
-
 Note: To install required packages run `make install` in your OS shell and `pack_install(cli_table).` in your SWI-Prolog shell
 
 [<img alt="Sequence Diagram" width="30%" align="right"
@@ -79,12 +75,15 @@ Please click on the Sequence Diagram and read the [CONTRIBUTING.md](./CONTRIBUTI
 
 ## How it works
 
+The abbreviation "št" could stand for:
 - Šeštadienis which means in Saturday in Lithuanian
 - Štvrtok which means in Thursday in Slovak
 
-But Lithuanian is spoken not only in Lithuania but also in Latvia and Slovak is spoken not only in Slovakia but also by a minority in Czech Republic. These countries use different date representations: Czech Republic, Latvia and Slovakia have the day written first because of the "little" date endianness format used as the standard in the country. Lithuania, on the other hand, uses the "big" date endiannes format which means that the month is written first.
-
-The system factor in all these facts and is able to come with the right answers:
+Lithuanian is spoken in Lithuania and in Latvia. Slovak is spoken in Slovakia but also by a minority in the Czech Republic.
+These countries use different date representations: Czech Republic, Latvia and Slovakia have the day written first because of
+the "little" date endianness format used as the standard in the country. Lithuania, on the other hand, uses the "big" date
+endianness format which means that the month is written first. The system factor in all these facts and is able to come with
+the right answers:
 
 In the case of interpreting the abbreviation as a Saturday:
 -  9 of November 2024
