@@ -35,13 +35,13 @@ bump: $(PACKAGE_PATH)/bumpversion ## Increase the version number
 
 # Requires unprotected main branch or maybe special token
 release: $(PACKAGE_PATH)/hub ## release for Github Actions
-	LOCAL_VERSION=$$(awk -F=' ' '/current_version/{printf "v%s",$$2}' .bumpversion.cfg) ;\
+	@LOCAL_VERSION=$$(awk -F=' ' '/current_version/{printf "v%s",$$2}' .bumpversion.cfg) ;\
 	REMOTE_VERSION=$$(curl --silent 'https://api.github.com/repos/crgz/$(NAME)/releases/latest' | jq -r .tag_name) ;\
 	if [ $$LOCAL_VERSION == $$REMOTE_VERSION ]; then exit; fi ;\
 	hub release create -m $$LOCAL_VERSION $$LOCAL_VERSION
 
 install: requirements committer ## Install the latest library release or the one in the VERSION variable (Eg. make install VERSION=v.0.0.207)
-	LOCAL_VERSION=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt') ;\
+	@LOCAL_VERSION=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt') ;\
 	while : ; do \
 		REMOTE_VERSION=$$(curl --silent 'https://api.github.com/repos/crgz/$(NAME)/releases/latest' | jq -r .tag_name) ;\
 		if [ $$LOCAL_VERSION == $$REMOTE_VERSION ]; then printf '\n' && break; fi ;\
@@ -61,7 +61,7 @@ committer:
 GIT_REPO_URL := $(shell git config --get remote.origin.url)
 
 publish: diagrams ## Publish the diagrams
-	echo $(GIT_REPO_URL) \
+	@echo $(GIT_REPO_URL) \
 	&& cd target/publish \
 	&& git init . \
 	&& git remote add github ${GIT_REPO_URL} \
