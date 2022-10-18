@@ -69,9 +69,14 @@ Note: To install required packages run `make install` in your OS shell and `pack
 [<img alt="Sequence Diagram" width="30%" align="right"
 src="https://crgz.github.io/abbreviated_dates/uml/png/sequence.png"/>](https://crgz.github.io/abbreviated_dates/uml/svg/sequence.svg)
 
-## Eager to Contribute?
+## Eager to Contribute? ❤️
 
-Please click on the Sequence Diagram and read the [CONTRIBUTING.md](./CONTRIBUTING.md) for further details regarding our GitHub Actions powered workflow:
+Collaboration is essential to keep projects alive. We would like to keep it as easy as possible to collaborate changes. There
+are a few guidelines that we need collaborators to follow so that all of us can benefit from quality control and quality
+documentation. All types of collaborations are encouraged and valued. Please make sure to read the relevant section before
+making your contribution. It will make it a lot easier for us maintainers and smooth out the experience for all involved. Our
+community looks forward to having you as a collaborator. Please read the [CONTRIBUTING.md](./CONTRIBUTING.md) for further
+details regarding our GitHub Actions powered workflow:
 
 ## How it works
 
@@ -100,16 +105,11 @@ For further details have a look at the [implementation](prolog/abbreviated_dates
 The package can be reviewed in the [Distribution Server](https://eu.swi-prolog.org/pack/review?p=abbreviated_dates)
 
 ## Roadmap
+
 - [x] Multi-language Support
-- [x] Add back to top links
+- [ ] Integrate with the Julian package
 
 See the [open issues](https://github.com///issues) for a full list of proposed features (and known issues).
-
-## Contributing! ❤️
-
-Contributions are essential to keep our projects alive. I would like to keep it as easy as possible to contribute changes.
-There are a few guidelines that I need contributors to follow so that all of us can benefit from quality control and quality
-documentation. Please read the [CONTRIBUTING.md](./CONTRIBUTING.md) for further details
 
 ## License
 
