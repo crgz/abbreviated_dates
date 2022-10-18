@@ -73,9 +73,9 @@ Please click on the Sequence Diagram and read the [CONTRIBUTING.md](./CONTRIBUTI
 
 But Lithuanian is spoken not only in Lithuania but also in Latvia and Slovak is spoken not only in Slovakia but also by a minority in Czech Republic. These countries use different date representations: Czech Republic, Latvia and Slovakia have the day written first because of the "little" date endianness format used as the standard in the country. Lithuania, on the other hand, uses the "big" date endiannes format which means that the month is written first.
 
-The system factor in all this facts and is able to come with the right answers:
+The system factor in all these facts and is able to come with the right answers:
 
-In the case of interpreting the abbreviation as s Saturday:
+In the case of interpreting the abbreviation as a Saturday:
 -  9 of November 2024
 - 11 of September 2027
 
@@ -83,7 +83,7 @@ In the case of interpreting the abbreviation as a Thursday:
 - 11 of September 2025
 
 For further details have a look at the [implementation](prolog/abbreviated_dates.pl). In addition, the
-[new](prolog/abbreviated_dates.plt) might give an impression on how to use this library.
+[unit tests](prolog/abbreviated_dates.plt) might give an impression on how to use this library.
 
 ## Review
 
@@ -123,7 +123,4 @@ Distributed under the MIT License. See `LICENSE` file for more information.
 [license-url]: https://github.com/crgz/abbreviated_dates/blob/main/LICENSE
 [contributions-shield]: https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat
 [contributions-url]: ./CONTRIBUTING.md
-[ask-shield]: https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg
-[ask-url]: https://github.com/crgz
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/crgz
+
