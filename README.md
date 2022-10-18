@@ -12,10 +12,10 @@
 
 # Parser for abbreviated, ambiguous, incomplete dates in multiple languages
 
-Have you ever tried to understand a date like **`11-09, št`**? Is the **`št`** a month or a weekday? What are those numbers
-actually meaning? This library leverages on [Good Ol' Fashioned
+Have you ever tried to understand a date like *11-09, št*? Is the *št* an abbreviation of a month or a weekday? Which of
+those numbers represent the month or the day? This library leverages on [Good Ol' Fashioned
 AI](https://www.cambridge.org/core/books/abs/cambridge-handbook-of-artificial-intelligence/gofai/FCF7D6DD921658FE8AE9F2A2B0FECBDD)
-to parse  abbreviated incomplete dates in multiple languages.
+to parse abbreviated, ambiguous, and incomplete dates in multiple languages.
 
 ## Key Features
 
@@ -30,8 +30,25 @@ to parse  abbreviated incomplete dates in multiple languages.
 ## How To Use
 
 The most straightforward way to parse dates is to use the abbreviated_dates:parse() predicate, that wraps around most of the
-functionality of the module. This example shows a basic usage of the library to parse the date: **"11-09, št"**. We get a
-table with all possible interpretations querying for: `solutions('11-09, št').`:
+functionality of the module.  Querying for: **"['./prolog/demo.pl'], solutions('11-09, št')."** generates a table with all
+possible interpretations for the given date:
+
+```prolog
+?- ['./prolog/demo.pl'], solutions('11-09, št').
+╔═══════════════════════╤════════════╤════════════════╗
+║         Date          │  Language  │    Country     ║
+╟───────────────────────┼────────────┼────────────────╢
+║ Saturday, 09 Nov 2024 │ Lithuanian │   Lithuania    ║
+║ Saturday, 11 Sep 2027 │ Lithuanian │     Latvia     ║
+║ Thursday, 11 Sep 2025 │   Slovak   │ Czech Republic ║
+║ Thursday, 11 Sep 2025 │   Slovak   │    Slovakia    ║
+║ Thursday, 11 Sep 2025 │   Slovak   │ Czech Republic ║
+║ Thursday, 11 Sep 2025 │   Slovak   │    Slovakia    ║
+╚═══════════════════════╧════════════╧════════════════╝
+true.
+```
+<details>
+  <summary>Click to see the demo code</summary>
 
 ```prolog
 :- use_module(library(abbreviated_dates)).
@@ -45,18 +62,12 @@ solutions(Text):- % E.g. solutions('11-09, št').
 format(Starting, Text, DateText, Language, Country):-
   parse(Starting, Text, [Date], _, Language, Country),
   format_time(string(DateText), "%A, %d %b %Y", Date).
-
-╔═══════════════════════╤════════════╤════════════════╗
-║         Date          │  Language  │    Country     ║
-╟───────────────────────┼────────────┼────────────────╢
-║ Saturday, 09 Nov 2024 │ Lithuanian │   Lithuania    ║
-║ Saturday, 11 Sep 2027 │ Lithuanian │     Latvia     ║
-║ Thursday, 11 Sep 2025 │   Slovak   │ Czech Republic ║
-║ Thursday, 11 Sep 2025 │   Slovak   │    Slovakia    ║
-║ Thursday, 11 Sep 2025 │   Slovak   │ Czech Republic ║
-║ Thursday, 11 Sep 2025 │   Slovak   │    Slovakia    ║
-╚═══════════════════════╧════════════╧════════════════╝
 ```
+</details>
+
+This example shows a basic usage of the library to parse the date: *"11-09, št"*.
+
+
 Note: To install required packages run `make install` in your OS shell and `pack_install(cli_table).` in your SWI-Prolog shell
 
 [<img alt="Sequence Diagram" width="30%" align="right"
