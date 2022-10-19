@@ -122,7 +122,7 @@ Consuming data from different sources:
 
 ## Operations
 
-We are leveraging on GNU Make to automate frequent actions. Please use the following command will show the available recipes
+We are leveraging GNU Make to automate frequent actions. Please use the following command will show the available recipes
 to use for operating the local development environment:
 
 ```commandline
