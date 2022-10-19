@@ -1,6 +1,10 @@
-<img src=".github/flags-jakearchibald.github.io-scour.svg?raw=true" width="25%" align="right" style="border:20px solid white">
+<h1 align="center">
+    <a href="https://github.com/scrapinghub/dateparser">
+        <img src="https://raw.githubusercontent.com/crgz/abbreviated_dates/main/.github/flags-jakearchibald.github.io-scour.svg?raw=true" width="25%" align="center" style="border:0px solid white">
+    </a>
+</h1>
 
-# Parser for abbreviated, ambiguous, incomplete dates in multiple languages
+<h3 align="center">Parser for Abbreviated Dates</h3>
 <!-- PROJECT SHIELDS -->
 [![Release!][release-shield]][release-url]
 [![Status][submit-shield]][submit-url]
@@ -21,14 +25,14 @@
     <a href="https://github.com/crgz/abbreviated_dates/issues">
         <img src="https://img.shields.io/github/issues/crgz/abbreviated_dates.svg" alt="issues">
     </a>
-    <a href="https://github.com/crgz/abbreviated_dates/network/members">
-        <img src=https://img.shields.io/github/forks/crgz/abbreviated_dates.svg" alt="forks - forks">
-    </a>
     <a href="https://github.com/crgz/abbreviated_dates/stargazers">
         <img src="https://img.shields.io/github/stars/crgz/abbreviated_dates.svg" alt="stars - stars">
     </a>
     <a href="https://github.com/crgz/abbreviated_dates/graphs/contributors">
         <img src="https://img.shields.io/github/contributors/crgz/abbreviated_dates.svg" alt="stars - stars">
+    </a>
+    <a href="./CONTRIBUTING.md">
+        <img src=https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat" alt="contributions - contributions">
     </a>
 </p>
 
