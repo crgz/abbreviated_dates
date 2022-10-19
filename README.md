@@ -148,7 +148,13 @@ make help
 ## Roadmap
 
 - [x] Multi-language Support
-- [ ] Integrate with the Julian package
+- [ ] Integrate with the [Python Bridge](https://github.com/crgz/fuzzy_dates)
+- [ ] Integrate with the [Julian](https://github.com/fifth-postulate/julian) package
+- [ ] Implement the Diagram Workflow in GitHub Actions
+- [ ] Identify the Scope of formats being covered
+- [ ] Add Coverage Metrics
+- [ ] Add support for words as date separator (and, bis, hasta...)
+- [ ] Search dates embedded in longer texts.
 
 See the [open issues](https://github.com///issues) for a full list of proposed features (and known issues).
 
