@@ -1,6 +1,6 @@
 <h1 align="center">
     <a href="https://github.com/scrapinghub/dateparser">
-        <img src="https://raw.githubusercontent.com/crgz/abbreviated_dates/main/.github/flags-jakearchibald.github.io-scour.svg?raw=true" width="25%" align="center" style="border:0px solid white">
+        <img src="https://raw.githubusercontent.com/crgz/abbreviated_dates/main/.github/images/logo.svg?raw=true" width="25%" align="center" style="border:0px solid white">
     </a>
 </h1>
 
