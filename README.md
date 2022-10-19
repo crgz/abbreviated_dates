@@ -97,6 +97,8 @@ to use for operating the local development environment:
 ```commandline
 make help
 ```
+<details>
+  <summary>Click to see the available recipes</summary>
 
 | Command      | Description                                                                                                |
 |--------------|------------------------------------------------------------------------------------------------------------|
@@ -110,6 +112,7 @@ make help
 | publish      | Publish the diagrams                                                                                       |
 | workflow     | Creates the Diagrams                                                                                       |
 | clean        | Remove debris                                                                                              |
+</details>
 
 ## How it works
 
