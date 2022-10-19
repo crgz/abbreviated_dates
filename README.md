@@ -1,8 +1,4 @@
-<h1 align="center">
-    <a href="https://github.com/scrapinghub/dateparser">
-        <img src="https://raw.githubusercontent.com/crgz/abbreviated_dates/main/.github/images/logo.svg" width="25%" align="center" style="border:0px solid white">
-    </a>
-</h1>
+<img src="https://raw.githubusercontent.com/crgz/abbreviated_dates/main/.github/images/logo.svg" width="25%" align="right" style="border:0px solid white">
 
 <h3 align="center">Parser for Abbreviated Dates</h3>
 
