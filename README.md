@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/crgz/abbreviated_dates/286a20f7c46525c3e29af6137840db1b247c23f9/.github/images/logo.svg" width="25%" align="right" style="border:0px solid white">
+<img src="https://raw.githubusercontent.com/crgz/abbreviated_dates/main/.github/images/logo.svg" width="25%" align="right" style="border:0px solid white">
 
 <h3 align="center">Parser for Abbreviated Dates</h3>
 
