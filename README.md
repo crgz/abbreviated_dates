@@ -26,9 +26,9 @@
 <p align="center">
     <a href="#user-content-key-features">Key Features</a> •
     <a href="#user-content-how-to-use">How To Use</a> •
-    <a href="#user-content-operations">Operations</a> •
     <a href="#user-content-how-it-works">How it works</a> •
     <a href="#user-content-common-use-cases">Common use cases</a> •
+    <a href="#user-content-operations">Operations</a> •
     <a href="#user-content-roadmap">Roadmap</a>
 </p>
 
@@ -89,31 +89,6 @@ pack_install(cli_table).
 ```
 </details>
 
-## Operations
-
-We are leveraging on GNU Make to automate frequent actions. Please use the following command will show the available recipes
-to use for operating the local development environment:
-
-```commandline
-make help
-```
-<details>
-  <summary>Click to see the available recipes</summary>
-
-| Command      | Description                                                                                                |
-|--------------|------------------------------------------------------------------------------------------------------------|
-| help         | Print this help                                                                                            |
-| synchronize  | Synchronize the local repository: Switch to the main branch, fetch changes & delete merged branches        |
-| test         | Run the test suite                                                                                         |
-| bump         | Increase the version number                                                                                |
-| release      | Release recipe to be use from Github Actions                                                               |
-| install      | Install the latest library release or the one in the VERSION variable (Eg. make install VERSION=v.0.0.207) |
-| requirements | Install the packages packs required for the development environment                                        |
-| publish      | Publish the diagrams                                                                                       |
-| workflow     | Creates the Diagrams                                                                                       |
-| clean        | Remove debris                                                                                              |
-</details>
-
 ## How it works
 
 The abbreviation "št" could stand for:
@@ -144,6 +119,31 @@ Consuming data from different sources:
 * IoT: consuming data coming from different sources with different date formats
 * Tooling: consuming dates from different logs / sources
 * Format transformations: when transforming dates coming from different files (PDF, CSV, etc.) to other formats (database, etc).
+
+## Operations
+
+We are leveraging on GNU Make to automate frequent actions. Please use the following command will show the available recipes
+to use for operating the local development environment:
+
+```commandline
+make help
+```
+<details>
+  <summary>Click to see the available recipes</summary>
+
+| Command      | Description                                                                                                |
+|--------------|------------------------------------------------------------------------------------------------------------|
+| help         | Print this help                                                                                            |
+| synchronize  | Synchronize the local repository: Switch to the main branch, fetch changes & delete merged branches        |
+| test         | Run the test suite                                                                                         |
+| bump         | Increase the version number                                                                                |
+| release      | Release recipe to be use from Github Actions                                                               |
+| install      | Install the latest library release or the one in the VERSION variable (Eg. make install VERSION=v.0.0.207) |
+| requirements | Install the packages packs required for the development environment                                        |
+| publish      | Publish the diagrams                                                                                       |
+| workflow     | Creates the Diagrams                                                                                       |
+| clean        | Remove debris                                                                                              |
+</details>
 
 ## Roadmap
 
