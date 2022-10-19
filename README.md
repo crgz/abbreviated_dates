@@ -5,15 +5,6 @@
 </h1>
 
 <h3 align="center">Parser for Abbreviated Dates</h3>
-<!-- PROJECT SHIELDS -->
-[![Release!][release-shield]][release-url]
-[![Status][submit-shield]][submit-url]
-[![Issues][issues-shield]][issues-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Contributors][contributors-shield]][contributors-url]
-[![contributions welcome][contributions-shield]][contributions-url]
-
 
 <p align="center">
     <a href=https://www.swi-prolog.org/pack/list?p=abbreviated_dates">
@@ -31,33 +22,10 @@
     <a href="https://github.com/crgz/abbreviated_dates/graphs/contributors">
         <img src="https://img.shields.io/github/contributors/crgz/abbreviated_dates.svg" alt="stars - stars">
     </a>
-    <a href="./CONTRIBUTING.md">
-        <img src=https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat" alt="contributions - contributions">
+    <a href="https://github.com/crgz/abbreviated_dates/blob/main/CONTRIBUTING.md">
+        <img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat" alt="contributions - contributions">
     </a>
 </p>
-
-<!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[release-shield]: https://github.com/crgz/abbreviated_dates/blob/main/.github/badges/release.svg
-[release-url]: https://www.swi-prolog.org/pack/list?p=abbreviated_dates
-
-[submit-shield]: https://github.com/crgz/abbreviated_dates/actions/workflows/04-ship.yml/badge.svg
-[submit-url]: https://github.com/crgz/abbreviated_dates/actions?query=is%3Asuccess
-
-[issues-shield]: https://img.shields.io/github/issues/crgz/abbreviated_dates.svg
-[issues-url]: https://github.com/crgz/abbreviated_dates/issues
-
-[forks-shield]: https://img.shields.io/github/forks/crgz/abbreviated_dates.svg
-[forks-url]: https://github.com/crgz/abbreviated_dates/network/members
-
-[stars-shield]: https://img.shields.io/github/stars/crgz/abbreviated_dates.svg
-[stars-url]: https://github.com/crgz/abbreviated_dates/stargazers
-
-[contributors-shield]: https://img.shields.io/github/contributors/crgz/abbreviated_dates.svg
-[contributors-url]: https://github.com/crgz/abbreviated_dates/graphs/contributors
-
-[contributions-shield]: https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat
-[contributions-url]: ./CONTRIBUTING.md
 
 <p align="center">
     <a href="#user-content-key-features">Key Features</a> •
