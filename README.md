@@ -31,7 +31,7 @@
     <a href="https://github.com/crgz/abbreviated_dates/graphs/contributors">
         <img src="https://img.shields.io/github/contributors/crgz/abbreviated_dates.svg" alt="stars - stars">
     </a>
-    <a href="./CONTRIBUTING.md">
+    <a href="https://github.com/crgz/abbreviated_dates/blob/main/CONTRIBUTING.md">
         <img src=https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat" alt="contributions - contributions">
     </a>
 </p>
