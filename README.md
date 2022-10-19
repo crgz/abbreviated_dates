@@ -1,3 +1,6 @@
+<img src=".github/flags-jakearchibald.github.io-scour.svg?raw=true" width="25%" align="right" style="border:20px solid white">
+
+# Parser for abbreviated, ambiguous, incomplete dates in multiple languages
 <!-- PROJECT SHIELDS -->
 [![Release!][release-shield]][release-url]
 [![Status][submit-shield]][submit-url]
@@ -5,12 +8,61 @@
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Contributors][contributors-shield]][contributors-url]
-[![MIT License][license-shield]][license-url]
 [![contributions welcome][contributions-shield]][contributions-url]
 
-<img src=".github/flags-jakearchibald.github.io-scour.svg?raw=true" width="25%" align="right" style="border:20px solid white">
 
-# Parser for abbreviated, ambiguous, incomplete dates in multiple languages
+<p align="center">
+    <a href=https://www.swi-prolog.org/pack/list?p=abbreviated_dates">
+        <img src="https://github.com/crgz/abbreviated_dates/blob/main/.github/badges/release.svg" alt="release - release">
+    </a>
+    <a href="https://github.com/crgz/abbreviated_dates/actions?query=is%3Asuccess">
+        <img src="https://github.com/crgz/abbreviated_dates/actions/workflows/04-ship.yml/badge.svg" alt="Status - Status">
+    </a>
+    <a href="https://github.com/crgz/abbreviated_dates/issues">
+        <img src="https://img.shields.io/github/issues/crgz/abbreviated_dates.svg" alt="issues">
+    </a>
+    <a href="https://github.com/crgz/abbreviated_dates/network/members">
+        <img src=https://img.shields.io/github/forks/crgz/abbreviated_dates.svg" alt="forks - forks">
+    </a>
+    <a href="https://github.com/crgz/abbreviated_dates/stargazers">
+        <img src="https://img.shields.io/github/stars/crgz/abbreviated_dates.svg" alt="stars - stars">
+    </a>
+    <a href="https://github.com/crgz/abbreviated_dates/graphs/contributors">
+        <img src="https://img.shields.io/github/contributors/crgz/abbreviated_dates.svg" alt="stars - stars">
+    </a>
+</p>
+
+<!-- MARKDOWN LINKS & IMAGES -->
+<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+[release-shield]: https://github.com/crgz/abbreviated_dates/blob/main/.github/badges/release.svg
+[release-url]: https://www.swi-prolog.org/pack/list?p=abbreviated_dates
+
+[submit-shield]: https://github.com/crgz/abbreviated_dates/actions/workflows/04-ship.yml/badge.svg
+[submit-url]: https://github.com/crgz/abbreviated_dates/actions?query=is%3Asuccess
+
+[issues-shield]: https://img.shields.io/github/issues/crgz/abbreviated_dates.svg
+[issues-url]: https://github.com/crgz/abbreviated_dates/issues
+
+[forks-shield]: https://img.shields.io/github/forks/crgz/abbreviated_dates.svg
+[forks-url]: https://github.com/crgz/abbreviated_dates/network/members
+
+[stars-shield]: https://img.shields.io/github/stars/crgz/abbreviated_dates.svg
+[stars-url]: https://github.com/crgz/abbreviated_dates/stargazers
+
+[contributors-shield]: https://img.shields.io/github/contributors/crgz/abbreviated_dates.svg
+[contributors-url]: https://github.com/crgz/abbreviated_dates/graphs/contributors
+
+[contributions-shield]: https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat
+[contributions-url]: ./CONTRIBUTING.md
+
+<p align="center">
+    <a href="#user-content-key-features">Key Features</a> •
+    <a href="#user-content-how-to-use">How To Use</a> •
+    <a href="#user-content-installation">Installation</a> •
+    <a href="#user-content-how-it-works">How it works</a> •
+    <a href="#user-content-common-use-cases">Common use cases</a> •
+    <a href="#user-content-roadmap">Roadmap</a>
+</p>
 
 Have you ever tried to understand a date like *11-09, št*? Is the *št* an abbreviation of a month or a weekday? Which of
 those numbers represent the month or the day? This library leverages on [Good Ol' Fashioned
@@ -64,19 +116,19 @@ format(Starting, Text, DateText, Language, Country):-
 ```
 </details>
 
-Note: To install required packages run `make install` in your OS shell and `pack_install(cli_table).` in your SWI-Prolog shell
+## Installation
 
-[<img alt="Sequence Diagram" width="30%" align="right"
-src="https://crgz.github.io/abbreviated_dates/uml/png/sequence.png"/>](https://crgz.github.io/abbreviated_dates/uml/svg/sequence.svg)
+To install required packages run:
 
-## Eager to Contribute? ❤️
+```commandline
+make install
+```
 
-Collaboration is essential to keep projects alive. We would like to keep it as easy as possible to collaborate changes. There
-are a few guidelines that we need collaborators to follow so that all of us can benefit from quality control and quality
-documentation. All types of collaborations are encouraged and valued. Please make sure to read the relevant section before
-making your contribution. It will make it a lot easier for us maintainers and smooth out the experience for all involved. Our
-community looks forward to having you as a collaborator. Please read the [CONTRIBUTING.md](./CONTRIBUTING.md) for further
-details regarding our GitHub Actions powered workflow:
+To test the demo code shown above run this query in your SWI-Prolog shell:
+
+```prolog
+pack_install(cli_table).
+```
 
 ## How it works
 
@@ -100,9 +152,14 @@ In the case of interpreting the abbreviation as a Thursday:
 For further details have a look at the [implementation](prolog/abbreviated_dates.pl). In addition, the
 [unit tests](prolog/abbreviated_dates.plt) might give an impression on how to use this library.
 
-## Review
+## Common use cases
 
-The package can be reviewed in the [Distribution Server](https://eu.swi-prolog.org/pack/review?p=abbreviated_dates)
+Consuming data from different sources:
+
+* Scraping: extract dates from different places with several formats and languages
+* IoT: consuming data coming from different sources with different date formats
+* Tooling: consuming dates from different logs / sources
+* Format transformations: when transforming dates coming from different files (PDF, CSV, etc.) to other formats (database, etc).
 
 ## Roadmap
 
@@ -111,26 +168,10 @@ The package can be reviewed in the [Distribution Server](https://eu.swi-prolog.o
 
 See the [open issues](https://github.com///issues) for a full list of proposed features (and known issues).
 
+## Review
+
+The package can be reviewed in the [Distribution Server](https://eu.swi-prolog.org/pack/review?p=abbreviated_dates)
+
 ## License
 
 Distributed under the MIT License. See `LICENSE` file for more information.
-
-<!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[release-shield]: https://github.com/crgz/abbreviated_dates/blob/main/.github/badges/release.svg
-[release-url]: https://www.swi-prolog.org/pack/list?p=abbreviated_dates
-[submit-shield]: https://github.com/crgz/abbreviated_dates/actions/workflows/04-ship.yml/badge.svg
-[submit-url]: https://github.com/crgz/abbreviated_dates/actions?query=is%3Asuccess
-[issues-shield]: https://img.shields.io/github/issues/crgz/abbreviated_dates.svg
-[issues-url]: https://github.com/crgz/abbreviated_dates/issues
-[forks-shield]: https://img.shields.io/github/forks/crgz/abbreviated_dates.svg
-[forks-url]: https://github.com/crgz/abbreviated_dates/network/members
-[stars-shield]: https://img.shields.io/github/stars/crgz/abbreviated_dates.svg
-[stars-url]: https://github.com/crgz/abbreviated_dates/stargazers
-[contributors-shield]: https://img.shields.io/github/contributors/crgz/abbreviated_dates.svg
-[contributors-url]: https://github.com/crgz/abbreviated_dates/graphs/contributors
-[license-shield]: https://img.shields.io/github/license/crgz/abbreviated_dates.svg
-[license-url]: https://github.com/crgz/abbreviated_dates/blob/main/LICENSE
-[contributions-shield]: https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat
-[contributions-url]: ./CONTRIBUTING.md
-
