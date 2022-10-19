@@ -3,7 +3,7 @@
 # having a Makefile included and seeing all the weird results when make all was run in a location where it was not
 # expected. https://rlaanemets.com/post/show/prolog-pack-development-experience
 
-.PHONY: all about help reset test bump release install requirements committer publish diagrams clean remove-all
+.PHONY: all about help synchronize test bump release install requirements committer publish diagrams clean remove-all
 SHELL = /bin/bash
 .SHELLFLAGS = -o pipefail -c
 
@@ -19,12 +19,12 @@ all: about
 about:
 	@: $${VERSION:=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt')} ; echo $(NAME) $$VERSION -- $(TITLE)
 
-help: ## Print this help
-	@printf '\e[1;34m%s\e[m%s %s\n\n' "List of available commands for: " $(NAME)
+help: about ## Print this help
+	@printf '\e[1;34m\n%s\e[m\n\n' "List of available commands:"
 	@grep -hE '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
-	awk 'BEGIN {FS = ":.*?## "}; {printf "\033[1;36m%-20s\033[0m %s\n", $$1, $$2}'
+	awk 'BEGIN {FS = ":.*?## "}; {printf "\033[1;36m%-12s\033[0m %s\n", $$1, $$2}'
 
-reset: ## Switch to main branch, fetch changes & delete merged branches
+synchronize: ## Synchronize the local repository: Switch to the main branch, fetch changes & delete merged branches
 	@git checkout main && git pull && git branch --merged | egrep -v "(^\*|main)" | xargs -r git branch -d || exit 0
 
 test: requirements  ## Run the test suite
@@ -34,7 +34,7 @@ bump: $(PACKAGE_PATH)/bumpversion ## Increase the version number
 	@bumpversion --allow-dirty --no-commit --no-tag --list patch
 
 # Requires unprotected main branch or maybe special token
-release: $(PACKAGE_PATH)/hub ## release for Github Actions
+release: $(PACKAGE_PATH)/hub ## Release recipe to be use from Github Actions
 	@LOCAL_VERSION=$$(awk -F=' ' '/current_version/{printf "v%s",$$2}' .bumpversion.cfg) ;\
 	REMOTE_VERSION=$$(curl --silent 'https://api.github.com/repos/crgz/$(NAME)/releases/latest' | jq -r .tag_name) ;\
 	if [ $$LOCAL_VERSION == $$REMOTE_VERSION ]; then exit; fi ;\
@@ -87,7 +87,7 @@ target/publish/workflow.svg:
 clean: ## Remove debris
 	rm -rfd target
 
-remove-all:
+remove-all: ## Remove packages and packs
 	@swipl -g "(member(P,[abbreviated_dates,date_time,tap]),pack_property(P,library(P)),pack_remove(P),fail);true,halt"
 	@sudo dpkg --purge swi-prolog bumpversion hub
 	@sudo add-apt-repository --remove -y ppa:swi-prolog/stable
