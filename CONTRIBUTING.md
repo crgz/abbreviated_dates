@@ -26,7 +26,7 @@ your appreciation, which we would also be very happy about:
 Typical Contribution Workflow
 -----------------------------
 
-[<img alt="ARCTIC Context" width="100%" align="right"
+[<img alt="sequence" width="100%" align="right"
 src="https://crgz.github.io/abbreviated_dates/uml/png/sequence.png"/>](https://crgz.github.io/abbreviated_dates/uml/svg/sequence.svg)
 
 ### Create a Pull Request
@@ -94,7 +94,7 @@ Request is closed.
 ## General guidelines and philosophy for contribution
 
 -   Please include unit tests when you contribute new features, as they
-    help to a) prove that your code works correctly, and b) guard
+    help to prove that your code works correctly, and guard
     against future breaking changes to lower the maintenance cost.
 -   Bug fixes also generally require unit tests, because the presence of
     bugs usually indicates insufficient test coverage.
@@ -144,7 +144,7 @@ We will then take care of the issue as soon as possible.
 
 #### Before Submitting a Bug Report
 
-A good bug report shouldn’t leave others needing to chase you up for
+A good bug report should not leave others needing to chase you up for
 more information. Therefore, we ask you to investigate carefully,
 collect information and describe the issue in detail in your report.
 Please complete the following steps in advance to help us fix any
