@@ -164,6 +164,11 @@ single_day([Context|_], Date, Language, '%d', _) -->
   month_day(D),
   {future_date(Context, D, Date), language(Language)}.
 
+% phrase(abbreviated_dates:single_day([date(2020, 2, 28)], Date, Language, Syntax), `31.`).
+single_day([Context|_], Date, Language, '%d', _) -->
+  month_day(D), ".",
+  {future_date(Context, D, Date), language(Language)}.
+
 % DATES HINTING RELATIVE DAYS
 
 % phrase(abbreviated_dates:single_day([date(2020, 2, 29)], Date, Language, Syntax), `Tomorrow`).

@@ -223,6 +223,15 @@ test('Absolute Day'):-
     'Slovak','Slovenian','Spanish','Swedish','Turkish','Ukrainian','Vietnamese']),
   assertion(Formats == ['%d']).
 
+test('Absolute Day plus dot'):-
+  solutions([date(2021, 9, 21)], '4.', Dates, Languages, Formats),
+  assertion(Dates == [date(2021, 10, 4)]),
+  assertion(Languages == [
+    'Bulgarian','Chinese','Croatian','Czech','Danish','Dutch','English','Estonian','Finnish','French','German','Greek',
+    'Hebrew','Hungarian','Italian','Japanese','Latvian','Lithuanian','Norwegian','Polish','Portuguese','Romanian','Russian',
+    'Slovak','Slovenian','Spanish','Swedish','Turkish','Ukrainian','Vietnamese']),
+  assertion(Formats == ['%d']).
+
 % DATES HINTING RELATIVE DAYS
 
 test('Today'):-
