@@ -40,7 +40,7 @@ to parse abbreviated, ambiguous, and incomplete dates in multiple languages.
 <img src="https://api.star-history.com/svg?repos=crgz/abbreviated_dates" width="60%" align="left" style="border:0px solid white">
 
 ## How to support this work
-Please give these GitHub repositories a star <a href="https://github.com/crgz/abbreviated_dates"><img src="https://cdn-icons-png.flaticon.com/128/753/753277.png" width="20" height="20"></a>
+Please give these GitHub repository a star <a href="https://github.com/crgz/abbreviated_dates"><img src="https://cdn-icons-png.flaticon.com/128/753/753277.png" width="20" height="20"></a>
 
 ## Key Features
 
