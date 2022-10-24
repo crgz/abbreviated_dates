@@ -37,6 +37,11 @@ those numbers represent the month or the day? This library leverages on [Good Ol
 AI](https://www.cambridge.org/core/books/abs/cambridge-handbook-of-artificial-intelligence/gofai/FCF7D6DD921658FE8AE9F2A2B0FECBDD)
 to parse abbreviated, ambiguous, and incomplete dates in multiple languages.
 
+<img src="https://api.star-history.com/svg?repos=crgz/abbreviated_dates" width="50%" align="left" style="border:0px solid white">
+
+## How to support this work
+Please give these GitHub repository a star <a href="https://github.com/crgz/abbreviated_dates"><img src="https://cdn-icons-png.flaticon.com/128/753/753277.png" width="20" height="20"></a>
+
 ## Key Features
 
 * Python support through a [Python Bridge](https://github.com/crgz/fuzzy_dates)
