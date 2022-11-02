@@ -97,7 +97,7 @@ pack_install(cli_table).
 ## How it works
 
 The abbreviation "št" could stand for:
-- Šeštadienis which means in Saturday in Lithuanian
+- Šeštadienis which means Saturday in Lithuanian
 - Štvrtok which means in Thursday in Slovak
 
 Lithuanian is spoken in Lithuania and in Latvia. Slovak is spoken in Slovakia but also by a minority in the Czech Republic.
