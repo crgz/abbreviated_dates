@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>crgz</groupId>
+    <artifactId>abbreviated_dates</artifactId>
+    <version>0.0.0</version>
+    <url>https://github.com/crgz/abbreviated_dates</url>
+    <name>Parser for Abbreviated Dates</name>
+    <description>
+        The Parser for Abbreviated Dates retrieve possible date graphemes meanings, analyzeing their uses according to
+        cultural contexts
+    </description>
+    <packaging>pom</packaging>
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <performancetest.webservice.host>localhost</performancetest.webservice.host>
+        <performancetest.webservice.path>/api/analyze</performancetest.webservice.path>
+        <performancetest.connectTimeout>1000</performancetest.connectTimeout>
+        <performancetest.responseTimeout>3000</performancetest.responseTimeout>
+        <performancetest.threadCount>20</performancetest.threadCount>
+        <performancetest.loopCount>10</performancetest.loopCount>
+        <skipITs>false</skipITs>
+        <!--
+        4.0: Capable of: mvn clean jmeter:configure jmeter:gui
+        jmeter-maven-plugin 2.8.3 & jmeter 5.0: Capable of: enabling the plugin manager if darklaf-property-loader-2.3.0.jar if removed from /lib
+        Known problems:
+        5.0 jmeter-graph-maven-plugin:0.1.0:create-graph: Exception in thread "main" java.lang.InstantiationError: org.apache.log.Logger
+        5.5 An error occurred: kotlin/coroutines/Continuation
+        -->
+        <apache.jmeter.version>4.0</apache.jmeter.version>
+    </properties>
+
+    <profiles>
+        <!--I N T E G R A T I O N   &  P E R F O R M A N C E  -->
+        <profile>
+            <id>performance</id>
+            <build> <!--Inherited-->
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>build-helper-maven-plugin</artifactId>
+                        <version>3.0.0</version>
+                        <executions>
+                            <execution>
+                                <id>reserve-container-port</id>
+                                <goals>
+                                    <goal>reserve-network-port</goal>
+                                </goals>
+                                <phase>generate-resources</phase>
+                                <configuration>
+                                    <portNames>
+                                        <portName>receiverPort</portName>
+                                    </portNames>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin> <!--build-helper-->
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.7</version>
+                        <executions>
+                            <execution>
+                                <id>Run integration-test task in pre-integration-test phase</id>
+                                <phase>pre-integration-test</phase>
+                                <configuration>
+                                    <target name="STARTING EPIGRAPHER">
+                                        <exec executable="swipl" spawn="true" dir="${project.basedir}" osfamily="unix">
+                                            <arg line="../prolog/epigrapher.pl --port=${receiverPort} --debug='http(request)' --pidfile=/tmp/epigrapher.pid --sighup=quit --no-fork"/>
+                                        </exec>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>Kill NodeServer in post-integration-test phase</id>
+                                <phase>post-integration-test</phase>
+                                <configuration>
+                                    <target name="ENDING EPIGRAPHER">
+                                        <exec executable="bash" spawn="true" dir="${project.basedir}" osfamily="unix">
+                                            <arg line="kill -HUP $(cat /tmp/epigrapher.pid)"/>
+                                        </exec>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin> <!--maven-antrun-plugin-->
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+    <build>
+        <plugins>
+
+            <plugin>
+                <groupId>com.lazerycode.jmeter</groupId>
+                <artifactId>jmeter-maven-plugin</artifactId>
+                <!--
+                Known problems:
+                 3.*:
+                  Failed to execute goal com.lazerycode.jmeter:jmeter-maven-plugin:3.6.0:configure (configure) on project...
+                  Could not find artifact org.apache.jmeter:ApacheJMeter_bolt:jar:4.0 in central ...
+                Succeeded with: 2.7.0, 2.9.0-->
+                <version>2.9.0</version>
+                <configuration>
+                    <jmeterVersion>${apache.jmeter.version}</jmeterVersion>
+                    <generateReports>false</generateReports><!-- Required to generate jtl after 2.5.1-->
+                    <resultsFileFormat>xml
+                    </resultsFileFormat><!-- https://github.com/jmeter-maven-plugin/jmeter-maven-plugin/issues/266-->
+                    <testResultsTimestamp>false</testResultsTimestamp>
+                    <overrideRootLogLevel>DEBUG</overrideRootLogLevel>
+                    <suppressJMeterOutput>false</suppressJMeterOutput>
+                    <ignoreResultFailures>true</ignoreResultFailures>
+                    <propertiesUser>
+                        <webservice.host>${performancetest.webservice.host}</webservice.host>
+                        <webservice.port>${performancetest.webservice.port}</webservice.port>
+                        <webservice.path>${performancetest.webservice.path}</webservice.path>
+                        <webservice.connectTimeout>${performancetest.connectTimeout}</webservice.connectTimeout>
+                        <webservice.responseTimeout>${performancetest.responseTimeout}</webservice.responseTimeout>
+                        <threadCount>${performancetest.threadCount}</threadCount>
+                        <loopCount>${performancetest.threadCount}</loopCount>
+                    </propertiesUser>
+                    <propertiesJMeter>
+                        <receiver.port>${receiverPort}</receiver.port>
+                        <jmeter.save.saveservice.thread_counts>true</jmeter.save.saveservice.thread_counts>
+                    </propertiesJMeter>
+                    <jMeterProcessJVMSettings>
+                        <arguments>
+                            <!--Remove Warning: Nashorn engine is planned to be removed from a future JDK release
+                                https://jmeter.apache.org/changes_history.html -->
+                            <argument>-Dnashorn.args=--no-deprecation-warning</argument>
+                        </arguments>
+                    </jMeterProcessJVMSettings>
+                    <!--The POM for commons-math3:commons-math3:jar:3.4.1 is missing, no dependency information available-->
+                    <!--https://stackoverflow.com/questions/42268380/how-to-use-perfmon-plugins-with-jmeter-maven-plugin-->
+                    <downloadExtensionDependencies>false</downloadExtensionDependencies>
+                    <!--darklaf-property-loader-2.3.0.jar in jmeter-plugins-manager>1.5 breaks jmeter-plugins-manager-->
+                    <!--kg.apc:jmeter-plugins-manager:1.5 works & exclude darklaf-property-loader-2.3.0.jar -->
+                    <jmeterExtensions>
+                        <artifact>kg.apc:jmeter-plugins-manager:1.5</artifact>
+                        <artifact>kg.apc:jmeter-plugins-graphs-basic:2.0</artifact>
+                        <artifact>kg.apc:jmeter-plugins-graphs-composite:2.0</artifact>
+                        <artifact>kg.apc:jmeter-plugins-graphs-dist:2.0</artifact>
+                        <artifact>kg.apc:jmeter-plugins-csl:0.1</artifact>
+                    </jmeterExtensions>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>configuration</id>
+                        <goals>
+                            <goal>configure</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>execute-jmeter-tests</id>
+                        <goals>
+                            <goal>jmeter</goal>
+                        </goals>
+                        <phase>integration-test</phase>
+                    </execution>
+                </executions>
+            </plugin> <!--jmeter-maven-plugin-->
+
+            <plugin>
+                <groupId>com.lazerycode.jmeter</groupId>
+                <artifactId>jmeter-analysis-maven-plugin</artifactId>
+                <version>1.0.6</version>
+                <configuration>
+                    <source>${project.build.directory}/**/*.jtl</source>
+                    <targetDirectory>${project.build.directory}/jmeter-analysis-maven-plugin/</targetDirectory>
+                    <configurationCharts>
+                        <width>800</width>
+                        <height>300</height>
+                    </configurationCharts>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>create-html-report</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>analyze</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin> <!--jmeter-analysis-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.8</version>
+                <executions>
+                    <execution>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <copy todir="${project.build.directory}/images/analysis/">
+                                    <fileset dir="${project.build.directory}/jmeter-analysis-maven-plugin/">
+                                        <include name="*.png"/>
+                                    </fileset>
+                                </copy>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin> <!--antrun-->
+
+            <plugin>
+                <groupId>de.codecentric</groupId>
+                <artifactId>jmeter-graph-maven-plugin</artifactId>
+                <version>0.1.0</version>
+                <executions>
+                    <execution>
+                        <id>create-graph-threads</id>
+                        <goals>
+                            <goal>create-graph</goal>
+                        </goals>
+                        <phase>verify</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <inputFile>${project.build.directory}/jmeter/results/smoke-test.jtl</inputFile>
+                    <graphs>
+                        <graph>
+                            <pluginType>ThreadsStateOverTime</pluginType>
+                            <width>800</width>
+                            <height>300</height>
+                            <outputFile>
+                                ${project.build.directory}/images/graph/${project.artifactId}-ThreadsStateOverTime.png
+                            </outputFile>
+                        </graph>
+                        <graph>
+                            <pluginType>BytesThroughputOverTime</pluginType>
+                            <width>800</width>
+                            <height>300</height>
+                            <outputFile>
+                                ${project.build.directory}/images/graph/${project.artifactId}-BytesThroughputOverTime.png
+                            </outputFile>
+                        </graph>
+                        <graph>
+                            <pluginType>HitsPerSecond</pluginType>
+                            <width>800</width>
+                            <height>300</height>
+                            <outputFile>
+                                ${project.build.directory}/images/graph/${project.artifactId}-HitsPerSecond.png
+                            </outputFile>
+                        </graph>
+                        <graph>
+                            <pluginType>LatenciesOverTime</pluginType>
+                            <width>800</width>
+                            <height>300</height>
+                            <outputFile>
+                                ${project.build.directory}/images/graph/${project.artifactId}-LatenciesOverTime.png
+                            </outputFile>
+                        </graph>
+                        <graph>
+                            <pluginType>ResponseCodesPerSecond</pluginType>
+                            <width>800</width>
+                            <height>300</height>
+                            <outputFile>
+                                ${project.build.directory}/images/graph/${project.artifactId}-ResponseCodesPerSecond.png
+                            </outputFile>
+                        </graph>
+                        <graph>
+                            <pluginType>ResponseTimesDistribution</pluginType>
+                            <width>800</width>
+                            <height>300</height>
+                            <outputFile>
+                                ${project.build.directory}/images/graph/${project.artifactId}-ResponseTimesDistribution.png
+                            </outputFile>
+                        </graph>
+                        <graph>
+                            <pluginType>ResponseTimesOverTime</pluginType>
+                            <width>800</width>
+                            <height>300</height>
+                            <outputFile>
+                                ${project.build.directory}/images/graph/${project.artifactId}-ResponseTimesOverTime.png
+                            </outputFile>
+                        </graph>
+                        <graph>
+                            <pluginType>ResponseTimesPercentiles</pluginType>
+                            <width>800</width>
+                            <height>300</height>
+                            <outputFile>
+                                ${project.build.directory}/images/graph/${project.artifactId}-ResponseTimesPercentiles.png
+                            </outputFile>
+                        </graph>
+                        <graph>
+                            <pluginType>ThroughputVsThreads</pluginType>
+                            <width>800</width>
+                            <height>300</height>
+                            <outputFile>
+                                ${project.build.directory}/images/graph/${project.artifactId}-ThroughputVsThreads.png
+                            </outputFile>
+                        </graph>
+                        <graph>
+                            <pluginType>TimesVsThreads</pluginType>
+                            <width>800</width>
+                            <height>300</height>
+                            <outputFile>
+                                ${project.build.directory}/images/graph/${project.artifactId}-TimesVsThreads.png
+                            </outputFile>
+                        </graph>
+                        <graph>
+                            <pluginType>TransactionsPerSecond</pluginType>
+                            <width>800</width>
+                            <height>300</height>
+                            <outputFile>
+                                ${project.build.directory}/images/graph/${project.artifactId}-TransactionsPerSecond.png
+                            </outputFile>
+                        </graph>
+                    </graphs>
+                </configuration>
+            </plugin> <!--jmeter-graph-maven-plugin-->
+        </plugins>
+    </build>
+</project>
