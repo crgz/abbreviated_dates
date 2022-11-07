@@ -28,7 +28,7 @@ synchronize: ## Synchronize the local repository: Switch to the main branch, fet
 	@git checkout main && git pull && git branch --merged | egrep -v "(^\*|main)" | xargs -r git branch -d || exit 0
 
 test: requirements  ## Run the test suite
-	@swipl -g 'load_test_files([]),run_tests,halt' prolog/$(NAME).pl
+	@swipl -g 'load_test_files([]),run_tests,halt' prolog/epigrapher.pl
 
 bump: $(PACKAGE_PATH)/bumpversion ## Increase the version number
 	@bumpversion --allow-dirty --no-commit --no-tag --list patch
