@@ -79,6 +79,49 @@ $(PPA_PATH)/cpick-ubuntu-hub-bionic.list:
 $(PPA_PATH)/swi-prolog-ubuntu-stable-bionic.list:
 	@sudo add-apt-repository -y ppa:swi-prolog/stable
 
+$(PACKAGE_PATH)/swipl:
+	@sudo apt install -y swi-prolog
+$(PACKAGE_PATH)/hub: $(HUB_PPA)
+	@sudo apt install -y hub
+$(PACKAGE_PATH)/%: # Install packages from default repo
+	@sudo apt install $(notdir $@) -y
+
+# Performance
+test-load:
+	mvn -e verify -DskipITs=false -Pperformance -f performance/pom.xml
+jmeter-run:
+	mvn -f performance/pom.xml -Pperformance jmeter:gui -DguiTestFile=src/test/jmeter/test.jmx
+
+PID=/tmp/epigrapher.pid
+server-start: server-stop
+	@swipl prolog/epigrapher.pl --port=3000 --debug='http(request)' --pidfile=$(PID) --sighup=quit --fork
+server-stop:
+	@if [ -f $(PID) ]; then kill -HUP $$(cat $(PID)) || rm $(PID); fi
+
+#
+# docker
+#
+.PHONY: docker-run
+PORT ?= 3000
+docker-run: docker-build  ## Run the application in the Docker container
+	docker run -it -p $(PORT):$(PORT) --name="$(NAME)" $(NAME)
+
+.PHONY: docker-build
+BASE_IMAGE ?= swipl
+docker-build:  ## Build the Docker container for the app
+	docker build  --build-arg "PORT=$(PORT)" --build-arg "BASE_IMAGE=$(BASE_IMAGE)" -t $(NAME) .
+
+.PHONY: docker-push
+docker-push: docker-build ## push the Docker container for the app
+	docker push $(NAME)
+
+.PHONY: docker-clean
+docker-clean: ## Remove docker instances
+	docker stop $(NAME) || true && docker rm $(NAME) || true
+
+#
+#  diagrams
+#
 GIT_REPO_URL := $(shell git config --get remote.origin.url)
 
 publish: diagrams ## Publish the diagrams
@@ -93,10 +136,6 @@ publish: diagrams ## Publish the diagrams
 	&& cd ../.. || exit
 
 diagrams: workflow
-
-#
-#  workflow
-#
 workflow: target/publish/workflow.svg  ## Creates the Diagrams
 target/publish/workflow.svg:
 	@printf '\e[1;34m%-6s\e[m\n' "Start generation of scalable C4 Diagrams"
