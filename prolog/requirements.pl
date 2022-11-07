@@ -2,22 +2,22 @@
 
 default([tap,date_time,abbreviated_dates]).
 
-install :- default(R), install(R).
+install :- default(Requirements), install(Requirements).
 
-install(R) :-
+install(Requirements) :-
     open_null_stream(Null),
     set_prolog_IO(user_input, user_output, Null),
-    foreach((member(P,R),missing(P)),pack_install(P,[interactive(false)])),
+    foreach((member(Pack,Requirements),missing(Pack)),pack_install(Pack,[interactive(false)])),
     close(Null). 
 
-missing(P):-
-    getenv('HOME',H),
-    atomic_list_concat([H, '/.local/share/swi-prolog/pack/', P], D),
-    \+exists_directory(D).
+missing(Pack):-
+    getenv('HOME',Home),
+    atomic_list_concat([Home, '/.local/share/swi-prolog/pack/', Pack], Directory),
+    \+exists_directory(Directory).
 
 remove :-
-    default(R),
-    reverse(R, Reverse),
-    foreach((member(P,Reverse), exist(P)), pack_remove(P)).
+    default(Requirements),
+    reverse(Requirements, Reverse),
+    foreach((member(Pack,Reverse), exist(Pack)), pack_remove(Pack)).
 
-exist(P):- pack_property(P, library(P)).
+exist(Pack):- pack_property(Pack, library(Pack)).
