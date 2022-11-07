@@ -14,7 +14,7 @@ PACKAGE_PATH = /usr/bin
 PPA_PATH = /etc/apt/sources.list.d
 HUB_PPA := $(shell [ $$(lsb_release -r|cut -f2) = 18.04 ] && echo $(PPA_PATH)/cpick-ubuntu-hub-bionic.list || echo "")
 
-all: about
+all: packages
 
 about:
 	@: $${VERSION:=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt')} ; echo $(NAME) $$VERSION -- $(TITLE)
@@ -51,12 +51,33 @@ install: requirements committer ## Install the latest library release or the one
 	REMOTE=https://github.com/crgz/$(NAME)/archive/$$VERSION.zip ;\
 	swipl -qg "pack_remove($(NAME)),pack_install('$$REMOTE',[interactive(false)]),halt(0)" -t 'halt(1)'
 
-requirements: packages packs  ## Install the packages packs required for the development environment
+# Setup requirements
+dev: requirements jdk ## Install the packages required for the development environment
+requirements: packages packs  ## Install the packages required for the execution environment
 packages: $(PPA_PATH)/swi-prolog-ubuntu-stable-bionic.list $(PACKAGE_PATH)/swipl $(PACKAGE_PATH)/git
-packs: $(PACK_PATH)/tap  $(PACK_PATH)/date_time
+packs:
+	@swipl -g "install,halt" prolog/requirements.pl
 
-committer:
-	@git config --global user.email "conrado.rgz@gmail.com" && git config --global user.name "Conrado Rodriguez"
+jdk: ## Install the packages required for the performance tests
+	apt install maven openjdk-11-jdk
+
+remove-all: clean packs-remove ## Remove packages and packs
+	@sudo dpkg --purge swi-prolog bumpversion hub
+	@sudo add-apt-repository --remove -y ppa:swi-prolog/stable
+	@sudo add-apt-repository --remove -y ppa:cpick/hub
+	@sudo rm -f $(HUB_PPA) $(PPA_PATH)/swi-prolog-ubuntu-stable-bionic.list
+	@sudo apt -y autoremove
+
+clean: ## Remove performance tests results
+	mvn clean -f performance/pom.xml
+
+packs-remove: ## Remove packs
+	@swipl -g "remove,halt" prolog/requirements.pl
+
+$(PPA_PATH)/cpick-ubuntu-hub-bionic.list:
+	@sudo add-apt-repository -ny ppa:cpick/hub  # Let the last repo do the update
+$(PPA_PATH)/swi-prolog-ubuntu-stable-bionic.list:
+	@sudo add-apt-repository -y ppa:swi-prolog/stable
 
 GIT_REPO_URL := $(shell git config --get remote.origin.url)
 
@@ -84,28 +105,5 @@ target/publish/workflow.svg:
 	@mvn exec:java@generate-diagrams -DoutputType=png -Dlinks=0  -f .github/plantuml/
 	@printf '\n\e[1;34m%-6s\e[m\n' "The diagrams has been generated"
 
-clean: ## Remove debris
-	rm -rfd target
-
-remove-all: ## Remove packages and packs
-	@swipl -g "(member(P,[abbreviated_dates,date_time,tap]),pack_property(P,library(P)),pack_remove(P),fail);true,halt"
-	@sudo dpkg --purge swi-prolog bumpversion hub
-	@sudo add-apt-repository --remove -y ppa:swi-prolog/stable
-	@sudo add-apt-repository --remove -y ppa:cpick/hub
-	@sudo rm -f $(HUB_PPA) $(PPA_PATH)/swi-prolog-ubuntu-stable-bionic.list
-	@sudo apt -y autoremove
-
-$(PPA_PATH)/cpick-ubuntu-hub-bionic.list:
-	@sudo add-apt-repository -ny ppa:cpick/hub  # Let the last repo do the update
-$(PPA_PATH)/swi-prolog-ubuntu-stable-bionic.list:
-	@sudo add-apt-repository -y ppa:swi-prolog/stable
-
-$(PACKAGE_PATH)/swipl:
-	@sudo apt install -y swi-prolog
-$(PACKAGE_PATH)/hub: $(HUB_PPA)
-	@sudo apt install -y hub
-$(PACKAGE_PATH)/%: # Install packages from default repo
-	@sudo apt install $(notdir $@) -y
-
-$(PACK_PATH)/%:
-	@swipl -qg "pack_install('$(notdir $@)',[interactive(false)]),halt"
+committer:
+	@git config --global user.email "conrado.rgz@gmail.com" && git config --global user.name "Conrado Rodriguez"
