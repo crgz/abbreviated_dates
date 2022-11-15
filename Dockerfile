@@ -1,8 +1,7 @@
 ARG  BASE_IMAGE
 FROM ${BASE_IMAGE}
-RUN apt update
-RUN apt install -y git make
-RUN groupadd parser \
+RUN apt update && apt install -y git make
+RUN groupadd epigrapher \
     --gid 1201 \
     && useradd epigrapher \
     --create-home \
