@@ -4,17 +4,17 @@ RUN apt update
 RUN apt install -y git make
 RUN groupadd parser \
     --gid 1201 \
-    && useradd parser \
+    && useradd epigrapher \
     --create-home \
     --gid 1201 \
     --shell /bin/bash \
     --uid 1200 \
-    && usermod -a -G sudo parser \
+    && usermod -a -G sudo epigrapher \
     && echo 'ALL ALL = (ALL) NOPASSWD: ALL' >> /etc/sudoers \
-    && echo 'parser:secret' | chpasswd
-ENV HOME=/home/parser
+    && echo 'epigrapher:secret' | chpasswd
+ENV HOME=/home/epigrapher
 
-USER parser
+USER epigrapher
 COPY prolog/ /app
 ARG PORT
 ENV PORT=$PORT
