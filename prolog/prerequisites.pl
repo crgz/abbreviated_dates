@@ -1,4 +1,6 @@
-:- module(requirements, [install/0, install/1, remove/0]).
+#!/usr/bin/env swipl
+:- module(prerequisites, [install/0, install/1, remove/0]).
+:- initialization(install, main).
 
 default([tap,date_time,abbreviated_dates]).
 
