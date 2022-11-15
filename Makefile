@@ -103,15 +103,9 @@ $(PACKAGE_PATH)/%: # Install packages from default repo
 
 # Performance
 test-load:
-	mvn -e verify -DskipITs=false -Pperformance -f performance/pom.xml
-jmeter-run:
-	mvn -f performance/pom.xml -Pperformance jmeter:gui -DguiTestFile=src/test/jmeter/test.jmx
-
-PID=/tmp/epigrapher.pid
-server-start: server-stop
-	@swipl prolog/epigrapher.pl --port=3000 --debug='http(request)' --pidfile=$(PID) --sighup=quit --fork
-server-stop:
-	@if [ -f $(PID) ]; then kill -HUP $$(cat $(PID)) || rm $(PID); fi
+	mvn clean -e verify -f performance/pom.xml
+jmeter-gui:
+	mvn clean -f performance/pom.xml jmeter:configure jmeter:gui -DguiTestFile=src/test/jmeter/smoke-test.jmx
 
 #
 # docker
