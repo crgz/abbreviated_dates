@@ -86,7 +86,7 @@ clean: ## Remove performance tests results
 	mvn clean -f performance/pom.xml
 
 packs-remove: ## Remove packs
-	@swipl -g "remove,halt" prolog/requirements.pl
+	@swipl -g "remove,halt" prolog/prerequisites.pl
 
 $(PPA_PATH)/cpick-ubuntu-hub-bionic.list:
 	@sudo add-apt-repository -ny ppa:cpick/hub  # Let the last repo do the update
