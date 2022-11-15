@@ -117,8 +117,8 @@ server-stop:
 #
 .PHONY: docker-run
 PORT ?= 3000
-docker-run: docker-build  ## Run the application in the Docker container
-	docker run -it -p $(PORT):$(PORT) --name="$(NAME)" $(NAME)
+docker-run: docker-clean docker-build  ## Run the application in the Docker container
+	docker run --memory 16m --memory-swap 0m -it -p $(PORT):$(PORT) --name="$(NAME)" $(NAME)
 
 .PHONY: docker-build
 BASE_IMAGE ?= swipl
