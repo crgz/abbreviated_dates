@@ -63,6 +63,7 @@ server-start: server-stop pack-install
 server-stop:
 	@if [ -f $(PID) ]; then kill -HUP $$(cat $(PID)) || rm $(PID); fi
 
+VERSION = $(shell awk -F\' '/version/{print $$2}' pack.pl)
 pack-install: packs $(SOURCES)
 	swipl -qg "pack_remove($(NAME)),halt"
 	tar zcvf $(NAME)-$(VERSION).tgz pack.pl prolog/
