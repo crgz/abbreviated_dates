@@ -10,6 +10,7 @@
 :- use_module(library(http/http_json)).
 :- use_module(library(date_time)).
 :- use_module(library(abbreviated_dates)).
+:- use_module(configuration).
 
 :- use_module(library(http/http_log)).
 :- set_setting(http:logfile, '/dev/stdout').
@@ -19,9 +20,13 @@
 :- http_handler(root(api/analyze), analyze, []).
 :- http_handler(root(health), server_health, []).
 
-run :-
-    print_message(banner, format('epigrapher started', [])),
-    http_daemon.
+server :-
+	server([]).
+
+server(Options) :-
+    findall(Term, (setting(epigrapher:Functor, Value),Term=..[Functor,Value]), Defaults),
+	merge_options(Options, Defaults, HTTPOptions),
+	http_daemon(HTTPOptions).
 
 %%	analyze(+Request)
 %
