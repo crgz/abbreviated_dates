@@ -1,7 +1,4 @@
-:- module(epigrapher, [parse_parameters/3, parse_time_fail_safe/2]).
-
-:- [requirements].
-:- initialization(requirements:install, now).
+:- module(epigrapher, [server/0, parse_parameters/3, parse_time_fail_safe/2]).
 
 :- use_module(library(http/http_unix_daemon)).
 :- use_module(library(http/http_error)). % https://www.swi-prolog.org/pldoc/man?section=http-debug
