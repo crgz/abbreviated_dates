@@ -11,9 +11,6 @@
 
 :- use_module(library(http/http_log)).
 :- set_setting(http:logfile, '/dev/stdout').
-
-:- initialization(run, main).
-
 :- http_handler(root(api/analyze), analyze, []).
 :- http_handler(root(health), server_health, []).
 
