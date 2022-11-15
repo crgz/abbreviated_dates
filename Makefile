@@ -155,5 +155,22 @@ target/publish/workflow.svg:
 	@mvn exec:java@generate-diagrams -DoutputType=png -Dlinks=0  -f .github/plantuml/
 	@printf '\n\e[1;34m%-6s\e[m\n' "The diagrams has been generated"
 
+#
+# Debug
+#
+.PHONY:	debug
+debug: ## Display local make variables defined
+	@$(foreach V, $(sort $(.VARIABLES)), \
+		$(if $(filter-out environment% default automatic,\
+			$(origin $V)), \
+			$(warning $V = $($V) )) \
+	)
+
+.PHONY:	debug-all
+debug-all: ## Display all make variables defined
+	@$(foreach V, $(sort $(.VARIABLES)), \
+		$(warning $V = $($V) ) \
+	)
+
 committer:
 	@git config --global user.email "conrado.rgz@gmail.com" && git config --global user.name "Conrado Rodriguez"
