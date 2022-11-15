@@ -13,8 +13,10 @@ PACK_PATH = ${HOME}/.local/share/swi-prolog/pack
 PACKAGE_PATH = /usr/bin
 PPA_PATH = /etc/apt/sources.list.d
 HUB_PPA := $(shell [ $$(lsb_release -r|cut -f2) = 18.04 ] && echo $(PPA_PATH)/cpick-ubuntu-hub-bionic.list || echo "")
+SOURCES := $(wildcard prolog/*.pl)
 
 all: about
+check: test
 
 about:
 	@: $${VERSION:=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt')} ; echo $(NAME) $$VERSION -- $(TITLE)
@@ -28,7 +30,7 @@ synchronize: ## Synchronize the local repository: Switch to the main branch, fet
 	@git checkout main && git pull && git branch --merged | egrep -v "(^\*|main)" | xargs -r git branch -d || exit 0
 
 test: requirements  ## Run the test suite
-	@swipl -g 'load_test_files([]),run_tests,halt' prolog/$(NAME).pl
+	@swipl -g 'load_test_files([]),run_tests,halt' prolog/epigrapher.pl
 
 bump: $(PACKAGE_PATH)/bumpversion ## Increase the version number
 	@bumpversion --allow-dirty --no-commit --no-tag --list patch
@@ -51,13 +53,86 @@ install: requirements committer ## Install the latest library release or the one
 	REMOTE=https://github.com/crgz/$(NAME)/archive/$$VERSION.zip ;\
 	swipl -qg "pack_remove($(NAME)),pack_install('$$REMOTE',[interactive(false)]),halt(0)" -t 'halt(1)'
 
-requirements: packages packs  ## Install the packages packs required for the development environment
+# Setup requirements
+dev: requirements jdk ## Install the packages required for the development environment
+requirements: packages packs  ## Install the packages required for the execution environment
 packages: $(PPA_PATH)/swi-prolog-ubuntu-stable-bionic.list $(PACKAGE_PATH)/swipl $(PACKAGE_PATH)/git
+
+PID=/tmp/epigrapher.pid
+server-start: server-stop pack-install
+	@swipl -s prolog/prerequisites.pl -g install,halt && swipl -s prolog/epigrapher.pl -g server
+server-stop:
+	@if [ -f $(PID) ]; then kill -HUP $$(cat $(PID)) || rm $(PID); fi
+
+VERSION = $(shell awk -F\' '/version/{print $$2}' pack.pl)
+pack-install: packs $(SOURCES)
+	swipl -qg "pack_remove($(NAME)),halt"
+	tar zcvf $(NAME)-$(VERSION).tgz pack.pl prolog/
+	swipl -qg "pack_install('$(NAME)-$(VERSION).tgz'),halt"
+
 packs: $(PACK_PATH)/tap  $(PACK_PATH)/date_time
 
-committer:
-	@git config --global user.email "conrado.rgz@gmail.com" && git config --global user.name "Conrado Rodriguez"
+$(PACK_PATH)/%:
+	@swipl -qg "pack_install('$(notdir $@)',[interactive(false)]),halt"
 
+jdk: ## Install the packages required for the performance tests
+	apt install maven openjdk-11-jdk
+
+remove-all: clean packs-remove ## Remove packages and packs
+	@sudo dpkg --purge swi-prolog bumpversion hub
+	@sudo add-apt-repository --remove -y ppa:swi-prolog/stable
+	@sudo add-apt-repository --remove -y ppa:cpick/hub
+	@sudo rm -f $(HUB_PPA) $(PPA_PATH)/swi-prolog-ubuntu-stable-bionic.list
+	@sudo apt -y autoremove
+
+clean: ## Remove performance tests results
+	mvn clean -f performance/pom.xml
+
+packs-remove: ## Remove packs
+	@swipl -g "remove,halt" prolog/prerequisites.pl
+
+$(PPA_PATH)/cpick-ubuntu-hub-bionic.list:
+	@sudo add-apt-repository -ny ppa:cpick/hub  # Let the last repo do the update
+$(PPA_PATH)/swi-prolog-ubuntu-stable-bionic.list:
+	@sudo add-apt-repository -y ppa:swi-prolog/stable
+
+$(PACKAGE_PATH)/swipl:
+	@sudo apt install -y swi-prolog
+$(PACKAGE_PATH)/hub: $(HUB_PPA)
+	@sudo apt install -y hub
+$(PACKAGE_PATH)/%: # Install packages from default repo
+	@sudo apt install $(notdir $@) -y
+
+# Performance
+test-load:
+	mvn clean -e verify -f performance/pom.xml
+jmeter-gui:
+	mvn clean -f performance/pom.xml jmeter:configure jmeter:gui -DguiTestFile=src/test/jmeter/smoke-test.jmx
+
+#
+# docker
+#
+.PHONY: docker-run
+PORT ?= 3000
+docker-run: docker-clean docker-build  ## Run the application in the Docker container
+	docker run --memory 16m --memory-swap 0m -it -p $(PORT):$(PORT) --name="$(NAME)" $(NAME)
+
+.PHONY: docker-build
+BASE_IMAGE ?= swipl
+docker-build:  ## Build the Docker container for the app
+	docker build  --build-arg "PORT=$(PORT)" --build-arg "BASE_IMAGE=$(BASE_IMAGE)" -t $(NAME) .
+
+.PHONY: docker-push
+docker-push: docker-build ## push the Docker container for the app
+	docker push $(NAME)
+
+.PHONY: docker-clean
+docker-clean: ## Remove docker instances
+	docker stop $(NAME) || true && docker rm $(NAME) || true
+
+#
+#  diagrams
+#
 GIT_REPO_URL := $(shell git config --get remote.origin.url)
 
 publish: diagrams ## Publish the diagrams
@@ -72,10 +147,6 @@ publish: diagrams ## Publish the diagrams
 	&& cd ../.. || exit
 
 diagrams: workflow
-
-#
-#  workflow
-#
 workflow: target/publish/workflow.svg  ## Creates the Diagrams
 target/publish/workflow.svg:
 	@printf '\e[1;34m%-6s\e[m\n' "Start generation of scalable C4 Diagrams"
@@ -84,28 +155,22 @@ target/publish/workflow.svg:
 	@mvn exec:java@generate-diagrams -DoutputType=png -Dlinks=0  -f .github/plantuml/
 	@printf '\n\e[1;34m%-6s\e[m\n' "The diagrams has been generated"
 
-clean: ## Remove debris
-	rm -rfd target
+#
+# Debug
+#
+.PHONY:	debug
+debug: ## Display local make variables defined
+	@$(foreach V, $(sort $(.VARIABLES)), \
+		$(if $(filter-out environment% default automatic,\
+			$(origin $V)), \
+			$(warning $V = $($V) )) \
+	)
 
-remove-all: ## Remove packages and packs
-	@swipl -g "(member(P,[abbreviated_dates,date_time,tap]),pack_property(P,library(P)),pack_remove(P),fail);true,halt"
-	@sudo dpkg --purge swi-prolog bumpversion hub
-	@sudo add-apt-repository --remove -y ppa:swi-prolog/stable
-	@sudo add-apt-repository --remove -y ppa:cpick/hub
-	@sudo rm -f $(HUB_PPA) $(PPA_PATH)/swi-prolog-ubuntu-stable-bionic.list
-	@sudo apt -y autoremove
+.PHONY:	debug-all
+debug-all: ## Display all make variables defined
+	@$(foreach V, $(sort $(.VARIABLES)), \
+		$(warning $V = $($V) ) \
+	)
 
-$(PPA_PATH)/cpick-ubuntu-hub-bionic.list:
-	@sudo add-apt-repository -ny ppa:cpick/hub  # Let the last repo do the update
-$(PPA_PATH)/swi-prolog-ubuntu-stable-bionic.list:
-	@sudo add-apt-repository -y ppa:swi-prolog/stable
-
-$(PACKAGE_PATH)/swipl:
-	@sudo apt install -y swi-prolog
-$(PACKAGE_PATH)/hub: $(HUB_PPA)
-	@sudo apt install -y hub
-$(PACKAGE_PATH)/%: # Install packages from default repo
-	@sudo apt install $(notdir $@) -y
-
-$(PACK_PATH)/%:
-	@swipl -qg "pack_install('$(notdir $@)',[interactive(false)]),halt"
+committer:
+	@git config --global user.email "conrado.rgz@gmail.com" && git config --global user.name "Conrado Rodriguez"
