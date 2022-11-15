@@ -55,8 +55,22 @@ install: requirements committer ## Install the latest library release or the one
 dev: requirements jdk ## Install the packages required for the development environment
 requirements: packages packs  ## Install the packages required for the execution environment
 packages: $(PPA_PATH)/swi-prolog-ubuntu-stable-bionic.list $(PACKAGE_PATH)/swipl $(PACKAGE_PATH)/git
-packs:
-	@swipl -g "install,halt" prolog/requirements.pl
+
+PID=/tmp/epigrapher.pid
+server-start: server-stop pack-install
+	@swipl -s prolog/prerequisites.pl -g install,halt && swipl -s prolog/epigrapher.pl -g server
+server-stop:
+	@if [ -f $(PID) ]; then kill -HUP $$(cat $(PID)) || rm $(PID); fi
+
+pack-install: packs $(SOURCES)
+	swipl -qg "pack_remove($(NAME)),halt"
+	tar zcvf $(NAME)-$(VERSION).tgz pack.pl prolog/
+	swipl -qg "pack_install('$(NAME)-$(VERSION).tgz'),halt"
+
+packs: $(PACK_PATH)/tap  $(PACK_PATH)/date_time
+
+$(PACK_PATH)/%:
+	@swipl -qg "pack_install('$(notdir $@)',[interactive(false)]),halt"
 
 jdk: ## Install the packages required for the performance tests
 	apt install maven openjdk-11-jdk
