@@ -18,5 +18,5 @@ USER epigrapher
 COPY prolog/ /app
 ARG PORT
 ENV PORT=$PORT
-CMD swipl app/epigrapher.pl --port=${PORT} --no-fork --debug='http(request)'
+CMD app/prerequisites.pl && swipl app/epigrapher.pl -g server --port=${PORT} --no-fork --debug='http(request)'
 EXPOSE ${PORT}
