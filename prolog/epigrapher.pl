@@ -5,11 +5,11 @@
 :- use_module(library(http/thread_httpd)).
 :- use_module(library(http/http_dispatch)).
 :- use_module(library(http/http_json)).
+:- use_module(library(http/http_log)).
 :- use_module(library(date_time)).
 :- use_module(library(abbreviated_dates)).
 :- use_module(configuration).
 
-:- use_module(library(http/http_log)).
 :- set_setting(http:logfile, '/dev/stdout').
 :- http_handler(root(api/analyze), analyze, []).
 :- http_handler(root(health), server_health, []).
