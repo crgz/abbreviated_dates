@@ -15,7 +15,8 @@ PPA_PATH = /etc/apt/sources.list.d
 HUB_PPA := $(shell [ $$(lsb_release -r|cut -f2) = 18.04 ] && echo $(PPA_PATH)/cpick-ubuntu-hub-bionic.list || echo "")
 SOURCES := $(wildcard prolog/*.pl)
 
-all: packages
+all: about
+check: test
 
 about:
 	@: $${VERSION:=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt')} ; echo $(NAME) $$VERSION -- $(TITLE)
