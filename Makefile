@@ -60,7 +60,7 @@ install: requirements committer ## Install the latest library release or the one
 	swipl -qg "pack_remove($(NAME)),pack_install('$$REMOTE',[interactive(false)]),halt(0)" -t 'halt(1)'
 
 requirements: packages packs  ## Install the packages packs required for the development environment
-packages: $(PPA_PATH)/swi-prolog-ubuntu-stable-bionic.list $(PACKAGE_PATH)/swipl $(PACKAGE_PATH)/git
+packages: $(PACKAGE_PATH)/swipl $(PACKAGE_PATH)/git
 packs: $(PACK_PATH)/tap  $(PACK_PATH)/date_time
 
 committer:
@@ -110,12 +110,15 @@ $(PACKAGE_PATH)/swipl: /etc/apt/sources.list.d/swi-prolog-ubuntu-stable-$(DISTRI
 	apt-add-repository -y ppa:swi-prolog/stable
 	@touch $@
 
-$(PACKAGE_PATH)/swipl:
-	@sudo apt install -y swi-prolog
 $(PACKAGE_PATH)/hub: $(HUB_PPA)
-	@sudo apt install -y hub
+	@apt install -y hub
+	@touch $@
+/etc/apt/sources.list.d/cpick-ubuntu-hub-$(DISTRIBUTION_CODENAME).list:
+	@add-apt-repository -ny ppa:cpick/hub  # Let the last repo do the update
+	@touch $@
+
 $(PACKAGE_PATH)/%: # Install packages from default repo
-	@sudo apt install $(notdir $@) -y
+	@apt install $(notdir $@) -y
 
 $(PACK_PATH)/%:
 	@swipl -qg "pack_install('$(notdir $@)',[interactive(false)]),halt"
