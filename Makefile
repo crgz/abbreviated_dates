@@ -11,8 +11,16 @@ NAME = $(shell awk -F"[()]" '/name/{print $$2}' pack.pl)
 TITLE = $(shell awk -F"[()]" '/title/{print $$2}' pack.pl)
 PACK_PATH = ${HOME}/.local/share/swi-prolog/pack
 PACKAGE_PATH = /usr/bin
+
+DISTRIBUTION_CODENAME := $(shell awk -F'=' '/UBUNTU_CODENAME/{print $$2}' /etc/os-release)
+SUPPORTED_DISTRIBUTIONS := focal jammy
+ifeq ($(filter $(DISTRIBUTION_CODENAME),$(SUPPORTED_DISTRIBUTIONS)),)
+    $(warning Terminating on detection of unsupported Ubuntu distribution: $(DISTRIBUTION_CODENAME). \
+    Supported distibutions are: $(SUPPORTED_DISTRIBUTIONS))
+endif
+
 PPA_PATH = /etc/apt/sources.list.d
-HUB_PPA := $(shell [ $$(lsb_release -r|cut -f2) = 18.04 ] && echo $(PPA_PATH)/cpick-ubuntu-hub-bionic.list || echo "")
+HUB_PPA := $(shell [ $$(lsb_release -r|cut -f2) = 18.04 ] && echo $(PPA_PATH)/cpick-ubuntu-hub-$(DISTRIBUTION_CODENAME).list || echo "")
 
 all: about
 
@@ -89,16 +97,18 @@ clean: ## Remove debris
 
 remove-all: ## Remove packages and packs
 	@swipl -g "(member(P,[abbreviated_dates,date_time,tap]),pack_property(P,library(P)),pack_remove(P),fail);true,halt"
-	@sudo dpkg --purge swi-prolog bumpversion hub
-	@sudo add-apt-repository --remove -y ppa:swi-prolog/stable
-	@sudo add-apt-repository --remove -y ppa:cpick/hub
-	@sudo rm -f $(HUB_PPA) $(PPA_PATH)/swi-prolog-ubuntu-stable-bionic.list
-	@sudo apt -y autoremove
+	@dpkg --purge swi-prolog bumpversion hub
+	@add-apt-repository --remove -y ppa:swi-prolog/stable
+	@add-apt-repository --remove -y ppa:cpick/hub
+	@rm -f $(HUB_PPA) /etc/apt/sources.list.d/swi-prolog-ubuntu-stable-$(DISTRIBUTION_CODENAME).list
+	@apt -y autoremove
 
-$(PPA_PATH)/cpick-ubuntu-hub-bionic.list:
-	@sudo add-apt-repository -ny ppa:cpick/hub  # Let the last repo do the update
-$(PPA_PATH)/swi-prolog-ubuntu-stable-bionic.list:
-	@sudo add-apt-repository -y ppa:swi-prolog/stable
+$(PACKAGE_PATH)/swipl: /etc/apt/sources.list.d/swi-prolog-ubuntu-stable-$(DISTRIBUTION_CODENAME).list
+	@apt-get -qqy install swi-prolog-nox
+	@touch $@
+/etc/apt/sources.list.d/swi-prolog-ubuntu-stable-$(DISTRIBUTION_CODENAME).list:
+	apt-add-repository -y ppa:swi-prolog/stable
+	@touch $@
 
 $(PACKAGE_PATH)/swipl:
 	@sudo apt install -y swi-prolog
