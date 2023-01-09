@@ -15,8 +15,12 @@ jobs:
         uses: actions/checkout@v3
       - name: Increase version counter and update version dependent files
         run: sudo make utilities && make bump
-      - name: Set the VERSION variable int he GitHub Environment
+      - name: Set the VERSION variable int the GitHub Environment
         run: echo "VERSION=$(awk -F=' ' '/current_version/{printf "v%s",$2}' .bumpversion.cfg)" >> $GITHUB_ENV
+      - name: create pull request
+        run: gh pr create -B release -H main --title 'Merge main into release'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Create Pull Request
         id: cpr
         uses: peter-evans/create-pull-request@v4
