@@ -68,7 +68,7 @@ test: /usr/bin/swipl packs ## Run the test suite
 	@swipl -g 'load_test_files([]),run_tests,halt' prolog/$(NAME).pl
 
 .PHONY: bump ## Increase the version number
-bump: /usr/bin/bumpversion ## Increase the version number
+bump: /usr/bin/bumpversion committer
 	@bumpversion --allow-dirty --list patch
 
 .PHONY: release ## Release a new version (Requires unprotected main branch or special token to be used from Github Actions)
@@ -123,7 +123,7 @@ clean:
 	rm -rfd target
 
 .PHONY: clean-more ## Remove debris from utilities target
-clean-more: ## Remove packages and packs
+clean-more:
 	@swipl -g "(member(P,[abbreviated_dates,date_time,tap]),pack_property(P,library(P)),pack_remove(P),fail);true,halt"
 	@dpkg --purge swi-prolog bumpversion hub
 	@add-apt-repository --remove -y ppa:swi-prolog/stable
