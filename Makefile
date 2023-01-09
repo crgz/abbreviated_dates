@@ -20,20 +20,37 @@ TITLE = $(shell awk -F"[()]" '/title/{print $$2}' pack.pl)
 about:
 	@: $${VERSION:=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt')} ; echo $(NAME) $$VERSION -- $(TITLE)
 
+#
+# Superuser rules
+#
+.PHONY: utilities  ## Install utilities required for the tool (Run with sudo)
 DISTRIBUTION_CODENAME := $(shell awk -F'=' '/UBUNTU_CODENAME/{print $$2}' /etc/os-release)
 SUPPORTED_DISTRIBUTIONS := focal jammy
 ifeq ($(filter $(DISTRIBUTION_CODENAME),$(SUPPORTED_DISTRIBUTIONS)),)
     $(warning Terminating on detection of unsupported Ubuntu distribution: $(DISTRIBUTION_CODENAME). \
     Supported distibutions are: $(SUPPORTED_DISTRIBUTIONS))
 endif
+PROLOG_LIST_FILE = /etc/apt/sources.list.d/swi-prolog-ubuntu-stable-$(DISTRIBUTION_CODENAME).list
+LAST_HUB_LIST_FILE = /etc/apt/sources.list.d/cpick-ubuntu-hub-$(DISTRIBUTION_CODENAME).list
+HUB_LIST_FILE := $(shell [ $$(lsb_release -r|cut -f2) = 18.04 ] && echo $(LAST_HUB_LIST_FILE) || echo "")
+utilities: /usr/bin/swipl /usr/bin/git
 
-PPA_PATH = /etc/apt/sources.list.d
-HUB_PPA := $(shell [ $$(lsb_release -r|cut -f2) = 18.04 ] && echo $(PPA_PATH)/cpick-ubuntu-hub-$(DISTRIBUTION_CODENAME).list || echo "")
+/usr/bin/swipl: $(PROLOG_LIST_FILE)
+	@apt-get -qqy install swi-prolog-nox
+	@touch $@
+$(PROLOG_LIST_FILE):
+	apt-add-repository -y ppa:swi-prolog/stable
+	@touch $@
 
-all: about
+/usr/bin/hub: $(HUB_LIST_FILE)
+	@apt install -y hub
+	@touch $@
+$(HUB_LIST_FILE):
+	@add-apt-repository -ny ppa:cpick/hub  # Let the last repo do the update
+	@touch $@
 
-about:
-	@: $${VERSION:=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt')} ; echo $(NAME) $$VERSION -- $(TITLE)
+/usr/bin/%: # Install packages from default repo
+	@apt install $(notdir $@) -y
 
 help: about ## Print this help
 	@printf '\e[1;34m\n%s\e[m\n\n' "List of available commands:"
