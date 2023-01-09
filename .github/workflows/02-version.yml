@@ -17,25 +17,7 @@ jobs:
         run: sudo make utilities && make bump
       - name: Set the VERSION variable int the GitHub Environment
         run: echo "VERSION=$(awk -F=' ' '/current_version/{printf "v%s",$2}' .bumpversion.cfg)" >> $GITHUB_ENV
-      - name: create pull request
-        run: gh pr create -B release -H main --title 'Merge main into release' --body 'Created by Github action'
+      - name: Increase the version number
+        run: make bump
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Create Pull Request
-        id: cpr
-        uses: peter-evans/create-pull-request@v4
-        with:
-          token: ${{ secrets.PAT }}
-          branch: release
-          title: "Release: ${{ env.VERSION }} - ${{ github.event.pull_request.title }}"
-          delete-branch: true
-      - name: Check outputs
-        if: ${{ steps.cpr.outputs.pull-request-number }}
-        run: |
-          echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
-          echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
-      - name: Enable pull request automerge
-        uses: peter-evans/enable-pull-request-automerge@v2
-        with:
-          token: ${{ secrets.PAT }}
-          pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}

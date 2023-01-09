@@ -53,6 +53,20 @@ $(HUB_LIST_FILE):
 	@add-apt-repository -ny ppa:cpick/hub  # Let the last repo do the update
 	@touch $@
 
+ARCH=$(shell dpkg --print-architecture)
+GH_KEYRING = /usr/share/keyrings/githubcli-archive-keyring.gpg
+GH_LIST = "deb [arch=$(ARCH) signed-by=$(GH_KEYRING)] https://cli.github.com/packages stable main"
+GH_LIST_FILE = /etc/apt/sources.list.d/github-cli.list
+/usr/bin/gh: $(GH_LIST_FILE)
+	@apt install $(notdir $@) -y
+$(GH_LIST_FILE): $(GH_KEYRING)
+	@echo $(GH_LIST) | sudo tee $(GH_LIST_FILE) > /dev/null
+	@sudo apt-get update
+	@touch $@
+$(GH_KEYRING):
+	@curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=$(GH_KEYRING)
+	@touch $@
+
 /usr/bin/%: # Install packages from default repo
 	@apt install $(notdir $@) -y
 
@@ -67,11 +81,21 @@ synchronize: /usr/bin/git
 test: /usr/bin/swipl packs ## Run the test suite
 	@swipl -g 'load_test_files([]),run_tests,halt' prolog/$(NAME).pl
 
+.PHONY: store-token ## Store the Github token
+store-token:
+	secret-tool store --label='github.com/crgz' user ${USER} domain github.com
+
 .PHONY: bump ## Increase the version number
+bump: export GH_TOKEN ?= $(shell secret-tool lookup user ${USER} domain github.com) # Overridable
 bump: /usr/bin/bumpversion committer
+	@git checkout -b release
 	@bumpversion --allow-dirty --list patch
+	@git push origin release
+	@gh pr create -B main -H release --fill
+	@gh pr merge -m --auto --delete-branch
 
 .PHONY: release ## Release a new version (Requires unprotected main branch or special token to be used from Github Actions)
+release: export GH_TOKEN ?= $(shell secret-tool lookup user ${USER} domain github.com) # Overridable
 release: /usr/bin/hub
 	@LOCAL_VERSION=$$(awk -F=' ' '/current_version/{printf "v%s",$$2}' .bumpversion.cfg) ;\
 	REMOTE_VERSION=$$(curl --silent 'https://api.github.com/repos/crgz/$(NAME)/releases/latest' | jq -r .tag_name) ;\
