@@ -127,22 +127,6 @@ clean-more: ## Remove packages and packs
 	@rm -f $(HUB_PPA) /etc/apt/sources.list.d/swi-prolog-ubuntu-stable-$(DISTRIBUTION_CODENAME).list
 	@apt -y autoremove
 
-$(PACKAGE_PATH)/swipl: /etc/apt/sources.list.d/swi-prolog-ubuntu-stable-$(DISTRIBUTION_CODENAME).list
-	@apt-get -qqy install swi-prolog-nox
-	@touch $@
-/etc/apt/sources.list.d/swi-prolog-ubuntu-stable-$(DISTRIBUTION_CODENAME).list:
-	apt-add-repository -y ppa:swi-prolog/stable
-	@touch $@
-
-$(PACKAGE_PATH)/hub: $(HUB_PPA)
-	@apt install -y hub
-	@touch $@
-/etc/apt/sources.list.d/cpick-ubuntu-hub-$(DISTRIBUTION_CODENAME).list:
-	@add-apt-repository -ny ppa:cpick/hub  # Let the last repo do the update
-	@touch $@
-
-$(PACKAGE_PATH)/%: # Install packages from default repo
-	@apt install $(notdir $@) -y
-
-$(PACK_PATH)/%:
-	@swipl -qg "pack_install('$(notdir $@)',[interactive(false)]),halt"
+.PHONY: committer ## config committer credentials
+committer:
+	@git config --global user.email "conrado.rgz@gmail.com" && git config --global user.name "Conrado Rodriguez"
