@@ -32,7 +32,12 @@ endif
 PROLOG_LIST_FILE = /etc/apt/sources.list.d/swi-prolog-ubuntu-stable-$(DISTRIBUTION_CODENAME).list
 LAST_HUB_LIST_FILE = /etc/apt/sources.list.d/cpick-ubuntu-hub-$(DISTRIBUTION_CODENAME).list
 HUB_LIST_FILE := $(shell [ $$(lsb_release -r|cut -f2) = 18.04 ] && echo $(LAST_HUB_LIST_FILE) || echo "")
-utilities: /usr/bin/swipl /usr/bin/git
+utilities: packages /usr/bin/swipl
+
+.PHONY: packages  ## Install packages required for the tool (Run with sudo)
+packages:
+	sudo apt-get update
+	apt-get -qqy install git bumpversion hub
 
 /usr/bin/swipl: $(PROLOG_LIST_FILE)
 	@apt-get -qqy install swi-prolog-nox
