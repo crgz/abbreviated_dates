@@ -98,7 +98,7 @@ $(PACK_PATH)/%:
 
 .PHONY: publish ## Publish the diagrams
 GIT_REPO_URL := $(shell git config --get remote.origin.url)
-publish: diagrams
+publish: diagrams /usr/bin/git
 	@echo $(GIT_REPO_URL) \
 	&& cd target/publish \
 	&& git init . \
