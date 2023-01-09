@@ -74,7 +74,8 @@ release: /usr/bin/hub
 	if [ $$LOCAL_VERSION == $$REMOTE_VERSION ]; then exit; fi ;\
 	hub release create -m $$LOCAL_VERSION $$LOCAL_VERSION
 
-install: requirements committer ## Install the latest library release or the one in the VERSION variable (Eg. make install VERSION=v.0.0.207)
+.PHONY: install ## Install the latest library release or the one in the VERSION variable (Eg. make install VERSION=v.0.0.207)
+install:  /usr/bin/swipl packs committer
 	@LOCAL_VERSION=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt') ;\
 	while : ; do \
 		REMOTE_VERSION=$$(curl --silent 'https://api.github.com/repos/crgz/$(NAME)/releases/latest' | jq -r .tag_name) ;\
