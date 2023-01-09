@@ -21,7 +21,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} git checkout -b release \
+          make committer \
+          && git checkout -b release \
           && bumpversion --allow-dirty --list patch \
           && git push origin release \
           && gh pr create -B main -H release --fill \
