@@ -14,5 +14,5 @@ jobs:
       uses: actions/checkout@v3
     - name: Create a new release based on current version
       env:
-        GITHUB_TOKEN: ${{ secrets.PAT }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: sudo make utilities && make release
