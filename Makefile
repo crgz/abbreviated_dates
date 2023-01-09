@@ -114,7 +114,8 @@ target/publish/workflow.svg:
 	@mvn exec:java@generate-diagrams -DoutputType=png -Dlinks=0  -f .github/plantuml/
 	@printf '\n\e[1;34m%-6s\e[m\n' "The diagrams has been generated"
 
-clean: ## Remove debris
+.PHONY: clean ## Remove debris from build target
+clean:
 	rm -rfd target
 
 remove-all: ## Remove packages and packs
