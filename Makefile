@@ -67,8 +67,8 @@ test: /usr/bin/swipl packs ## Run the test suite
 bump: /usr/bin/bumpversion ## Increase the version number
 	@bumpversion --allow-dirty --no-commit --no-tag --list patch
 
-# Requires unprotected main branch or maybe special token
-release: $(PACKAGE_PATH)/hub ## Release recipe to be use from Github Actions
+.PHONY: release ## Release a new version (Requires unprotected main branch or special token to be used from Github Actions)
+release: /usr/bin/hub
 	@LOCAL_VERSION=$$(awk -F=' ' '/current_version/{printf "v%s",$$2}' .bumpversion.cfg) ;\
 	REMOTE_VERSION=$$(curl --silent 'https://api.github.com/repos/crgz/$(NAME)/releases/latest' | jq -r .tag_name) ;\
 	if [ $$LOCAL_VERSION == $$REMOTE_VERSION ]; then exit; fi ;\
