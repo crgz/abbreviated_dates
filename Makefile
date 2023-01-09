@@ -17,8 +17,8 @@ help: about
 .PHONY: about  ## Describe this tool
 NAME = $(shell awk -F"[()]" '/name/{print $$2}' pack.pl)
 TITLE = $(shell awk -F"[()]" '/title/{print $$2}' pack.pl)
-PACK_PATH = ${HOME}/.local/share/swi-prolog/pack
-PACKAGE_PATH = /usr/bin
+about:
+	@: $${VERSION:=$$(swipl -q -s pack -g 'version(V),format("v~a",[V]),halt')} ; echo $(NAME) $$VERSION -- $(TITLE)
 
 DISTRIBUTION_CODENAME := $(shell awk -F'=' '/UBUNTU_CODENAME/{print $$2}' /etc/os-release)
 SUPPORTED_DISTRIBUTIONS := focal jammy
