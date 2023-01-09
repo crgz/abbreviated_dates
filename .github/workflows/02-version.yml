@@ -22,8 +22,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           make committer \
-          && git push -d origin release \
-          && (git checkout -b release &>/dev/null || true) \
+          && (git push -d origin release || true) \
+          && git checkout -b release \
           && bumpversion --allow-dirty --list patch \
           && git push origin release \
           && gh pr create -B main -H release --fill \
