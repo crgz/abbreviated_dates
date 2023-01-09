@@ -60,7 +60,7 @@ $(HUB_LIST_FILE):
 # Unprivileged user rules
 #
 .PHONY: synchronize ## Synchronize the local repository: Switch to the main branch, fetch changes & delete merged branches
-synchronize:
+synchronize: /usr/bin/git
 	@git checkout main && git pull && git branch --merged | egrep -v "(^\*|main)" | xargs -r git branch -d || exit 0
 
 .PHONY: test ## Run the test suite
@@ -98,7 +98,7 @@ $(PACK_PATH)/%:
 
 .PHONY: publish ## Publish the diagrams
 GIT_REPO_URL := $(shell git config --get remote.origin.url)
-publish: diagrams
+publish: diagrams /usr/bin/git
 	@echo $(GIT_REPO_URL) \
 	&& cd target/publish \
 	&& git init . \
