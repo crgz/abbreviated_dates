@@ -60,7 +60,7 @@ $(HUB_LIST_FILE):
 # Unprivileged user rules
 #
 .PHONY: synchronize ## Synchronize the local repository: Switch to the main branch, fetch changes & delete merged branches
-synchronize:
+synchronize: /usr/bin/git
 	@git checkout main && git pull && git branch --merged | egrep -v "(^\*|main)" | xargs -r git branch -d || exit 0
 
 .PHONY: test ## Run the test suite
