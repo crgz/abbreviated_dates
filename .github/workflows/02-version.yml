@@ -13,11 +13,11 @@ jobs:
     steps:
       - name: Checkout Library Repository
         uses: actions/checkout@v3
-      - name: Increase version counter and update version dependent files
+      - name: Install utilities
         run: sudo make utilities
       - name: Set the VERSION variable int the GitHub Environment
         run: echo "VERSION=$(awk -F=' ' '/current_version/{printf "v%s",$2}' .bumpversion.cfg)" >> $GITHUB_ENV
-      - name: Increase the version number
+      - name: Increase version counter and update version dependent files
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
