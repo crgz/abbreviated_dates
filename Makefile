@@ -123,7 +123,7 @@ clean:
 	rm -rfd target
 
 .PHONY: clean-more ## Remove debris from utilities target
-clean-more: ## Remove packages and packs
+clean-more:
 	@swipl -g "(member(P,[abbreviated_dates,date_time,tap]),pack_property(P,library(P)),pack_remove(P),fail);true,halt"
 	@dpkg --purge swi-prolog bumpversion hub
 	@add-apt-repository --remove -y ppa:swi-prolog/stable
