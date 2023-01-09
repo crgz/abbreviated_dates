@@ -20,7 +20,7 @@ jobs:
               - 'prolog/**/*'
       - name: Run Unit Tests if change in source files is detected
         if: steps.changes.outputs.src == 'true'
-        run: make test
+        run: sudo make utilities && make test
       - name: ✅ Set the merge commit status check using GitHub REST API
         # see https://docs.github.com/en/rest/reference/repos#create-a-commit-status
         if: ${{ success() }}
