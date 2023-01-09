@@ -92,12 +92,9 @@ packs: $(PACK_PATH)/tap  $(PACK_PATH)/date_time
 $(PACK_PATH)/%:
 	@swipl -qg "pack_install('$(notdir $@)',[interactive(false)]),halt"
 
-committer:
-	@git config --global user.email "conrado.rgz@gmail.com" && git config --global user.name "Conrado Rodriguez"
-
+.PHONY: publish ## Publish the diagrams
 GIT_REPO_URL := $(shell git config --get remote.origin.url)
-
-publish: diagrams ## Publish the diagrams
+publish: diagrams
 	@echo $(GIT_REPO_URL) \
 	&& cd target/publish \
 	&& git init . \
