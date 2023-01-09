@@ -18,6 +18,6 @@ jobs:
       - name: Set the VERSION variable int the GitHub Environment
         run: echo "VERSION=$(awk -F=' ' '/current_version/{printf "v%s",$2}' .bumpversion.cfg)" >> $GITHUB_ENV
       - name: Increase the version number
-        run: make bump
+        run: GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} make bump
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
