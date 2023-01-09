@@ -59,7 +59,8 @@ $(HUB_LIST_FILE):
 synchronize:
 	@git checkout main && git pull && git branch --merged | egrep -v "(^\*|main)" | xargs -r git branch -d || exit 0
 
-test: requirements  ## Run the test suite
+.PHONY: test ## Run the test suite
+test: /usr/bin/swipl packs ## Run the test suite
 	@swipl -g 'load_test_files([]),run_tests,halt' prolog/$(NAME).pl
 
 bump: $(PACKAGE_PATH)/bumpversion ## Increase the version number
