@@ -68,7 +68,7 @@ test: /usr/bin/swipl packs ## Run the test suite
 	@swipl -g 'load_test_files([]),run_tests,halt' prolog/$(NAME).pl
 
 .PHONY: bump ## Increase the version number
-bump: /usr/bin/bumpversion ## Increase the version number
+bump: /usr/bin/bumpversion committer
 	@bumpversion --allow-dirty --list patch
 
 .PHONY: release ## Release a new version (Requires unprotected main branch or special token to be used from Github Actions)
