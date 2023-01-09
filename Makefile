@@ -53,6 +53,20 @@ $(HUB_LIST_FILE):
 	@add-apt-repository -ny ppa:cpick/hub  # Let the last repo do the update
 	@touch $@
 
+ARCH=$(shell dpkg --print-architecture)
+GH_KEYRING = /usr/share/keyrings/githubcli-archive-keyring.gpg
+GH_LIST = "deb [arch=$(ARCH) signed-by=$(GH_KEYRING)] https://cli.github.com/packages stable main"
+GH_LIST_FILE = /etc/apt/sources.list.d/github-cli.list
+/usr/bin/gh: $(GH_LIST_FILE)
+	@apt install $(notdir $@) -y
+$(GH_LIST_FILE): $(GH_KEYRING)
+	@echo $(GH_LIST) | sudo tee $(GH_LIST_FILE) > /dev/null
+	@sudo apt-get update
+	@touch $@
+$(GH_KEYRING):
+	@curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=$(GH_KEYRING)
+	@touch $@
+
 /usr/bin/%: # Install packages from default repo
 	@apt install $(notdir $@) -y
 
