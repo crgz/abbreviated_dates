@@ -81,6 +81,10 @@ synchronize: /usr/bin/git
 test: /usr/bin/swipl packs ## Run the test suite
 	@swipl -g 'load_test_files([]),run_tests,halt' prolog/$(NAME).pl
 
+.PHONY: store-token ## Store the Github token
+store-token:
+	secret-tool store --label='github.com/crgz' user ${USER} domain github.com
+
 .PHONY: bump ## Increase the version number
 bump: /usr/bin/bumpversion committer
 	@bumpversion --allow-dirty --list patch
