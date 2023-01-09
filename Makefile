@@ -157,4 +157,6 @@ clean-more:
 
 .PHONY: committer ## config committer credentials
 committer:
-	@git config --global user.email "conrado.rgz@gmail.com" && git config --global user.name "Conrado Rodriguez"
+	@git config --global user.email "conrado.rgz@gmail.com"
+	@git config --global user.name "Conrado Rodriguez"
+	@git config pull.ff only
