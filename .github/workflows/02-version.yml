@@ -24,6 +24,7 @@ jobs:
           make committer \
           && git checkout -b release \
           && bumpversion --allow-dirty --list patch \
+          && git pull origin release \
           && git push origin release \
           && gh pr create -B main -H release --fill \
           && gh pr merge -m --auto --delete-branch
