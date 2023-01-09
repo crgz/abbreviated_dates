@@ -86,8 +86,13 @@ store-token:
 	secret-tool store --label='github.com/crgz' user ${USER} domain github.com
 
 .PHONY: bump ## Increase the version number
+bump: export GH_TOKEN ?= $(shell secret-tool lookup user ${USER} domain github.com) # Overridable
 bump: /usr/bin/bumpversion committer
+	@git checkout -b release
 	@bumpversion --allow-dirty --list patch
+	@git push origin release
+	@gh pr create -B main -H release --fill
+	@gh pr merge -m --auto --delete-branch
 
 .PHONY: release ## Release a new version (Requires unprotected main branch or special token to be used from Github Actions)
 release: /usr/bin/hub
