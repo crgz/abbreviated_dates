@@ -105,12 +105,8 @@ publish: diagrams
 	&& git push github gh-pages --force \
 	&& cd ../.. || exit
 
-diagrams: workflow
-
-#
-#  workflow
-#
-workflow: target/publish/workflow.svg  ## Creates the Diagrams
+.PHONY: diagrams ## Creates the Diagrams
+diagrams: target/publish/workflow.svg
 target/publish/workflow.svg:
 	@printf '\e[1;34m%-6s\e[m\n' "Start generation of scalable C4 Diagrams"
 	@mvn exec:java@generate-diagrams -f .github/plantuml/
