@@ -86,9 +86,11 @@ install:  /usr/bin/swipl packs committer
 	REMOTE=https://github.com/crgz/$(NAME)/archive/$$VERSION.zip ;\
 	swipl -qg "pack_remove($(NAME)),pack_install('$$REMOTE',[interactive(false)]),halt(0)" -t 'halt(1)'
 
-requirements: packages packs  ## Install the packages packs required for the development environment
-packages: $(PACKAGE_PATH)/swipl $(PACKAGE_PATH)/git
+.PHONY: packs ## Install the required packs
+PACK_PATH = ${HOME}/.local/share/swi-prolog/pack
 packs: $(PACK_PATH)/tap  $(PACK_PATH)/date_time
+$(PACK_PATH)/%:
+	@swipl -qg "pack_install('$(notdir $@)',[interactive(false)]),halt"
 
 committer:
 	@git config --global user.email "conrado.rgz@gmail.com" && git config --global user.name "Conrado Rodriguez"
