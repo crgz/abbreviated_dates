@@ -22,9 +22,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           make committer \
-          && git checkout -b release \
+          && git push -d origin release \
+          && (git checkout -b release &>/dev/null || true) \
           && bumpversion --allow-dirty --list patch \
-          && git pull origin release \
           && git push origin release \
           && gh pr create -B main -H release --fill \
           && gh pr merge -m --auto --delete-branch
