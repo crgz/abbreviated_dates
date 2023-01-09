@@ -118,7 +118,8 @@ target/publish/workflow.svg:
 clean:
 	rm -rfd target
 
-remove-all: ## Remove packages and packs
+.PHONY: clean-more ## Remove debris from utilities target
+clean-more: ## Remove packages and packs
 	@swipl -g "(member(P,[abbreviated_dates,date_time,tap]),pack_property(P,library(P)),pack_remove(P),fail);true,halt"
 	@dpkg --purge swi-prolog bumpversion hub
 	@add-apt-repository --remove -y ppa:swi-prolog/stable
