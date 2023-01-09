@@ -3,7 +3,6 @@
 # having a Makefile included and seeing all the weird results when make all was run in a location where it was not
 # expected. https://rlaanemets.com/post/show/prolog-pack-development-experience
 
-.PHONY: all about help synchronize test bump release install requirements committer publish diagrams clean remove-all
 SHELL = /bin/bash
 .SHELLFLAGS = -o pipefail -c
 
