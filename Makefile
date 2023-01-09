@@ -7,6 +7,14 @@
 SHELL = /bin/bash
 .SHELLFLAGS = -o pipefail -c
 
+all: help
+
+.PHONY: help  ## Print this help
+help: about
+	@printf '\n\033[1;36m%-12s\033[0m %s\n────────────────────────\n' "Command" "Description"
+	@awk 'BEGIN {FS = " *## |: "}; /^.PHONY: /{printf "\033[1;36m%-12s\033[0m %s\n", $$2, $$3}' $(MAKEFILE_LIST)
+
+.PHONY: about  ## Describe this tool
 NAME = $(shell awk -F"[()]" '/name/{print $$2}' pack.pl)
 TITLE = $(shell awk -F"[()]" '/title/{print $$2}' pack.pl)
 PACK_PATH = ${HOME}/.local/share/swi-prolog/pack
