@@ -52,12 +52,11 @@ $(HUB_LIST_FILE):
 /usr/bin/%: # Install packages from default repo
 	@apt install $(notdir $@) -y
 
-help: about ## Print this help
-	@printf '\e[1;34m\n%s\e[m\n\n' "List of available commands:"
-	@grep -hE '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
-	awk 'BEGIN {FS = ":.*?## "}; {printf "\033[1;36m%-12s\033[0m %s\n", $$1, $$2}'
-
-synchronize: ## Synchronize the local repository: Switch to the main branch, fetch changes & delete merged branches
+#
+# Unprivileged user rules
+#
+.PHONY: synchronize ## Synchronize the local repository: Switch to the main branch, fetch changes & delete merged branches
+synchronize:
 	@git checkout main && git pull && git branch --merged | egrep -v "(^\*|main)" | xargs -r git branch -d || exit 0
 
 test: requirements  ## Run the test suite
