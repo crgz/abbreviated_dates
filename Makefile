@@ -63,7 +63,8 @@ synchronize:
 test: /usr/bin/swipl packs ## Run the test suite
 	@swipl -g 'load_test_files([]),run_tests,halt' prolog/$(NAME).pl
 
-bump: $(PACKAGE_PATH)/bumpversion ## Increase the version number
+.PHONY: bump ## Increase the version number
+bump: /usr/bin/bumpversion ## Increase the version number
 	@bumpversion --allow-dirty --no-commit --no-tag --list patch
 
 # Requires unprotected main branch or maybe special token
