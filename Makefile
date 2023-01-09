@@ -69,7 +69,7 @@ test: /usr/bin/swipl packs ## Run the test suite
 
 .PHONY: bump ## Increase the version number
 bump: /usr/bin/bumpversion ## Increase the version number
-	@bumpversion --allow-dirty --no-commit --no-tag --list patch
+	@bumpversion --allow-dirty --list patch
 
 .PHONY: release ## Release a new version (Requires unprotected main branch or special token to be used from Github Actions)
 release: /usr/bin/hub
