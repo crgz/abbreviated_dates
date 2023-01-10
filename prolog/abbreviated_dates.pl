@@ -185,6 +185,11 @@ single_day([Context|_], Date, Language, Syntax, _) -->
   string(Month), b, month_day(Day),
   {factor_month_day(Context, Day, Month, implicit, Date, Language, MonthFormat), atom_concat(MonthFormat,' %d', Syntax)}.
 
+% phrase(abbreviated_dates:single_day([date(2020, 2, 28)], Date, Language, Syntax), `Jan. 1`).
+single_day([Context|_], Date, Language, Syntax, _) -->
+  string(Month), ".", b, month_day(Day),
+  {factor_month_day(Context, Day, Month, explicit, Date, Language, MonthFormat), atom_concat(MonthFormat,' %d', Syntax)}.
+  
 % DATES HINTING JUST DAYS
 
 % phrase(abbreviated_dates:single_day([date(2020, 2, 28)], Date, Language, Syntax), `31`).

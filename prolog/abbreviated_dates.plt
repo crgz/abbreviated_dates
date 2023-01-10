@@ -229,6 +229,11 @@ test('Capitalized Implicitly Abbreviated Month Name & Day'):-
   assertion(Languages == ['Danish','Dutch','English','German','Norwegian','Portuguese','Slovenian','Spanish','Swedish']),
   assertion(Formats == ['%b %d']).
 
+test('Capitalized Explicitly Abbreviated Month Name & Day'):-
+  solutions([date(2021, 9, 21)], 'Jun. 17', Dates, Languages, Formats),
+  assertion(Dates == [date(2022,6,17),date(2023,6,17),date(2024,6,17),date(2025,6,17),date(2026,6,17),date(2027,6,17)]),
+  assertion(Languages == ['Danish','Dutch','English','German','Norwegian','Portuguese','Slovenian','Spanish','Swedish']),
+  assertion(Formats == ['%b. %d']).
 
 % DATES HINTING JUST DAYS
 
