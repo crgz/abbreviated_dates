@@ -88,6 +88,7 @@ store-token:
 .PHONY: bump ## Increase the version number
 bump: export GH_TOKEN ?= $(shell secret-tool lookup user ${USER} domain github.com) # Overridable
 bump: /usr/bin/bumpversion committer
+	@git push -d origin release || true
 	@git checkout -b release
 	@bumpversion --allow-dirty --list patch
 	@git push origin release
