@@ -19,7 +19,7 @@ jobs:
         run: echo "VERSION=$(awk -F=' ' '/current_version/{printf "v%s",$2}' .bumpversion.cfg)" >> $GITHUB_ENV
       - name: Create Pull Request
         id: cpr
-        uses: peter-evans/create-pull-request@v3
+        uses: peter-evans/create-pull-request@v4
         with:
           branch: release
           title: "Release: ${{ env.VERSION }} - ${{ github.event.pull_request.title }}"
@@ -32,6 +32,5 @@ jobs:
       - name: Enable pull request automerge
         uses: peter-evans/enable-pull-request-automerge@v2
         with:
-          token: ${{ secrets.PAT }}
           pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}
 
