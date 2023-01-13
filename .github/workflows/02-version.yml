@@ -23,6 +23,7 @@ jobs:
         id: cpr
         uses: peter-evans/create-pull-request@v4
         with:
+          # Please check the README.md for detailed instructions to enable this token
           token: ${{ secrets.PAT }}
           branch: release
           title: "Release: ${{ env.VERSION }} - ${{ github.event.pull_request.title }}"
