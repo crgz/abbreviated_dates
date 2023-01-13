@@ -23,7 +23,7 @@ jobs:
         id: cpr
         uses: peter-evans/create-pull-request@v4
         with:
-          token: ${{ secrets.PAT }}
+          token: ${{ secrets.METRICS_TOKEN }}
           branch: release
           title: "Release: ${{ env.VERSION }} - ${{ github.event.pull_request.title }}"
           delete-branch: true
