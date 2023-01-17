@@ -47,7 +47,7 @@ $(PROLOG_LIST_FILE):
 	@touch $@
 
 /usr/bin/hub: $(HUB_LIST_FILE)
-	@apt install -y hub
+	@apt-get install -y hub
 	@touch $@
 $(HUB_LIST_FILE):
 	@add-apt-repository -ny ppa:cpick/hub  # Let the last repo do the update
@@ -58,7 +58,7 @@ GH_KEYRING = /usr/share/keyrings/githubcli-archive-keyring.gpg
 GH_LIST = "deb [arch=$(ARCH) signed-by=$(GH_KEYRING)] https://cli.github.com/packages stable main"
 GH_LIST_FILE = /etc/apt/sources.list.d/github-cli.list
 /usr/bin/gh: $(GH_LIST_FILE)
-	@apt install $(notdir $@) -y
+	@apt-get install $(notdir $@) -y
 $(GH_LIST_FILE): $(GH_KEYRING)
 	@echo $(GH_LIST) | sudo tee $(GH_LIST_FILE) > /dev/null
 	@sudo apt-get update
@@ -68,7 +68,7 @@ $(GH_KEYRING):
 	@touch $@
 
 /usr/bin/%: # Install packages from default repo
-	@apt install $(notdir $@) -y
+	@apt-get install $(notdir $@) -y
 
 #
 # Unprivileged user rules
@@ -154,7 +154,7 @@ clean-more:
 	@add-apt-repository --remove -y ppa:swi-prolog/stable
 	@add-apt-repository --remove -y ppa:cpick/hub
 	@rm -f $(HUB_PPA) /etc/apt/sources.list.d/swi-prolog-ubuntu-stable-$(DISTRIBUTION_CODENAME).list
-	@apt -y autoremove
+	@apt-get -y autoremove
 
 .PHONY: committer ## config committer credentials
 committer:
