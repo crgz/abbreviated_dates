@@ -3,7 +3,7 @@
 <h3 align="center">Parser for Abbreviated Dates</h3>
 
 <p align="center">
-    <a href=https://www.swi-prolog.org/pack/list?p=abbreviated_dates">
+    <a href="https://www.swi-prolog.org/pack/list?p=abbreviated_dates">
         <img src="https://github.com/crgz/abbreviated_dates/blob/main/.github/badges/release.svg" alt="release - release">
     </a>
     <a href="https://github.com/crgz/abbreviated_dates/actions?query=is%3Asuccess">
