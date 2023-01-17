@@ -12,7 +12,9 @@ jobs:
     steps:
     - name: Checkout Library Repository
       uses: actions/checkout@v3
+    - name: Install workflow required utilities
+      run: sudo make utilities
     - name: Create a new release based on current version
       env:
         GITHUB_TOKEN: ${{ secrets.PAT }}
-      run: sudo make utilities && make release
+      run: make release

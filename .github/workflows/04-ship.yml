@@ -10,5 +10,7 @@ jobs:
     steps:
     - name: Checkout Library Repository
       uses: actions/checkout@v3
+    - name: Install workflow required utilities
+      run: sudo make /usr/bin/swipl
     - name: Ship the new released package into the Library Supply Chain Infrastructure
       run: make install
